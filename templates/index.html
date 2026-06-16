@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Room Finder</title>
+
+  <link rel="stylesheet" href="/room-finder/static/css/style.css">
+  <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+<header>
+  <div class="navbar">
+    <div class="logo">
+      <img src="/room-finder/static/images/roomfinder.jpeg" alt="Room Finder Logo" width="40" height="40" />
+      <span class="site-title">Room Finder</span>
+    </div>
+    <div class="nav-buttons">
+      <a href="/login" class="btn-login">Login</a>
+      <a href="/signup" class="btn-signup">Signup</a>
+    </div>
+  </div>
+</header>
+
+  <!-- HERO TEXT -->
+  <section class="hero-text">
+    <strong>Find verified rooms across Nepal</strong><br/>
+    <small>Trusted listings with ownership documents verified by our team.</small><br/>
+    <span></span>
+  </section>
+
+  <!-- SEARCH BAR -->
+  <section class="search-section">
+    <div class="search-bar">
+      <span>&#128269;</span>
+      <input type="text" placeholder="city, district, province or area" />
+    </div>
+    <button class="search-btn" onclick="alert('Search clicked')">Search</button>
+  </section>
+
+  <!-- PROVINCE FILTER TABS -->
+  <section class="province-tabs">
+    <button class="tab active" onclick="setActive(this)">All</button>
+    <button class="tab" onclick="setActive(this)">Koshi</button>
+    <button class="tab" onclick="setActive(this)">Madhesh</button>
+    <button class="tab" onclick="setActive(this)">Bagmati</button>
+    <button class="tab" onclick="setActive(this)">Lumbini</button>
+    <button class="tab" onclick="setActive(this)">Gandaki</button>
+    <button class="tab" onclick="setActive(this)">Karnali</button>
+    <button class="tab" onclick="setActive(this)">Sudur</button>
+    <span class="more-icon">&#9670;</span>
+  </section>
+
+  <!-- DISTRICT DROPDOWN -->
+  <section class="district-section">
+    <details>
+      <summary>District &#9660;</summary>
+      <ul>
+        <li>Kathmandu</li>
+        <li>Pokhara</li>
+        <li>Lalitpur</li>
+        <li>Bhaktapur</li>
+      </ul>
+    </details>
+  </section>
+
+  <!-- BROWSE BY TYPE -->
+  <section class="browse-type">
+    <div class="browse-header">
+      <strong>Browse by type -</strong>
+      <a href="#">See all</a>
+    </div>
+    <div class="type-grid">
+      <div class="type-card">
+        <div class="type-icon"><iconify-icon icon="mingcute:building-2-line"></iconify-icon>  <!-- ✅ Flat --></div>
+        <span>Flat</span>
+      </div>
+      <div class="type-card">
+        <div class="type-icon"><iconify-icon icon="mingcute:door-line"></iconify-icon></div>
+        <span>Single Room</span>
+      </div>
+      <div class="type-card">
+        <div class="type-icon"><iconify-icon icon="mingcute:building-3-line"></iconify-icon></div>
+        <span>Apartment</span>
+      </div>
+      <div class="type-card">
+        <div class="type-icon"><iconify-icon icon="mingcute:home-2-line"></iconify-icon></div>
+        <span>House</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURED LISTINGS -->
+  <section class="listings-grid">
+
+    <!-- Card 1 -->
+    <div class="listing-card">
+      <div class="card-top">
+        <span class="verified-badge">Verified</span>
+        <span class="heart">&#10084;</span>
+      </div>
+      <div class="card-icon"><iconify-icon icon="mingcute:building-2-line"></iconify-icon></div>
+      <h3>2BHK Flat-Baneshor</h3>
+      <p class="location"><iconify-icon icon="mdi:location"></iconify-icon> Kathmandu, Bagmati</p>
+      <p class="desc">Furnished, attached bath, WiFi included, 5 min from Ring Road</p>
+      <div class="card-footer">
+        <span class="price">NPR 18000.00/mo</span>
+        <a href="#" class="view-details">VIEW DETAILS</a>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="listing-card">
+      <div class="card-top">
+        <span class="verified-badge">Verified</span>
+        <span class="heart">&#10084;</span>
+      </div>
+      <div class="card-icon"><iconify-icon icon="mingcute:door-line"></iconify-icon></div>
+      <h3>Single Room-Nadipur</h3>
+      <p class="location"><iconify-icon icon="mdi:location"></iconify-icon> Pokhara, Gandaki</p>
+      <p class="desc">Quiet area, bike parking, 24/7 water, semi-furnished</p>
+      <div class="card-footer">
+        <span class="price">NPR 6000.00/mo</span>
+        <a href="#" class="view-details">VIEW DETAILS</a>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ADVERTISEMENT BANNER -->
+  <section class="ad-banner">
+    <div class="ad-text">
+      <span class="ad-label">Advertisement</span>
+      <p><strong>Prabhu Bank Home Loan</strong><br/>Interest from 8.5% — apply online today</p>
+    </div>
+    <button onclick="alert('Learn More clicked')">LEARN MORE</button>
+  </section>
+
+  <!-- MORE LISTINGS HEADING -->
+  <section class="more-listings-heading">
+    <h2>More listings</h2>
+  </section>
+
+  <!-- MORE LISTINGS GRID -->
+  <section class="listings-grid">
+
+    <!-- Card 3 (repeat of 1) -->
+    <div class="listing-card">
+      <div class="card-top">
+        <span class="verified-badge">Verified</span>
+        <span class="heart">&#10084;</span>
+      </div>
+      <div class="card-icon"><iconify-icon icon="mingcute:building-2-line"></iconify-icon></div>
+      <h3>2BHK Flat-Baneshor</h3>
+      <p class="location"><iconify-icon icon="mdi:location"></iconify-icon> Kathmandu, Bagmati</p>
+      <p class="desc">Furnished, attached bath, WiFi included, 5 min from Ring Road</p>
+      <div class="card-footer">
+        <span class="price">NPR 18000.00/mo</span>
+        <a href="#" class="view-details">VIEW DETAILS</a>
+      </div>
+    </div>
+
+    <!-- Card 4 (repeat of 2) -->
+    <div class="listing-card">
+      <div class="card-top">
+        <span class="verified-badge">Verified</span>
+        <span class="heart">&#10084;</span>
+      </div>
+      <div class="card-icon"><iconify-icon icon="mingcute:door-line"></iconify-icon></div>
+      <h3>Single Room-Nadipur</h3>
+      <p class="location"><iconify-icon icon="mdi:location"></iconify-icon> Pokhara, Gandaki</p>
+      <p class="desc">Quiet area, bike parking, 24/7 water, semi-furnished</p>
+      <div class="card-footer">
+        <span class="price">NPR 6000.00/mo</span>
+        <a href="#" class="view-details">VIEW DETAILS</a>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav">
+    <a href="#" class="bottom-nav-item active">
+    <img src="/room-finder/static/images/home.png" alt="home" width="40" height="40" />
+     </div>
+      <span></span>
+      <small>Home</small>
+    </a>
+    <a href="#" class="bottom-nav-item">
+    <img src="/room-finder/static/images/search.png" alt="search" width="40" height="40" />
+     </div>
+      <span></span>
+      <small>Search</small>
+    </a>
+    <a href="#" class="bottom-nav-item">
+    <img src="/room-finder/static/images/saved.png" alt="saved" width="40" height="40" />
+     </div>
+      <span></span>
+      <small>Saved</small>
+    </a>
+    <a href="#" class="bottom-nav-item">
+    <img src="/room-finder/static/images/lists.png" alt="lists" width="40" height="40" />
+     </div>
+      <span></span>
+      <small>List</small>
+    </a>
+    <a href="#" class="bottom-nav-item">
+    <img src="/room-finder/static/images/profile.png" alt="profile" width="40" height="40" />
+     </div>
+      <span></span>
+      <small>Profile</small>
+    </a>
+  </nav>
+
+  <script>
+    function setActive(el) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      el.classList.add('active');
+    }
+  </script>
+
+</body>
+</html>
