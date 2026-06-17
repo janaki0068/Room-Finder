@@ -3,9 +3,9 @@
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Room Finder</title>
 
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
@@ -282,7 +282,10 @@
 
         </div>
 
-    </div>
+          {% else %}
+          <iconify-icon icon="mingcute:home-2-line"></iconify-icon>
+          {% endif %}
+        </div>
 
     <!-- INLINE ADVERTISEMENT -->
 
@@ -312,7 +315,7 @@
 
     {% empty %}
 
-    <div style="padding:20px;">
+      <div style="padding: 20px">
         <h3>No rooms available.</h3>
     </div>
 
