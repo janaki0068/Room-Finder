@@ -4,6 +4,7 @@ from django.contrib import messages
 from .forms import RegisterForm
 from .models import *
 from django.db.models import Q
+from django.http import JsonResponse
 
 
 # Create your views here.
@@ -93,4 +94,15 @@ def search_rooms(request):
     return render(request, 'home.html', {
         'rooms':rooms,
         'query':query,
+    })
+
+
+def get_districts(request, province_id):
+    districts = District.objects.filter(province_id=province_id).values(
+        'id',
+        'name'
+    )
+
+    return JsonResponse({
+        'districts': list(districts)
     })

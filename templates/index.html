@@ -1,284 +1,379 @@
+
 {% load static %}
 
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Room Finder</title>
 
-
-<link rel="stylesheet" href="{% static 'css/style.css' %}">
-<script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
-
-
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
 </head>
 <body>
 
 <header>
     <div class="navbar">
+
         <div class="logo">
-            <img src="{% static 'images/roomfinder.jpeg' %}"
-                 alt="Room Finder Logo"
-                 width="40"
-                 height="40">
+            <img
+                src="{% static 'images/roomfinder.jpeg' %}"
+                alt="Room Finder Logo"
+                width="40"
+                height="40"
+            >
             <span class="site-title">Room Finder</span>
         </div>
 
+<div class="nav-buttons">
+    <a href="{% url 'login' %}" class="btn-login">
+        Login
+    </a>
 
-    <div class="nav-buttons">
-        <a href="#" class="btn-login">Login</a>
-        <a href="#" class="btn-signup">Signup</a>
-    </div>
+    <a href="{% url 'register' %}" class="btn-signup">
+        Register
+    </a>
 </div>
 
-
+    </div>
 </header>
 
+<!-- HERO -->
+
 <section class="hero-text">
-    <strong>Find verified rooms across Nepal</strong><br>
+
+    <strong>
+        Find verified rooms across Nepal
+    </strong>
+
     <small>
         Trusted listings with ownership documents verified by our team.
     </small>
+
 </section>
 
+<!-- SEARCH + FILTERS -->
 <section class="search-section">
-    <form method="GET" action="{% url 'home' %}" class="search-form">
 
+    <form method="GET"
+          action="{% url 'home' %}"
+          class="search-form">
 
-    <div class="search-bar">
-        <span>&#128269;</span>
+        <div class="search-bar">
 
-        <input
-            type="text"
-            name="q"
-            placeholder="city, district, province or area"
-            value="{{ request.GET.q }}"
-        >
-    </div>
+            <span>&#128269;</span>
 
-    <button type="submit" class="search-btn">
-        Search
-    </button>
+            <input
+                type="text"
+                name="q"
+                placeholder="City, district, province or area"
+                value="{{ request.GET.q }}"
+            >
 
-</form>
+        </div>
 
-
-</section>
-
-<section class="province-tabs">
-    <a href="/" class="tab {% if not selected_province %}active{% endif %}">
-    All
-    </a>
+    <select id="province-select" name="province" class="filter-select">
+    <option value="">Province</option>
 
     {% for province in provinces %}
-        <a href="?province={{ province.id }}"
-        class="tab {% if selected_province == province.id|stringformat:'s' %}active{% endif %}">
-            {{ province.name }}
-        </a>
+    <option value="{{ province.id }}">
+        {{ province.name }}
+    </option>
     {% endfor %}
+    </select>
 
-<span class="more-icon">&#9670;</span>
 
+    <select id="district-select" name="district" class="filter-select">
+    <option value="">District</option>
+    </select>
+
+
+        <select name="sort" class="filter-select">
+
+            <option value="latest">
+                Latest
+            </option>
+
+            <option value="low-high">
+                Price Low → High
+            </option>
+
+            <option value="high-low">
+                Price High → Low
+            </option>
+
+        </select>
+
+        <button type="submit" class="search-btn">
+            Search
+        </button>
+
+    </form>
 
 </section>
 
-<section class="district-section">
-    <details>
-    <summary>District ▼</summary>
 
-    <ul>
-        {% for district in districts %}
-            <li>
-                <a href="?district={{ district.id }}">
-                    {{ district.name }}
-                </a>
-            </li>
-        {% endfor %}
-    </ul>
-</details>
 
-</section>
+<!-- BROWSE BY TYPE -->
 
 <section class="browse-type">
 
+    <div class="browse-header">
 
-<div class="browse-header">
-    <strong>Browse by type -</strong>
-    <a href="#">See all</a>
+        <strong>
+            Browse by Type -
+        </strong>
+
+        <a href="javascript:void(0)"
+   id="seeAllBtn">
+    See all
+</a>
+
+    </div>
+
+    <div class="type-grid">
+
+        <div class="type-card">
+            <div class="type-icon">
+                <iconify-icon icon="mingcute:building-2-line"></iconify-icon>
+            </div>
+            <span>Flat</span>
+        </div>
+
+        <div class="type-card">
+            <div class="type-icon">
+                <iconify-icon icon="mingcute:door-line"></iconify-icon>
+            </div>
+            <span>Single Room</span>
+        </div>
+
+        <div class="type-card">
+            <div class="type-icon">
+                <iconify-icon icon="mingcute:building-3-line"></iconify-icon>
+            </div>
+            <span>Apartment</span>
+        </div>
+
+        <div class="type-card">
+            <div class="type-icon">
+                <iconify-icon icon="mingcute:home-2-line"></iconify-icon>
+            </div>
+            <span>House</span>
+        </div>
+
+    </div>
+
+<div class="type-grid hidden-types" id="allTypes">
+
+    <div class="type-card">
+        <div class="type-icon">
+            <iconify-icon icon="mdi:bed"></iconify-icon>
+        </div>
+        <span>Hostel</span>
+    </div>
+
+    <div class="type-card">
+        <div class="type-icon">
+            <iconify-icon icon="mdi:office-building"></iconify-icon>
+        </div>
+        <span>Office Space</span>
+    </div>
+
+    <div class="type-card">
+        <div class="type-icon">
+            <iconify-icon icon="mdi:store"></iconify-icon>
+        </div>
+        <span>Shop</span>
+    </div>
+
+    <div class="type-card">
+        <div class="type-icon">
+            <iconify-icon icon="mdi:warehouse"></iconify-icon>
+        </div>
+        <span>Commercial</span>
+    </div>
+
 </div>
-
-<div class="type-grid">
-
-    <div class="type-card">
-        <div class="type-icon">
-            <iconify-icon icon="mingcute:building-2-line"></iconify-icon>
-        </div>
-        <span>Flat</span>
-    </div>
-
-    <div class="type-card">
-        <div class="type-icon">
-            <iconify-icon icon="mingcute:door-line"></iconify-icon>
-        </div>
-        <span>Single Room</span>
-    </div>
-
-    <div class="type-card">
-        <div class="type-icon">
-            <iconify-icon icon="mingcute:building-3-line"></iconify-icon>
-        </div>
-        <span>Apartment</span>
-    </div>
-
-    <div class="type-card">
-        <div class="type-icon">
-            <iconify-icon icon="mingcute:home-2-line"></iconify-icon>
-        </div>
-        <span>House</span>
-    </div>
-
-</div>
-
 
 </section>
 
+<!-- LISTINGS -->
+
 <section class="listings-grid">
 
+    {% for room in rooms %}
 
-{% for room in rooms %}
+    <div class="listing-card">
 
-<div class="listing-card">
+        <div class="card-top">
 
-    <div class="card-top">
+            {% if room.is_verified %}
+            <span class="verified-badge">
+                Verified
+            </span>
+            {% endif %}
 
-        {% if room.is_verified %}
-            <span class="verified-badge">Verified</span>
-        {% endif %}
+            <span class="heart">
+                &#10084;
+            </span>
 
-        <span class="heart">&#10084;</span>
+        </div>
 
-    </div>
+        <div class="card-icon">
 
-    <div class="card-icon">
+            {% if room.room_type == "flat" %}
+                <iconify-icon icon="mingcute:building-2-line"></iconify-icon>
 
-        {% if room.room_type == "flat" %}
-            <iconify-icon icon="mingcute:building-2-line"></iconify-icon>
+            {% elif room.room_type == "single" %}
+                <iconify-icon icon="mingcute:door-line"></iconify-icon>
 
-        {% elif room.room_type == "single" %}
-            <iconify-icon icon="mingcute:door-line"></iconify-icon>
+            {% elif room.room_type == "apartment" %}
+                <iconify-icon icon="mingcute:building-3-line"></iconify-icon>
 
-        {% elif room.room_type == "apartment" %}
-            <iconify-icon icon="mingcute:building-3-line"></iconify-icon>
+            {% else %}
+                <iconify-icon icon="mingcute:home-2-line"></iconify-icon>
+            {% endif %}
 
-        {% else %}
-            <iconify-icon icon="mingcute:home-2-line"></iconify-icon>
-        {% endif %}
+        </div>
 
-    </div>
+        <h3>
+            {{ room.title }}
+        </h3>
 
-    <h3>{{ room.title }}</h3>
+        <p class="location">
+            <iconify-icon icon="mdi:location"></iconify-icon>
+            {{ room.city }}, {{ room.province.name }}
+        </p>
 
-    <p class="location">
-        <iconify-icon icon="mdi:location"></iconify-icon>
-        {{ room.city }}, {{ room.province.name }}
-    </p>
+        <p class="desc">
+            {{ room.description|truncatechars:80 }}
+        </p>
 
-    <p class="desc">
-        {{ room.description|truncatechars:80 }}
-    </p>
+        <div class="room-features">
 
-    <div class="room-features">
-
-        {% if room.furnished %}
+            {% if room.furnished %}
             <span>✓ Furnished</span>
-        {% endif %}
+            {% endif %}
 
-        {% if room.wifi %}
+            {% if room.wifi %}
             <span>✓ WiFi</span>
-        {% endif %}
+            {% endif %}
 
-        {% if room.attached_bathroom %}
+            {% if room.attached_bathroom %}
             <span>✓ Attached Bath</span>
-        {% endif %}
+            {% endif %}
 
-        {% if room.parking %}
+            {% if room.parking %}
             <span>✓ Parking</span>
-        {% endif %}
+            {% endif %}
+
+        </div>
+
+        <div class="card-footer">
+
+            <span class="price">
+                NPR {{ room.price }}/mo
+            </span>
+
+            <a href="#" class="view-details">
+                VIEW DETAILS
+            </a>
+
+        </div>
 
     </div>
 
-    <div class="card-footer">
-        <span class="price">
-            NPR {{ room.price }}/mo
+    <!-- INLINE ADVERTISEMENT -->
+
+    {% if forloop.counter|divisibleby:6 %}
+
+    <div class="listing-ad">
+
+        <span class="ad-label">
+            Advertisement
         </span>
 
-        <a href="#" class="view-details">
-            VIEW DETAILS
-        </a>
+        <h3>
+            Prabhu Bank Home Loan
+        </h3>
+
+        <p>
+            Interest from 8.5% — Apply online today.
+        </p>
+
+        <button type="button">
+            Learn More
+        </button>
+
     </div>
 
-</div>
+    {% endif %}
 
-{% empty %}
+    {% empty %}
 
     <div style="padding:20px;">
         <h3>No rooms available.</h3>
     </div>
 
-{% endfor %}
-
+    {% endfor %}
 
 </section>
+
+<!-- LARGE BANNER AD -->
 
 <section class="ad-banner">
 
+    <div class="ad-text">
 
-<div class="ad-text">
-    <span class="ad-label">Advertisement</span>
+        <span class="ad-label">
+            Advertisement
+        </span>
 
-    <p>
-        <strong>Prabhu Bank Home Loan</strong><br>
-        Interest from 8.5% — apply online today
-    </p>
-</div>
+        <p>
+            <strong>
+                Prabhu Bank Home Loan
+            </strong>
+            <br>
+            Interest from 8.5% — apply online today
+        </p>
 
-<button type="button">
-    LEARN MORE
-</button>
+    </div>
 
+    <button type="button">
+        LEARN MORE
+    </button>
 
 </section>
 
+<!-- BOTTOM NAV -->
+
 <nav class="bottom-nav">
 
+    <a href="/" class="bottom-nav-item active">
+        <img src="{% static 'images/home.png' %}" alt="Home" width="40" height="40">
+        <small>Home</small>
+    </a>
 
-<a href="/" class="bottom-nav-item active">
-    <img src="{% static 'images/home.png' %}" alt="Home" width="40" height="40">
-    <small>Home</small>
-</a>
+    <a href="#" class="bottom-nav-item">
+        <img src="{% static 'images/search.png' %}" alt="Search" width="40" height="40">
+        <small>Search</small>
+    </a>
 
-<a href="#" class="bottom-nav-item">
-    <img src="{% static 'images/search.png' %}" alt="Search" width="40" height="40">
-    <small>Search</small>
-</a>
+    <a href="#" class="bottom-nav-item">
+        <img src="{% static 'images/saved.png' %}" alt="Saved" width="40" height="40">
+        <small>Saved</small>
+    </a>
 
-<a href="#" class="bottom-nav-item">
-    <img src="{% static 'images/saved.png' %}" alt="Saved" width="40" height="40">
-    <small>Saved</small>
-</a>
+    <a href="#" class="bottom-nav-item">
+        <img src="{% static 'images/lists.png' %}" alt="Lists" width="40" height="40">
+        <small>List</small>
+    </a>
 
-<a href="#" class="bottom-nav-item">
-    <img src="{% static 'images/lists.png' %}" alt="Lists" width="40" height="40">
-    <small>List</small>
-</a>
-
-<a href="#" class="bottom-nav-item">
-    <img src="{% static 'images/profile.png' %}" alt="Profile" width="40" height="40">
-    <small>Profile</small>
-</a>
-
+    <a href="#" class="bottom-nav-item">
+        <img src="{% static 'images/profile.png' %}" alt="Profile" width="40" height="40">
+        <small>Profile</small>
+    </a>
 
 </nav>
 
@@ -292,5 +387,52 @@ function setActive(el) {
 }
 </script>
 
+<script>
+document.getElementById('province-select').addEventListener('change', function() {
+
+    const provinceId = this.value;
+
+    fetch(`/get-districts/${provinceId}/`)
+        .then(response => response.json())
+        .then(data => {
+
+            const districtSelect =
+                document.getElementById('district-select');
+
+            districtSelect.innerHTML =
+                '<option value="">District</option>';
+
+            data.districts.forEach(function(district) {
+
+                districtSelect.innerHTML +=
+                    `<option value="${district.id}">
+                        ${district.name}
+                    </option>`;
+
+            });
+
+        });
+
+});
+</script>
+
+<script>
+const btn = document.getElementById('seeAllBtn');
+const types = document.getElementById('allTypes');
+
+btn.addEventListener('click', function(){
+
+    types.classList.toggle('show');
+
+    if(types.classList.contains('show')){
+        btn.textContent = 'Show less';
+    }else{
+        btn.textContent = 'See all';
+    }
+
+});
+</script>
+
 </body>
 </html>
+

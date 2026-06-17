@@ -23,8 +23,12 @@ class Room(models.Model):
     ROOM_TYPES = [
         ("flat","Flat"),
         ("single","Single Room"),
+        ("2 rooms","2 Rooms"),
         ("apartment","Apartment"),
         ("house","House"),
+        ("hostel","Hostel"),
+        ("office space","Office Spaces"),
+        ("shutter","Shutter"),
     ]
     
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="rooms")
