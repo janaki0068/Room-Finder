@@ -478,3 +478,72 @@ BOTTOM NAV
 body{
     padding-bottom:100px;
 }
+
+
+/* Auth Popup */
+.auth-popup-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+}
+
+.auth-popup-overlay.show {
+    display: flex;
+}
+
+.auth-popup-box {
+    background: white;
+    padding: 32px;
+    border-radius: 12px;
+    text-align: center;
+    position: relative;
+    max-width: 320px;
+    width: 90%;
+}
+
+.auth-popup-box h3 {
+    color: var(--color-5);
+    margin-bottom: 8px;
+}
+
+.auth-popup-box p {
+    color: #555;
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+}
+
+.auth-popup-box a {
+    display: inline-block;
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.login-btn {
+    background-color: #FF5D8F;
+    color: white;
+}
+
+.register-btn {
+    background-color: #FADDE1;
+    color: #FF5D8F;
+}
+
+.close-popup {
+    position: absolute;
+    top: 10px;
+    right: 16px;
+    cursor: pointer;
+    font-size: 1.4rem;
+    color: #999;
+}

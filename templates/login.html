@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}">
+{% endblock css %}
+
+{% block content %}
+
+<div class="login-container">
+    <div class="left-side">
+        <h1>ROOM FINDER APP</h1>
+        <div class="logo">
+            <img src="{% static 'images/logo.png' %}" alt="Room Finder Image">
+        </div>
+        <div class="logo-text">
+            <h2>Ready to Find Your Space?</h2>
+            <p>Log in to connect with verified listings across Nepal.</p>
+        </div>
+    </div>
+    <div class="right-side">
+        <h2>Welcome To Room Finder</h2>
+        <form method="POST">
+            {% csrf_token %}
+            <div class="login-form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required placeholder="Enter your email">
+            </div>
+            <div class="login-form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required placeholder="Enter your password">
+            </div>
+            <div class="login-form-footer">
+                <button type="submit" class="login-btn">Sign In</button>
+                <p>Don't have an account? <a href="{% url 'register' %}">Sign Up </a></p>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock content %}

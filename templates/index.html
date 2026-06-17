@@ -1,296 +1,272 @@
 {% load static %}
 
-<!DOCTYPE html>
+<!doctype html>
 
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Room Finder</title>
 
-
-<link rel="stylesheet" href="{% static 'css/style.css' %}">
-<script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
-
-
-</head>
-<body>
-
-<header>
-    <div class="navbar">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+  </head>
+  <body>
+    <header>
+      <div class="navbar">
         <div class="logo">
-            <img src="{% static 'images/roomfinder.jpeg' %}"
-                 alt="Room Finder Logo"
-                 width="40"
-                 height="40">
-            <span class="site-title">Room Finder</span>
+          <img
+            src="{% static 'images/roomfinder.jpeg' %}"
+            alt="Room Finder Logo"
+            width="40"
+            height="40"
+          />
+          <span class="site-title">Room Finder</span>
         </div>
 
+        <div class="nav-buttons">
+          <a href="{% url 'login' %}" class="btn-login">Login</a>
+          <a href="{% url 'register' %}" class="btn-signup">Signup</a>
+        </div>
+      </div>
+    </header>
 
-    <div class="nav-buttons">
-        <a href="#" class="btn-login">Login</a>
-        <a href="#" class="btn-signup">Signup</a>
-    </div>
-</div>
-
-
-</header>
-
-<section class="hero-text">
-    <strong>Find verified rooms across Nepal</strong><br>
-    <small>
+    <section class="hero-text">
+      <strong>Find verified rooms across Nepal</strong><br />
+      <small>
         Trusted listings with ownership documents verified by our team.
-    </small>
-</section>
+      </small>
+    </section>
 
-<section class="search-section">
-    <form method="GET" action="{% url 'home' %}" class="search-form">
+    <section class="search-section">
+      <form method="GET" action="{% url 'home' %}" class="search-form">
+        <div class="search-bar">
+          <span>&#128269;</span>
 
-
-    <div class="search-bar">
-        <span>&#128269;</span>
-
-        <input
+          <input
             type="text"
             name="q"
             placeholder="city, district, province or area"
             value="{{ request.GET.q }}"
-        >
-    </div>
+          />
+        </div>
 
-    <button type="submit" class="search-btn">
-        Search
-    </button>
+        <button type="submit" class="search-btn">Search</button>
+      </form>
+    </section>
 
-</form>
+    <section class="province-tabs">
+      <a href="/" class="tab {% if not selected_province %}active{% endif %}">
+        All
+      </a>
 
+      {% for province in provinces %}
+      <a
+        href="?province={{ province.id }}"
+        class="tab {% if selected_province == province.id|stringformat:'s' %}active{% endif %}"
+      >
+        {{ province.name }}
+      </a>
+      {% endfor %}
 
-</section>
+      <span class="more-icon">&#9670;</span>
+    </section>
 
-<section class="province-tabs">
-    <a href="/" class="tab {% if not selected_province %}active{% endif %}">
-    All
-    </a>
+    <section class="district-section">
+      <details>
+        <summary>District ▼</summary>
 
-    {% for province in provinces %}
-        <a href="?province={{ province.id }}"
-        class="tab {% if selected_province == province.id|stringformat:'s' %}active{% endif %}">
-            {{ province.name }}
-        </a>
-    {% endfor %}
+        <ul>
+          {% for district in districts %}
+          <li>
+            <a href="?district={{ district.id }}"> {{ district.name }} </a>
+          </li>
+          {% endfor %}
+        </ul>
+      </details>
+    </section>
 
-<span class="more-icon">&#9670;</span>
+    <section class="browse-type">
+      <div class="browse-header">
+        <strong>Browse by type -</strong>
+        <a href="#">See all</a>
+      </div>
 
-
-</section>
-
-<section class="district-section">
-    <details>
-    <summary>District ▼</summary>
-
-    <ul>
-        {% for district in districts %}
-            <li>
-                <a href="?district={{ district.id }}">
-                    {{ district.name }}
-                </a>
-            </li>
-        {% endfor %}
-    </ul>
-</details>
-
-</section>
-
-<section class="browse-type">
-
-
-<div class="browse-header">
-    <strong>Browse by type -</strong>
-    <a href="#">See all</a>
-</div>
-
-<div class="type-grid">
-
-    <div class="type-card">
-        <div class="type-icon">
+      <div class="type-grid">
+        <div class="type-card">
+          <div class="type-icon">
             <iconify-icon icon="mingcute:building-2-line"></iconify-icon>
+          </div>
+          <span>Flat</span>
         </div>
-        <span>Flat</span>
-    </div>
 
-    <div class="type-card">
-        <div class="type-icon">
+        <div class="type-card">
+          <div class="type-icon">
             <iconify-icon icon="mingcute:door-line"></iconify-icon>
+          </div>
+          <span>Single Room</span>
         </div>
-        <span>Single Room</span>
-    </div>
 
-    <div class="type-card">
-        <div class="type-icon">
+        <div class="type-card">
+          <div class="type-icon">
             <iconify-icon icon="mingcute:building-3-line"></iconify-icon>
+          </div>
+          <span>Apartment</span>
         </div>
-        <span>Apartment</span>
-    </div>
 
-    <div class="type-card">
-        <div class="type-icon">
+        <div class="type-card">
+          <div class="type-icon">
             <iconify-icon icon="mingcute:home-2-line"></iconify-icon>
+          </div>
+          <span>House</span>
         </div>
-        <span>House</span>
-    </div>
+      </div>
+    </section>
 
-</div>
+    <section class="listings-grid">
+      {% for room in rooms %}
 
+      <div class="listing-card">
+        <div class="card-top">
+          {% if room.is_verified %}
+          <span class="verified-badge">Verified</span>
+          {% endif %}
 
-</section>
+          <span class="heart">&#10084;</span>
+        </div>
 
-<section class="listings-grid">
+        <div class="card-icon">
+          {% if room.room_type == "flat" %}
+          <iconify-icon icon="mingcute:building-2-line"></iconify-icon>
 
+          {% elif room.room_type == "single" %}
+          <iconify-icon icon="mingcute:door-line"></iconify-icon>
 
-{% for room in rooms %}
+          {% elif room.room_type == "apartment" %}
+          <iconify-icon icon="mingcute:building-3-line"></iconify-icon>
 
-<div class="listing-card">
+          {% else %}
+          <iconify-icon icon="mingcute:home-2-line"></iconify-icon>
+          {% endif %}
+        </div>
 
-    <div class="card-top">
+        <h3>{{ room.title }}</h3>
 
-        {% if room.is_verified %}
-            <span class="verified-badge">Verified</span>
-        {% endif %}
+        <p class="location">
+          <iconify-icon icon="mdi:location"></iconify-icon>
+          {{ room.city }}, {{ room.province.name }}
+        </p>
 
-        <span class="heart">&#10084;</span>
+        <p class="desc">{{ room.description|truncatechars:80 }}</p>
 
-    </div>
+        <div class="room-features">
+          {% if room.furnished %}
+          <span>✓ Furnished</span>
+          {% endif %} {% if room.wifi %}
+          <span>✓ WiFi</span>
+          {% endif %} {% if room.attached_bathroom %}
+          <span>✓ Attached Bath</span>
+          {% endif %} {% if room.parking %}
+          <span>✓ Parking</span>
+          {% endif %}
+        </div>
 
-    <div class="card-icon">
+        <div class="card-footer">
+          <span class="price"> NPR {{ room.price }}/mo </span>
 
-        {% if room.room_type == "flat" %}
-            <iconify-icon icon="mingcute:building-2-line"></iconify-icon>
+          <a href="#" class="view-details"> VIEW DETAILS </a>
+        </div>
+      </div>
 
-        {% elif room.room_type == "single" %}
-            <iconify-icon icon="mingcute:door-line"></iconify-icon>
+      {% empty %}
 
-        {% elif room.room_type == "apartment" %}
-            <iconify-icon icon="mingcute:building-3-line"></iconify-icon>
-
-        {% else %}
-            <iconify-icon icon="mingcute:home-2-line"></iconify-icon>
-        {% endif %}
-
-    </div>
-
-    <h3>{{ room.title }}</h3>
-
-    <p class="location">
-        <iconify-icon icon="mdi:location"></iconify-icon>
-        {{ room.city }}, {{ room.province.name }}
-    </p>
-
-    <p class="desc">
-        {{ room.description|truncatechars:80 }}
-    </p>
-
-    <div class="room-features">
-
-        {% if room.furnished %}
-            <span>✓ Furnished</span>
-        {% endif %}
-
-        {% if room.wifi %}
-            <span>✓ WiFi</span>
-        {% endif %}
-
-        {% if room.attached_bathroom %}
-            <span>✓ Attached Bath</span>
-        {% endif %}
-
-        {% if room.parking %}
-            <span>✓ Parking</span>
-        {% endif %}
-
-    </div>
-
-    <div class="card-footer">
-        <span class="price">
-            NPR {{ room.price }}/mo
-        </span>
-
-        <a href="#" class="view-details">
-            VIEW DETAILS
-        </a>
-    </div>
-
-</div>
-
-{% empty %}
-
-    <div style="padding:20px;">
+      <div style="padding: 20px">
         <h3>No rooms available.</h3>
-    </div>
+      </div>
 
-{% endfor %}
+      {% endfor %}
+    </section>
 
+    <section class="ad-banner">
+      <div class="ad-text">
+        <span class="ad-label">Advertisement</span>
 
-</section>
+        <p>
+          <strong>Prabhu Bank Home Loan</strong><br />
+          Interest from 8.5% — apply online today
+        </p>
+      </div>
 
-<section class="ad-banner">
+      <button type="button">LEARN MORE</button>
+    </section>
 
+    <nav class="bottom-nav">
+      <a href="/" class="bottom-nav-item active">
+        <img
+          src="{% static 'images/home.png' %}"
+          alt="Home"
+          width="40"
+          height="40"
+        />
+        <small>Home</small>
+      </a>
 
-<div class="ad-text">
-    <span class="ad-label">Advertisement</span>
+      <a href="#" class="bottom-nav-item">
+        <img
+          src="{% static 'images/search.png' %}"
+          alt="Search"
+          width="40"
+          height="40"
+        />
+        <small>Search</small>
+      </a>
 
-    <p>
-        <strong>Prabhu Bank Home Loan</strong><br>
-        Interest from 8.5% — apply online today
-    </p>
-</div>
-
-<button type="button">
-    LEARN MORE
-</button>
-
-
-</section>
-
-<nav class="bottom-nav">
-
-
-<a href="/" class="bottom-nav-item active">
-    <img src="{% static 'images/home.png' %}" alt="Home" width="40" height="40">
-    <small>Home</small>
-</a>
-
-<a href="#" class="bottom-nav-item">
-    <img src="{% static 'images/search.png' %}" alt="Search" width="40" height="40">
-    <small>Search</small>
-</a>
-
-<a href="#" class="bottom-nav-item">
+      <!-- prettier-ignore -->
+      <a href="{% if user.is_authenticated %}{% url 'saved' %}{% else %}#{% endif %}" class="bottom-nav-item" onclick="{% if not user.is_authenticated %}showAuthPopup(event){% endif %}">
     <img src="{% static 'images/saved.png' %}" alt="Saved" width="40" height="40">
     <small>Saved</small>
 </a>
 
-<a href="#" class="bottom-nav-item">
+      <!-- prettier-ignore -->
+      <a href="{% if user.is_authenticated %}{% url 'list' %}{% else %}#{% endif %}" class="bottom-nav-item" onclick="{% if not user.is_authenticated %}showAuthPopup(event){% endif %}">
     <img src="{% static 'images/lists.png' %}" alt="Lists" width="40" height="40">
     <small>List</small>
 </a>
 
-<a href="#" class="bottom-nav-item">
+      <!-- prettier-ignore -->
+      <a href="{% if user.is_authenticated %}{% url 'profile' %}{% else %}#{% endif %}" class="bottom-nav-item" onclick="{% if not user.is_authenticated %}showAuthPopup(event){% endif %}">
     <img src="{% static 'images/profile.png' %}" alt="Profile" width="40" height="40">
     <small>Profile</small>
 </a>
+    </nav>
 
+    <script>
+      function setActive(el) {
+        document.querySelectorAll(".tab").forEach((tab) => {
+          tab.classList.remove("active");
+        });
 
-</nav>
+        el.classList.add("active");
+      }
 
-<script>
-function setActive(el) {
-    document.querySelectorAll('.tab').forEach(tab => {
-        tab.classList.remove('active');
-    });
+      function showAuthPopup(event) {
+        event.preventDefault();
+        document.getElementById("authPopup").classList.add("show");
+      }
 
-    el.classList.add('active');
-}
-</script>
+      function closeAuthPopup() {
+        document.getElementById("authPopup").classList.remove("show");
+      }
+    </script>
 
-</body>
+    <div id="authPopup" class="auth-popup-overlay">
+      <div class="auth-popup-box">
+        <span class="close-popup" onclick="closeAuthPopup()">&times;</span>
+        <h3>Join Room Finder</h3>
+        <p>Log in or sign up to access this feature.</p>
+        <a href="{% url 'login' %}" class="login-btn">Login</a>
+        <a href="{% url 'register' %}" class="register-btn">Sign Up</a>
+      </div>
+    </div>
+  </body>
 </html>
