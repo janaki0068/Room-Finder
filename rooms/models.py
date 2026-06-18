@@ -73,17 +73,12 @@ class SavedRoom(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.room.title}"
-
-
-# PROFILE
+    
 class Profile(models.Model):
-    ROLE_CHOICES = [
-        ("tenant", "Tenant"),
-        ("landlord", "Landlord"),
-    ]
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    phone_number = models.CharField(max_length=15)
-    role = models.CharField(max_length=10, choices=ROLE_CHOICES, default="tenant")
+    is_landlord = models.BooleanField(default=False)
+    phone_number = models.CharField(max_length=15, blank=True)
+    image = models.ImageField(upload_to='profile_images/', blank=True, null=True)
 
     def __str__(self):
-        return f"{self.user.username} - {self.role}"
+        return f"{self.user.username} - {'Landlord' if self.is_landlord else 'Tenant'}"

@@ -62,16 +62,22 @@ def login_view(request):
         except User.DoesNotExist:
             messages.error(request, 'Invalid email or password.')
             return render(request, 'login.html')
-        
+
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
             login(request, user)
-            return redirect('home')
-        
+
+            # 👇 ROLE-BASED REDIRECT (IMPORTANT PART)
+            if hasattr(user, 'profile') and user.profile.is_landlord:
+                return redirect('landlord_dashboard')
+            else:
+                return redirect('home')
+
         else:
             messages.error(request, 'Invalid email or password.')
             return render(request, 'login.html')
+
     return render(request, 'login.html')
 
 # REGISTER
@@ -154,3 +160,35 @@ def list_view(request):
 @login_required(login_url='login')
 def profile_view(request):
     return render(request, 'profile.html')
+
+
+# Landlord dashboard
+@login_required
+def landlord_dashboard(request):
+    return render(request, "landlord_dashboard.html")
+
+# My listings page
+@login_required
+def my_listings(request):
+    return render(request, "my_listings.html")
+
+# Saved rooms page
+@login_required
+def saved_rooms(request):
+    return render(request, "saved_rooms.html")
+
+@login_required
+def edit_profile(request):
+    return render(request, "edit_profile.html")
+
+@login_required
+def upload_listing(request):
+    return render(request, "upload_listing.html")
+
+@login_required
+def messages(request):
+    return render(request, "messages.html")
+
+@login_required
+def settings_view(request):
+    return render(request, "settings.html")

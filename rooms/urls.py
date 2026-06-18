@@ -13,4 +13,12 @@ urlpatterns = [
     path('saved/', views.saved_view, name='saved_view'),
     path('list/', views.list_view, name='list_view'),
     path('profile/', views.profile_view, name='profile_view'),
+
+    path("landlord-dashboard/", views.landlord_dashboard, name="landlord_dashboard"),
+    path("my-listings/", views.my_listings, name="my_listings"),
+    path("saved-rooms/", views.saved_rooms, name="saved_rooms"),
+    path("edit-profile/", views.edit_profile, name="edit_profile"),
+    path("upload-listing/", views.upload_listing, name="upload_listing"),
+    path("messages/", views.messages, name="messages"),
+    path("settings/", views.settings_view, name="settings"),
 ]
