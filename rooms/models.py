@@ -38,6 +38,12 @@ class Room(models.Model):
         ("shutter", "Shutter"),
     ]
 
+    STATUS_CHOICES = [
+        ("pending", "Pending"),
+        ("approved", "Approved"),
+        ("rejected", "Rejected"),
+    ]
+
     owner = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="rooms")
     title = models.CharField(max_length=200)
@@ -48,7 +54,8 @@ class Room(models.Model):
     city = models.CharField(max_length=100)
     description = models.TextField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    is_verified = models.BooleanField(default=False)
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default="pending")
+    rejection_reason = models.TextField(blank=True, null=True)
     wifi = models.BooleanField(default=False)
     attached_bathroom = models.BooleanField(default=False)
     furnished = models.BooleanField(default=False)

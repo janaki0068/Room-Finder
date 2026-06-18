@@ -13,7 +13,7 @@ from django.contrib.auth.decorators import login_required
 
 # HOME
 def home(request):
-    rooms = Room.objects.all()
+    rooms = Room.objects.filter(status="approved")
 
     # GET FILTER VALUES
     query = request.GET.get('q')

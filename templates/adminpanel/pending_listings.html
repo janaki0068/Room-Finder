@@ -1,0 +1,31 @@
+{% extends "base.html" %} {% block content %}
+
+<h1>Pending Listings</h1>
+
+<table border="1" cellpadding="10">
+  <tr>
+    <th>Title</th>
+    <th>Owner</th>
+    <th>City</th>
+    <th>Price</th>
+    <th>Actions</th>
+  </tr>
+  {% for room in listings %}
+  <tr>
+    <td>{{ room.title }}</td>
+    <td>{{ room.owner.email }}</td>
+    <td>{{ room.city }}</td>
+    <td>${{ room.price }}</td>
+    <td>
+      <a href="{% url 'approve_listing' room.id %}">Approve</a>
+      <a href="{% url 'reject_listing' room.id %}">Reject</a>
+    </td>
+  </tr>
+  {% empty %}
+  <tr>
+    <td colspan="5">No pending listings</td>
+  </tr>
+  {% endfor %}
+</table>
+
+{% endblock content %}
