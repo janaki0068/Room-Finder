@@ -220,22 +220,22 @@
 
         </div>
 
-        <div class="card-icon">
+<div class="card-icon">
 
-            {% if room.room_type == "flat" %}
-                <iconify-icon icon="mingcute:building-2-line"></iconify-icon>
+    {% if room.room_type == "flat" %}
+        <iconify-icon icon="mingcute:building-2-line"></iconify-icon>
 
-            {% elif room.room_type == "single" %}
-                <iconify-icon icon="mingcute:door-line"></iconify-icon>
+    {% elif room.room_type == "single" %}
+        <iconify-icon icon="mingcute:door-line"></iconify-icon>
 
-            {% elif room.room_type == "apartment" %}
-                <iconify-icon icon="mingcute:building-3-line"></iconify-icon>
+    {% elif room.room_type == "apartment" %}
+        <iconify-icon icon="mingcute:building-3-line"></iconify-icon>
 
-            {% else %}
-                <iconify-icon icon="mingcute:home-2-line"></iconify-icon>
-            {% endif %}
+    {% else %}
+        <iconify-icon icon="mingcute:home-2-line"></iconify-icon>
+    {% endif %}
 
-        </div>
+</div>
 
         <h3>
             {{ room.title }}
@@ -280,11 +280,6 @@
                 VIEW DETAILS
             </a>
 
-        </div>
-
-          {% else %}
-          <iconify-icon icon="mingcute:home-2-line"></iconify-icon>
-          {% endif %}
         </div>
 
     <!-- INLINE ADVERTISEMENT -->

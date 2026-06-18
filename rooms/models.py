@@ -63,3 +63,6 @@ class SavedRoom(models.Model):
     def __str__(self):
         return f"{self.user.username} - {self.room.title}"
     
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    is_landlord = models.BooleanField(default=False)

@@ -1,0 +1,241 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Room Finder - Dashboard</title>
+
+  <link rel="stylesheet" href="{% static 'css/landlord_dashboard.css' %}">
+  <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<header>
+  <div class="logo">
+    <img src="{% static 'images/roomfinder.jpeg' %}" alt="Room Finder Logo" width="40" height="40"/>
+    <span>Room Finder</span>
+  </div>
+
+  <nav>
+    <a href="{% url 'home' %}">Home</a>
+    <a href="{% url 'landlord_dashboard' %}" class="active">Dashboard</a>
+    <a href="{% url 'my_listings' %}">My Listings</a>
+    <a href="{% url 'saved_rooms' %}">Saved</a>
+  </nav>
+
+  <div class="user-actions">
+    {% if request.user.profile.image %}
+      <img src="{{ request.user.profile.image.url }}" alt="User Avatar" class="avatar" />
+    {% else %}
+      <img src="{% static 'images/default-avatar.png' %}" alt="User Avatar" class="avatar" />
+    {% endif %}
+
+    <span class="username">
+      {{ request.user.get_full_name|default:request.user.username }}
+    </span>
+
+    <a href="{% url 'logout' %}">Logout</a>
+  </div>
+</header>
+
+<main>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="profile-card">
+      {% if request.user.profile.image %}
+        <img src="{{ request.user.profile.image.url }}" class="profile-photo" />
+      {% else %}
+        <img src="{% static 'images/default-avatar.png' %}" class="profile-photo" />
+      {% endif %}
+
+      <h3>{{ request.user.get_full_name|default:request.user.username }}</h3>
+      <p>{{ request.user.email }}</p>
+
+      <a href="{% url 'edit_profile' %}">Edit Profile</a>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="{% url 'landlord_dashboard' %}">
+        <span class="icon">🏠</span> Dashboard
+      </a>
+
+      <a href="{% url 'upload_listing' %}">
+        <span class="icon">➕</span> Upload Listing
+      </a>
+
+      <a href="{% url 'my_listings' %}">
+        <span class="icon">📋</span> My Listings
+      </a>
+
+      <a href="{% url 'saved_rooms' %}">
+        <span class="icon">❤️</span> Saved Rooms
+      </a>
+
+      <a href="{% url 'messages' %}">
+        <span class="icon">💬</span> Messages
+      </a>
+
+      <a href="{% url 'settings' %}">
+        <span class="icon">⚙️</span> Settings
+      </a>
+    </nav>
+  </aside>
+
+  <!-- DASHBOARD CONTENT -->
+  <section class="dashboard-content">
+
+    <!-- STATS ROW -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <h4>Total Listings</h4>
+        <p class="stat-number">{{ total_listings|default:0 }}</p>
+      </div>
+
+      <div class="stat-card">
+        <h4>Active Listings</h4>
+        <p class="stat-number">{{ active_listings|default:0 }}</p>
+      </div>
+
+      <div class="stat-card">
+        <h4>Total Views</h4>
+        <p class="stat-number">{{ total_views|default:0 }}</p>
+      </div>
+
+      <div class="stat-card">
+        <h4>Saved by Others</h4>
+        <p class="stat-number">{{ saved_count|default:0 }}</p>
+      </div>
+    </div>
+
+    <!-- UPLOAD SECTION (STATIC UI - can later convert to Django form) -->
+    <div class="upload-section">
+      <h2>Upload a New Listing</h2>
+
+      <div class="form-group">
+        <label>Title</label>
+        <input type="text" placeholder="e.g. Cozy single room in Baneshwor" />
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Property Type</label>
+          <select>
+            <option>Select type</option>
+            <option>Single Room</option>
+            <option>Flat</option>
+            <option>House</option>
+            <option>Apartment</option>
+            <option>PG / Hostel</option>
+            <option>Office Space</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Monthly Rent (NPR)</label>
+          <input type="number" placeholder="e.g. 8000" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Province</label>
+          <select>
+            <option>Select province</option>
+            <option>Koshi</option>
+            <option>Madhesh</option>
+            <option>Bagmati</option>
+            <option>Gandaki</option>
+            <option>Lumbini</option>
+            <option>Karnali</option>
+            <option>Sudur Paschim</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>District</label>
+          <input type="text" placeholder="e.g. Kathmandu" />
+        </div>
+
+        <div class="form-group">
+          <label>City / Area</label>
+          <input type="text" placeholder="e.g. Baneshwor" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Description</label>
+        <textarea rows="4"></textarea>
+      </div>
+
+      <div class="form-actions">
+        <button type="button">Save as Draft</button>
+        <button type="button">Publish Listing</button>
+      </div>
+    </div>
+
+    <!-- RECENT LISTINGS -->
+    <div class="my-listings-section">
+      <div class="section-header">
+        <h2>My Recent Listings</h2>
+        <a href="{% url 'my_listings' %}">See all</a>
+      </div>
+
+      <div class="listings-grid">
+
+        {% for listing in recent_listings %}
+        <div class="listing-card">
+
+          <div class="listing-img-wrap">
+            <img src="{{ listing.image.url }}" alt="{{ listing.title }}" />
+            <span class="badge {{ listing.status }}">{{ listing.status }}</span>
+          </div>
+
+          <div class="listing-info">
+            <h4>{{ listing.title }}</h4>
+
+            <p class="listing-meta">
+              {{ listing.property_type }} | 📍 {{ listing.city }}
+            </p>
+
+            <p class="listing-price">
+              NPR {{ listing.rent }} / month
+            </p>
+
+            <div class="listing-stats">
+              <span>👁 {{ listing.views }} views</span>
+              <span>❤️ {{ listing.saved_count }} saved</span>
+            </div>
+
+            <div class="listing-actions">
+              <a href="{% url 'edit_listing' listing.id %}" class="btn-edit">Edit</a>
+              <a href="{% url 'delete_listing' listing.id %}" class="btn-delete">Delete</a>
+            </div>
+          </div>
+
+        </div>
+        {% empty %}
+          <p>No listings yet.</p>
+        {% endfor %}
+
+      </div>
+    </div>
+
+  </section>
+</main>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <a href="{% url 'home' %}"><span>🏠</span><small>Home</small></a>
+  <a href="#"><span>🔍</span><small>Search</small></a>
+  <a href="{% url 'upload_listing' %}" class="upload-btn"><span>➕</span><small>Upload</small></a>
+  <a href="{% url 'saved_rooms' %}"><span>❤️</span><small>Saved</small></a>
+  <a href="{% url 'landlord_dashboard' %}" class="active"><span>👤</span><small>Profile</small></a>
+</nav>
+
+</body>
+</html>

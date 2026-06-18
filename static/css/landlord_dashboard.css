@@ -1,0 +1,450 @@
+/* =============================================
+   ROOM FINDER - FULL DASHBOARD CSS (DJANGO READY)
+   Theme: Pink / Rose Modern UI
+   ============================================= */
+
+/* --- RESET --- */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: #fff0f3;
+  color: #2d2d2d;
+  min-height: 100vh;
+  padding-bottom: 90px;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+/* --- HEADER --- */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #FBD0DD;
+  padding: 12px 28px;
+  border-bottom: 2px solid #ffd6e0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 10px rgba(232, 67, 147, 0.08);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  color: #e84393;
+  font-size: 1.2rem;
+}
+
+.logo img {
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+}
+
+header nav {
+  display: flex;
+  gap: 22px;
+}
+
+header nav a {
+  font-size: 0.95rem;
+  color: #555;
+  font-weight: 500;
+  padding: 6px 4px;
+  border-bottom: 2px solid transparent;
+  transition: 0.2s;
+}
+
+header nav a:hover,
+header nav a.active {
+  color: #e84393;
+  border-bottom: 2px solid #e84393;
+}
+
+.user-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid #f9a8c9;
+  object-fit: cover;
+}
+
+.username {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.user-actions a {
+  padding: 5px 14px;
+  border: 1px solid #e84393;
+  border-radius: 20px;
+  color: #e84393;
+  font-size: 0.85rem;
+  transition: 0.2s;
+}
+
+.user-actions a:hover {
+  background: #e84393;
+  color: white;
+}
+
+/* --- MAIN LAYOUT --- */
+main {
+  display: flex;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 20px;
+  gap: 25px;
+}
+
+/* --- SIDEBAR --- */
+.sidebar {
+  width: 240px;
+}
+
+.profile-card {
+  background: #fff;
+  border: 1.5px solid #ffd6e0;
+  border-radius: 16px;
+  padding: 20px;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.profile-photo {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  border: 3px solid #f9a8c9;
+  margin-bottom: 10px;
+  object-fit: cover;
+}
+
+.profile-card h3 {
+  font-size: 1rem;
+  margin-bottom: 5px;
+}
+
+.profile-card p {
+  font-size: 0.8rem;
+  color: #777;
+  margin-bottom: 10px;
+}
+
+.profile-card a {
+  display: inline-block;
+  padding: 5px 14px;
+  border: 1px solid #e84393;
+  border-radius: 20px;
+  color: #e84393;
+  font-size: 0.8rem;
+}
+
+.profile-card a:hover {
+  background: #e84393;
+  color: #fff;
+}
+
+.sidebar-nav {
+  background: #fff;
+  border: 1.5px solid #ffd6e0;
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-nav a {
+  padding: 12px 18px;
+  font-size: 0.9rem;
+  display: flex;
+  gap: 10px;
+  border-bottom: 1px solid #ffeaf0;
+  color: #444;
+  transition: 0.2s;
+}
+
+.sidebar-nav a:hover {
+  background: #fff0f3;
+  color: #e84393;
+}
+
+.sidebar-nav a:last-child {
+  border-bottom: none;
+}
+
+/* --- DASHBOARD CONTENT --- */
+.dashboard-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+/* --- STATS --- */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+}
+
+.stat-card {
+  background: #fff;
+  border: 1.5px solid #ffd6e0;
+  border-radius: 14px;
+  text-align: center;
+  padding: 18px;
+}
+
+.stat-card h4 {
+  font-size: 0.75rem;
+  color: #999;
+  text-transform: uppercase;
+}
+
+.stat-number {
+  font-size: 1.8rem;
+  color: #e84393;
+  font-weight: 800;
+  margin-top: 5px;
+}
+
+/* --- UPLOAD SECTION --- */
+.upload-section {
+  background: #fff;
+  border: 1.5px solid #ffd6e0;
+  border-radius: 16px;
+  padding: 25px;
+}
+
+.upload-section h2 {
+  font-size: 1.2rem;
+  margin-bottom: 15px;
+  border-bottom: 2px solid #ffd6e0;
+  padding-bottom: 10px;
+}
+
+/* --- FORM --- */
+.form-group {
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  padding: 10px;
+  border: 1.5px solid #ffd6e0;
+  border-radius: 10px;
+  background: #fff8fa;
+  outline: none;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: #e84393;
+}
+
+/* --- FORM ROW --- */
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 15px;
+}
+
+/* --- BUTTONS --- */
+.form-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.form-actions button {
+  padding: 10px 18px;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: #e84393;
+  color: #fff;
+}
+
+.btn-secondary {
+  border: 1.5px solid #e84393;
+  color: #e84393;
+  background: #fff;
+}
+
+/* --- LISTINGS --- */
+.my-listings-section {
+  background: #fff;
+  border: 1.5px solid #ffd6e0;
+  border-radius: 16px;
+  padding: 25px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 2px solid #ffd6e0;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+}
+
+.listings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 15px;
+}
+
+.listing-card {
+  background: #fff8fa;
+  border: 1.5px solid #ffd6e0;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.listing-img-wrap {
+  height: 150px;
+  background: #ffd6e0;
+}
+
+.listing-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.badge {
+  position: absolute;
+  margin: 10px;
+  padding: 4px 10px;
+  font-size: 0.7rem;
+  border-radius: 20px;
+}
+
+.badge.active {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.badge.pending {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.listing-info {
+  padding: 12px;
+}
+
+.listing-price {
+  color: #e84393;
+  font-weight: 700;
+}
+
+.listing-stats {
+  font-size: 0.75rem;
+  color: #888;
+  display: flex;
+  gap: 10px;
+}
+
+.listing-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.btn-edit,
+.btn-delete {
+  flex: 1;
+  padding: 6px;
+  font-size: 0.8rem;
+  border-radius: 8px;
+  border: 1px solid #e84393;
+  background: #fff;
+}
+
+.btn-edit:hover {
+  background: #e84393;
+  color: #fff;
+}
+
+.btn-delete {
+  border-color: #f87171;
+  color: #ef4444;
+}
+
+.btn-delete:hover {
+  background: #ef4444;
+  color: #fff;
+}
+
+/* --- BOTTOM NAV --- */
+.bottom-nav {
+  display: none;
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 1024px) {
+  .stats-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  main {
+    flex-direction: column;
+  }
+
+  header nav {
+    display: none;
+  }
+
+  .stats-row {
+    grid-template-columns: 1fr;
+  }
+
+  .bottom-nav {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background: #fff;
+    justify-content: space-around;
+    padding: 10px;
+    border-top: 2px solid #ffd6e0;
+  }
+}
