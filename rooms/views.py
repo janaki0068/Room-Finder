@@ -93,6 +93,12 @@ def register_view(request):
                 password=form.cleaned_data['password']
             )
 
+            Profile.objects.create(
+                user=user,
+                phone_number=form.cleaned_data['phone_number'],
+                role=form.cleaned_data['role']
+            )
+
             messages.success(request, 'User registered successfully.')
             return redirect('login')
     else:
