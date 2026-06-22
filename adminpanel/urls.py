@@ -7,5 +7,5 @@ urlpatterns = [
     path('rejected/', views.rejected_listings, name='rejected_listings'),
     path('approve/<int:room_id>/', views.approve_listing, name='approve_listing'),
     path('reject/<int:room_id>/', views.reject_listing, name='reject_listing'),
-
+    path('dashboard/', views.admin_dashboard, name='admin_dashboard'),
 ]

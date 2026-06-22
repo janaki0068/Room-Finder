@@ -1,0 +1,36 @@
+{% extends "base.html" %} {% load static %} {% block css %}
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="{% static 'css/adminpanel.css' %}"
+/>
+{% endblock css %} {% block content %}
+<div class="admin-container">
+  <div class="admin-header">
+    <h1>Admin Dashboard</h1>
+    <p>Overview of listings and user statistics</p>
+  </div>
+
+  <div class="stats-grid">
+    <a href="{% url 'pending_listings' %}" class="stat-card">
+      <span class="stat-number">{{ pending_count }}</span>
+      <span class="stat-label">Pending Listings</span>
+    </a>
+
+    <a href="{% url 'approved_listings' %}" class="stat-card">
+      <span class="stat-number">{{ approved_count }}</span>
+      <span class="stat-label">Approved Listings</span>
+    </a>
+
+    <a href="{% url 'rejected_listings' %}" class="stat-card">
+      <span class="stat-number">{{ rejected_count }}</span>
+      <span class="stat-label">Rejected Listings</span>
+    </a>
+
+    <div class="stat-card">
+      <span class="stat-number">{{ total_users }}</span>
+      <span class="stat-label">Total Users</span>
+    </div>
+  </div>
+</div>
+{% endblock content %}

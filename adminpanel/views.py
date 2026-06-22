@@ -1,8 +1,20 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.admin.views.decorators import staff_member_required
 from rooms.models import Room
+from django.contrib.auth.models import User
 
 # Create your views here.
+
+
+@staff_member_required
+def admin_dashboard(request):
+    context = {
+        "pending_count": Room.objects.filter(status="pending").count(),
+        "approved_count": Room.objects.filter(status="approved").count(),
+        "rejected_count": Room.objects.filter(status="rejected").count(),
+        "total_users": User.objects.count(),
+    }
+    return render(request, "adminpanel/dashboard.html", context)
 
 
 @staff_member_required
@@ -10,15 +22,18 @@ def pending_listings(request):
     listings = Room.objects.filter(status="pending")
     return render(request, "adminpanel/pending_listings.html", {"listings": listings})
 
+
 @staff_member_required
 def approved_listings(request):
     listings = Room.objects.filter(status="approved")
     return render(request, "adminpanel/approved_listings.html", {"listings": listings})
 
+
 @staff_member_required
 def rejected_listings(request):
     listings = Room.objects.filter(status="rejected")
     return render(request, "adminpanel/rejected_listings.html", {"listings": listings})
+
 
 @staff_member_required
 def approve_listing(request, room_id):
@@ -38,5 +53,5 @@ def reject_listing(request, room_id):
         room.rejection_reason = reason
         room.save()
         return redirect("pending_listings")
-    
+
     return render(request, "adminpanel/reject_listing.html", {"room": room})

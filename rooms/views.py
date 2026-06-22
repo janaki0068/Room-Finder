@@ -68,8 +68,9 @@ def login_view(request):
         if user is not None:
             login(request, user)
 
-            # 👇 ROLE-BASED REDIRECT (IMPORTANT PART)
-            if hasattr(user, 'profile') and user.profile.is_landlord:
+            if user.is_staff:
+                return redirect('admin_dashboard')
+            elif hasattr(user, 'profile') and user.profile.is_landlord:
                 return redirect('landlord_dashboard')
             else:
                 return redirect('home')
