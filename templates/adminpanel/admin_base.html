@@ -1,0 +1,40 @@
+{% extends "base.html" %} 
+{% load static %} 
+
+{% block css %}
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="{% static 'css/adminpanel.css' %}"
+/>
+{% endblock css %} 
+
+
+{% block content %}
+<div class="admin-layout">
+  <aside class="admin-sidebar">
+    <div class="sidebar-logo">
+      <img
+        src="{% static 'images/logo.png' %}"
+        alt="Room Finder"
+      />
+      <span>Room Finder</span>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="{% url 'admin_dashboard' %}" class="{% if request.resolver_match.url_name == 'admin_dashboard' %}active{% endif %}">Dashboard</a>
+      <a href="{% url 'pending_listings' %}" class="{% if request.resolver_match.url_name == 'pending_listings' %}active{% endif %}">Pending Listings</a>
+      <a href="{% url 'approved_listings' %}" class="{% if request.resolver_match.url_name == 'approved_listings' %}active{% endif %}">Approved Listings</a>
+      <a href="{% url 'rejected_listings' %}" class="{% if request.resolver_match.url_name == 'rejected_listings' %}active{% endif %}">Rejected Listings</a>
+      <a href="{% url 'user_management' %}" class="{% if request.resolver_match.url_name == 'user_management' %}active{% endif %}">User Management</a>
+      <a href="{% url 'reports_queue' %}" class="{% if request.resolver_match.url_name == 'reports_queue' %}active{% endif %}">Reports Queue</a>
+      <a href="{% url 'revenue_analytics' %}" class="{% if request.resolver_match.url_name == 'revenue_analytics' %}active{% endif %}">Revenue Analytics</a>
+      <a href="{% url 'ad_management' %}" class="{% if request.resolver_match.url_name == 'ad_management' %}active{% endif %}">Advertisement Management</a>
+    </nav>
+
+    <a href="{% url 'logout' %}" class="sidebar-logout">Logout</a>
+  </aside>
+
+  <main class="admin-main">{% block admin_content %}{% endblock %}</main>
+</div>
+{% endblock %}

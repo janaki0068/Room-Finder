@@ -1,0 +1,49 @@
+{% extends "adminpanel/admin_base.html" %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/adminpanel.css' %}">
+{% endblock css %}
+
+{% block admin_content %}
+
+<div class="admin-container">
+    <div class="admin-header">
+        <h1>User Management</h1>
+        <p>Manage registered users of the platform</p>
+    </div>
+
+    <div class="admin-table-wrapper">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Joined</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ user.get_full_name|default:user.username }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>
+                        {% if user.is_staff %}Admin
+                        {% elif user.profile.is_landlord %}Landlord
+                        {% else %}Tenant
+                        {% endif %}
+                    </td>
+                    <td>{{ user.date_joined|date:"M d, Y" }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="empty-row">No users found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock admin_content %}

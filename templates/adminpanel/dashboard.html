@@ -1,10 +1,15 @@
-{% extends "base.html" %} {% load static %} {% block css %}
+{% extends "adminpanel/admin_base.html" %} 
+{% load static %} 
+
+{% block css %}
 <link
   rel="stylesheet"
   type="text/css"
   href="{% static 'css/adminpanel.css' %}"
 />
-{% endblock css %} {% block content %}
+{% endblock css %} 
+
+{% block admin_content %}
 <div class="admin-container">
   <div class="admin-header">
     <h1>Admin Dashboard</h1>
@@ -27,10 +32,10 @@
       <span class="stat-label">Rejected Listings</span>
     </a>
 
-    <div class="stat-card">
+    <a href="{% url 'user_management' %}" class="stat-card">
       <span class="stat-number">{{ total_users }}</span>
       <span class="stat-label">Total Users</span>
-    </div>
+    </a>
   </div>
 </div>
-{% endblock content %}
+{% endblock admin_content %}

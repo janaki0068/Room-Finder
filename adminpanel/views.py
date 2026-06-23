@@ -55,3 +55,21 @@ def reject_listing(request, room_id):
         return redirect("pending_listings")
 
     return render(request, "adminpanel/reject_listing.html", {"room": room})
+
+
+@staff_member_required
+def user_management(request):
+    users = User.objects.all()
+    return render(request, "adminpanel/user_management.html", {"users": users})
+
+@staff_member_required
+def reports_queue(request):
+    return render(request, "adminpanel/reports_queue.html", {"reports": reports})
+
+@staff_member_required
+def revenue_analytics(request):
+    return render(request, "adminpanel/revenue_analytics.html", {"analytics": analytics})
+
+@staff_member_required
+def ad_management(request):
+    return render(request, "adminpanel/ad_management.html")
