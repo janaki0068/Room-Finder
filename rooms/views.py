@@ -87,7 +87,7 @@ def login_view(request):
 
 
 # REGISTER
-def register_view(request, role):
+def register_view(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST)
 
