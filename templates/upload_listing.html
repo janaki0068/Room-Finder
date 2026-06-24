@@ -1,0 +1,466 @@
+{% extends 'landlord_base.html' %}
+{% load static %}
+
+{% block title %}Upload Listing{% endblock %}
+{% block page_title %}Upload Listing{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/upload_listing.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="listing-container">
+
+    <!-- Header -->
+
+    <div class="listing-header">
+        <h1>Add New Property</h1>
+        <p>
+            Complete all sections to submit your property
+            for verification and approval.
+        </p>
+    </div>
+
+    <!-- Progress Steps -->
+
+    <div class="form-steps">
+
+        <div class="step active">
+            <span>1</span>
+            <p>Basic Info</p>
+        </div>
+
+        <div class="step">
+            <span>2</span>
+            <p>Location</p>
+        </div>
+
+        <div class="step">
+            <span>3</span>
+            <p>Pricing</p>
+        </div>
+
+        <div class="step">
+            <span>4</span>
+            <p>Facilities</p>
+        </div>
+
+        <div class="step">
+            <span>5</span>
+            <p>Documents</p>
+        </div>
+
+    </div>
+
+    <form method="POST"
+          enctype="multipart/form-data"
+          class="listing-form">
+
+        {% csrf_token %}
+
+        <!-- ==========================
+             BASIC INFORMATION
+        ========================== -->
+
+        <section class="form-card">
+
+            <h2>Basic Information</h2>
+
+            <div class="form-grid">
+
+                <div class="form-group full-width">
+                    <label>Property Title *</label>
+                    <input type="text"
+                           name="title"
+                           required>
+                </div>
+
+                <div class="form-group full-width">
+                    <label>Description *</label>
+                    <textarea
+                        name="description"
+                        rows="6"
+                        minlength="100"
+                        required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Property Type *</label>
+
+                    <select name="room_type" required>
+    {% for value, label in form.room_type.field.choices %}
+        <option value="{{ value }}">
+            {{ label }}
+        </option>
+    {% endfor %}
+</select>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ==========================
+             LOCATION
+        ========================== -->
+
+        <section class="form-card">
+
+            <h2>Location Information</h2>
+
+            <div class="form-grid">
+
+                <div class="form-group">
+                    <label>Province *</label>
+                    <select
+    id="province"
+    name="province"
+    required
+>
+
+    <option value="">
+        Select Province
+    </option>
+
+    {% for province in provinces %}
+        <option value="{{ province.id }}">
+            {{ province.name }}
+        </option>
+    {% endfor %}
+
+</select>
+                </div>
+
+                <div class="form-group">
+                    <label>District *</label>
+                    <select
+    id="district"
+    name="district"
+    required
+>
+    <option value="">
+        Select District
+    </option>
+</select>
+                </div>
+
+                <div class="form-group">
+                    <label>City / Municipality *</label>
+                    <input type="text"
+                           name="city"
+                           required>
+                </div>
+
+                <div class="form-group">
+                    <label>Area / Tole *</label>
+                    <input type="text"
+                           name="area"
+                           required>
+                </div>
+
+                <div class="form-group">
+                    <label>Address *</label>
+                    <input type="text"
+                        name="address"
+                        required>
+                </div>
+
+                <div class="form-group">
+                    <label>Ward Number *</label>
+                    <input type="number"
+                           name="ward_number"
+                           required>
+                </div>
+
+            </div>
+
+            <div class="form-group map-section">
+
+                <label>Google Maps Location *</label>
+
+                <div class="map-placeholder">
+
+                    <i class="ti ti-map-pin"></i>
+
+                    <p>
+                        Google Map will appear here.
+                    </p>
+
+                </div>
+
+                <input type="hidden"
+                       name="latitude">
+
+                <input type="hidden"
+                       name="longitude">
+
+            </div>
+
+        </section>
+
+        <!-- ==========================
+             PRICING
+        ========================== -->
+
+        <section class="form-card">
+
+            <h2>Pricing Information</h2>
+
+            <div class="form-grid">
+
+                <div class="form-group">
+                    <label>Monthly Rent (NPR) *</label>
+                    <input type="number"
+                           name="price"
+                           required>
+                </div>
+
+                <div class="form-group">
+                    <label>Security Deposit (NPR) *</label>
+                    <input type="number"
+                           name="security_deposit"
+                           required>
+                </div>
+
+            </div>
+
+            <div class="checkbox-group">
+
+                <label>Bills Included</label>
+
+                <div class="checkbox-grid">
+
+                <label>
+                {{ form.bill_water }}
+                Water
+            </label>
+
+            <label>
+                {{ form.bill_electricity }}
+                Electricity
+            </label>
+
+            <label>
+                {{ form.bill_internet }}
+                Internet
+            </label>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ==========================
+             FACILITIES
+        ========================== -->
+
+        <section class="form-card">
+
+    <h2>Facilities</h2>
+
+    <div class="facility-grid">
+
+        <label>
+            {{ form.parking }}
+            Car Parking
+        </label>
+
+        <label>
+            {{ form.has_bike_parking }}
+            Bike Parking
+        </label>
+
+        <label>
+            {{ form.wifi }}
+            WiFi
+        </label>
+
+        <label>
+            {{ form.has_drinking_water }}
+            Drinking Water
+        </label>
+
+        <label>
+            {{ form.has_water_24_7 }}
+            24/7 Water Supply
+        </label>
+
+        <label>
+            {{ form.has_balcony }}
+            Balcony
+        </label>
+
+        <label>
+            {{ form.furnished }}
+            Furnished
+        </label>
+
+        <label>
+            {{ form.attached_bathroom }}
+            Attached Bathroom
+        </label>
+
+        <label>
+            {{ form.has_security_guard }}
+            Security Guard
+        </label>
+
+        <label>
+            {{ form.has_cctv }}
+            CCTV
+        </label>
+
+        <label>
+            {{ form.pet_allowed }}
+            Pet Allowed
+        </label>
+
+        <label>
+            {{ form.has_laundry }}
+            Laundry Facility
+        </label>
+
+    </div>
+
+</section>
+
+        <!-- ==========================
+             DOCUMENTS
+        ========================== -->
+
+        <section class="form-card">
+
+            <h2>Verification Documents</h2>
+
+            <p class="upload-note">
+                Upload all required documents for manual verification.
+            </p>
+
+            <div class="document-grid">
+
+                <div class="upload-box">
+
+                    <label>Citizenship Front *</label>
+
+                    <input type="file"
+                           name="citizenship_front"
+                           accept="image/*"
+                           required>
+
+                </div>
+
+                <div class="upload-box">
+
+                    <label>Citizenship Back *</label>
+
+                    <input type="file"
+                           name="citizenship_back"
+                           accept="image/*"
+                           required>
+
+                </div>
+
+                <div class="upload-box">
+
+                    <label>Lalpurja *</label>
+
+                    <input type="file"
+                           name="lalpurja"
+                           accept="image/*"
+                           required>
+
+                </div>
+
+                <div class="upload-box">
+
+                    <label>Selfie with Citizenship *</label>
+
+                    <input type="file"
+                           name="selfie"
+                           accept="image/*"
+                           required>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- SUBMIT -->
+
+        <div class="submit-section">
+
+            <button type="submit"
+                    class="submit-btn">
+
+                Submit For Verification
+
+            </button>
+
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+
+<script>
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    const provinceSelect =
+        document.getElementById('province');
+
+    const districtSelect =
+        document.getElementById('district');
+
+    provinceSelect.addEventListener('change', function () {
+
+        const provinceId = this.value;
+
+        if (!provinceId) {
+            districtSelect.innerHTML =
+                '<option value="">Select District</option>';
+            return;
+        }
+
+        fetch(`/get-districts/${provinceId}/`)
+            .then(response => response.json())
+            .then(data => {
+
+                districtSelect.innerHTML =
+                    '<option value="">Select District</option>';
+
+                data.districts.forEach(function (district) {
+
+                    districtSelect.innerHTML += `
+                        <option value="${district.id}">
+                            ${district.name}
+                        </option>
+                    `;
+
+                });
+
+            })
+            .catch(error => {
+
+                console.error(
+                    'Error loading districts:',
+                    error
+                );
+
+            });
+
+    });
+
+});
+
+</script>
+
+{% endblock %}

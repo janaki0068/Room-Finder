@@ -6,3 +6,5 @@ admin.site.register(Province)
 admin.site.register(District)
 admin.site.register(Room)
 admin.site.register(SavedRoom)
+admin.site.register(VerificationDocument)
+

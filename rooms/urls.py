@@ -4,7 +4,11 @@ from . import views
 urlpatterns = [
     path('', views.home, name='home'),
     path('login/', views.login_view, name="login"),
-    path('register/', views.register_view, name='register'),
+
+    path('register/tenant/', views.register_view, {'role': 'tenant'}, name='register_tenant'),
+    path('register/landlord/', views.register_view, {'role': 'landlord'}, name='register_landlord'),
+   
+
     path('logout/', views.logout_view, name='logout'),
 
     path('search/',views.search_rooms, name='search_rooms'),
@@ -19,6 +23,11 @@ urlpatterns = [
     path("saved-rooms/", views.saved_rooms, name="saved_rooms"),
     path("edit-profile/", views.edit_profile, name="edit_profile"),
     path("upload-listing/", views.upload_listing, name="upload_listing"),
-    path("messages/", views.messages, name="messages"),
+    path("messages/", views.messages_view, name="messages"),
     path("settings/", views.settings_view, name="settings"),
+
+    path('get-districts/<int:province_id>/',views.get_districts,name='get_districts'),
+
+    path("tenant-dashboard/", views.tenant_dashboard, name="tenant_dashboard"),
+
 ]

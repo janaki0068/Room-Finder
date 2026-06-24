@@ -1,0 +1,166 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}Room Finder{% endblock %}</title>
+
+  <!-- Google Font: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Tabler Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+
+  <!-- Main CSS -->
+  <link rel="stylesheet" href="{% static 'css/landlord_base.css' %}" />
+
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- ===== SIDEBAR ===== -->
+  <aside class="sidebar">
+
+    <!-- Brand -->
+    <div class="sidebar-brand">
+      <div class="brand-icon">
+        <img src="{% static 'images/logo.png' %}"alt="Room Finder Logo"class="brand-logo">
+      </div>
+      <div>
+        <div class="brand-name">Room Finder</div>
+        <div class="brand-sub">Nepal</div>
+      </div>
+    </div>
+
+    <!-- User card -->
+    <div class="sidebar-user">
+      <div class="user-row">
+        <div class="user-avatar">
+          {% if request.user.first_name %}
+            {{ request.user.first_name.0|upper }}{{ request.user.last_name.0|upper }}
+          {% else %}
+            {{ request.user.username.0|upper }}
+          {% endif %}
+        </div>
+        <div>
+          <div class="user-name">
+            {% if request.user.get_full_name %}
+              {{ request.user.get_full_name }}
+            {% else %}
+              {{ request.user.username }}
+            {% endif %}
+          </div>
+          <div class="user-email">{{ request.user.email }}</div>
+        </div>
+      </div>
+      <a href="{% url 'edit_profile' %}" class="edit-profile-btn">Edit profile</a>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="sidebar-nav">
+      <div class="nav-section">Menu</div>
+
+      <a href="{% url 'landlord_dashboard' %}"
+         class="nav-item {% if request.resolver_match.url_name == 'landlord_dashboard' %}active{% endif %}">
+        <i class="ti ti-layout-dashboard"></i>
+        Dashboard
+      </a>
+
+      <a href="{% url 'upload_listing' %}"
+         class="nav-item {% if request.resolver_match.url_name == 'upload_listing' %}active{% endif %}">
+        <i class="ti ti-plus"></i>
+        Upload listing
+      </a>
+
+      <a href="{% url 'my_listings' %}"
+         class="nav-item {% if request.resolver_match.url_name == 'my_listings' %}active{% endif %}">
+        <i class="ti ti-building"></i>
+        My listings
+        {% if listing_count %}<span class="nav-badge">{{ listing_count }}</span>{% endif %}
+      </a>
+
+      <div class="nav-section">Account</div>
+
+      <a href="{% url 'saved_rooms' %}"
+         class="nav-item {% if request.resolver_match.url_name == 'saved_rooms' %}active{% endif %}">
+        <i class="ti ti-heart"></i>
+        Saved rooms
+      </a>
+
+      <a href="{% url 'messages' %}"
+         class="nav-item {% if request.resolver_match.url_name == 'messages_inbox' %}active{% endif %}">
+        <i class="ti ti-message"></i>
+        Messages
+        {% if unread_count %}<span class="nav-badge">{{ unread_count }}</span>{% endif %}
+      </a>
+
+      <a href="{% url 'settings' %}"
+         class="nav-item {% if request.resolver_match.url_name == 'settings' %}active{% endif %}">
+        <i class="ti ti-settings"></i>
+        Settings
+      </a>
+    </nav>
+
+    <!-- Logout -->
+    <div class="sidebar-footer">
+      <a href="{% url 'logout' %}" class="logout-btn">
+        <i class="ti ti-logout"></i>
+        Log out
+      </a>
+    </div>
+
+  </aside>
+  <!-- end sidebar -->
+
+  <!-- ===== MAIN AREA ===== -->
+  <div class="main-area">
+
+    <!-- Topbar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <span class="page-title">{% block page_title %}Dashboard{% endblock %}</span>
+      </div>
+      <div class="topbar-right">
+        <a href="{% url 'messages' %}" class="icon-btn notif-btn" title="Notifications">
+          <i class="ti ti-bell"></i>
+        </a>
+        <a href="{% url 'home' %}" class="icon-btn" title="Browse rooms">
+          <i class="ti ti-search"></i>
+        </a>
+        <a href="{% url 'edit_profile' %}" class="icon-btn" title="Profile">
+          <i class="ti ti-user"></i>
+        </a>
+      </div>
+    </header>
+
+    <!-- Django messages -->
+    {% if messages %}
+      <div style="padding: 12px 24px 0;">
+        {% for message in messages %}
+          <div class="alert {% if message.tags == 'error' %}alert-error{% else %}alert-success{% endif %}">
+            <i class="ti {% if message.tags == 'error' %}ti-alert-circle{% else %}ti-circle-check{% endif %}"></i>
+            {{ message }}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <!-- Page content -->
+    <div class="page-content">
+      {% block content %}{% endblock %}
+    </div>
+
+  </div>
+  <!-- end main area -->
+
+</div>
+<!-- end shell -->
+
+{% block extra_js %}{% endblock %}
+</body>
+</html>

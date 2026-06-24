@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import User
+from .models import Room
 
 class RegisterForm(forms.Form):
     first_name = forms.CharField(max_length=50)
@@ -19,3 +20,48 @@ class RegisterForm(forms.Form):
         
 
         return cleaned_data
+    
+class RoomForm(forms.ModelForm):
+
+    class Meta:
+        model = Room
+
+        fields = [
+            # Basic Info
+            'title',
+            'description',
+            'room_type',
+
+            # Location
+            'province',
+            'district',
+            'city',
+            'area',
+            'address',
+            'ward_number',
+            'latitude',
+            'longitude',
+
+            # Pricing
+            'price',
+            'security_deposit',
+
+            # Bills
+            'bill_water',
+            'bill_electricity',
+            'bill_internet',
+
+            # Facilities
+            'wifi',
+            'attached_bathroom',
+            'furnished',
+            'parking',
+            'has_bike_parking',
+            'has_drinking_water',
+            'has_water_24_7',
+            'has_balcony',
+            'has_security_guard',
+            'has_cctv',
+            'pet_allowed',
+            'has_laundry',
+        ]
