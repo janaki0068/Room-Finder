@@ -67,7 +67,9 @@ def login_view(request):
             login(request, user)
             role = user.profile.role
 
-            if role == 'landlord':
+            if user.is_staff:
+                return redirect('admin_dashboard')
+            elif hasattr(user, 'profile') and user.profile.is_landlord:
                 return redirect('landlord_dashboard')
             elif role == 'admin':
                 return redirect('admin_dashboard')
@@ -102,11 +104,13 @@ def register_view(request, role):
                 password=form.cleaned_data['password']
             )
 
-            # signal already created user.profile with default role='tenant'
-            user.profile.role = role
-            user.profile.save()
+            Profile.objects.create(
+                user=user,
+                phone_number=form.cleaned_data['phone_number'],
+                role=form.cleaned_data['role']
+            )
 
-            messages.success(request, 'User registered successfully. Please login.')
+            messages.success(request, 'User registered successfully.')
             return redirect('login')
 
         else:

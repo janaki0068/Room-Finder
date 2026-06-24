@@ -1,0 +1,49 @@
+{% extends "adminpanel/admin_base.html" %} {% load static %} {% block css %}
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="{% static 'css/adminpanel.css' %}"
+/>
+{% endblock css %} {% block admin_content %}
+
+<div class="admin-container">
+  <div class="admin-header">
+    <h1>Approved Listings</h1>
+    <p>Live listings currently visible to tenants</p>
+  </div>
+
+  <div class="admin-table-wrapper">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Owner</th>
+          <th>City</th>
+          <th>Price</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for room in listings %}
+        <tr>
+          <td>{{ room.title }}</td>
+          <td>{{room.owner.email}}</td>
+          <td>{{room.city}}</td>
+          <td>NPR {{room.price}}</td>
+          <td class="action-cell">
+            <a href="{% url 'reject_listing' room.id %}" class="btn-reject" onclick="return confirm('Are you sure you want to remove this listing?')">
+              Remove
+            </a>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="5" class="empty-row">No approved listings yet.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock admin_content %}

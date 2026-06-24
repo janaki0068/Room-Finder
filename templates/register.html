@@ -1,66 +1,104 @@
-{% extends "base.html" %}
-{% load static %}
-
-{% block css %}
-<link rel="stylesheet" href="{% static 'css/register.css' %}">
-{% endblock css %}
-
-
-{% block content %}
+{% extends "base.html" %} {% load static %} {% block css %}
+<link rel="stylesheet" href="{% static 'css/register.css' %}" />
+{% endblock css %} {% block content %}
 
 <div class="register-container">
-    <div class="left-side">
-        <h1>ROOM FINDER APP</h1>
-        <div class="logo">
-            <img src="{% static 'images/logo.png' %}" alt="Room Finder Image">
-        </div>
-        <div class="logo-text">
-            <h2>Your Next Room is Just a Click Away</h2>
-            <p>Join Nepal's Verified Room Rental Marketplace</p>
-        </div>
+  <div class="left-side">
+    <h1>ROOM FINDER APP</h1>
+    <div class="logo">
+      <img src="{% static 'images/logo.png' %}" alt="Room Finder Image" />
     </div>
-    <div class="right-side">
-        <h2>Sign Up Here</h2>
-        <form method="POST">
-            {% csrf_token %}
-            <div class="register-form-grid">
-                <div class="register-form-group">
-                    <label for="first_name">First Name</label>
-                    <input type="text" id="first_name" name="first_name" required placeholder="Enter your first name">
-                </div>
-                <div class="register-form-group">
-                    <label for="last_name">Last Name</label>
-                    <input type="text" id="last_name" name="last_name" required placeholder="Enter your last name">
-                </div>
-                <div class="register-form-group full-width">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" required placeholder="Enter your email">
-                </div>
-                <div class="register-form-group full-width">
-                    <label for="phone_number">Phone Number</label>
-                    <input type="text" id="phone_number" name="phone_number" required placeholder="Enter your phone number">
-                </div>
-                <div class="register-form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" required placeholder="Enter your password">
-                </div>
-                <div class="register-form-group">
-                    <label for="confirm_password">Confirm Password</label>
-                    <input type="password" id="confirm_password" name="confirm_password" required placeholder="Confirm your password">
-                </div>
-                <div class="register-checkbox-group">
-                    <label for="checkbox">
-                        <input type="checkbox" id="checkbox" name="checkbox" required>
-                        By signing up, I agree to the <a href="#">Terms and Conditions</a>
-                    </label>
-                </div>
-                <div class="register-form-footer">
-                    <button type="submit" class="register-btn">Create my Account</button>
-                    <p>Already have an account? <a href="{% url 'login' %}">Login </a></p>
-                </div>
-            </div>
-        </form>
+    <div class="logo-text">
+      <h2>Your Next Room is Just a Click Away</h2>
+      <p>Join Nepal's Verified Room Rental Marketplace</p>
     </div>
+  </div>
+  <div class="right-side">
+    <h2>Sign Up Here</h2>
+    <form method="POST">
+      {% csrf_token %}
+      <div class="register-form-grid">
+        <div class="register-form-group">
+          <label for="first_name">First Name</label>
+          <input
+            type="text"
+            id="first_name"
+            name="first_name"
+            required
+            placeholder="Enter your first name"
+          />
+        </div>
+        <div class="register-form-group">
+          <label for="last_name">Last Name</label>
+          <input
+            type="text"
+            id="last_name"
+            name="last_name"
+            required
+            placeholder="Enter your last name"
+          />
+        </div>
+        <div class="register-form-group full-width">
+          <label for="email">Email</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            required
+            placeholder="Enter your email"
+          />
+        </div>
+        <div class="register-form-group full-width">
+          <label for="phone_number">Phone Number</label>
+          <input
+            type="text"
+            id="phone_number"
+            name="phone_number"
+            required
+            placeholder="Enter your phone number"
+          />
+        </div>
+        <div class="register-form-group full-width">
+          <label for="role">I am a:</label>
+          <select id="role" name="role" required>
+            <option value="">-- Select --</option>
+            <option value="tenant">Tenant (looking for a room)</option>
+            <option value="landlord">Landlord (listing a room)</option>
+          </select>
+        </div>
+        <div class="register-form-group">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            required
+            placeholder="Enter your password"
+          />
+        </div>
+        <div class="register-form-group">
+          <label for="confirm_password">Confirm Password</label>
+          <input
+            type="password"
+            id="confirm_password"
+            name="confirm_password"
+            required
+            placeholder="Confirm your password"
+          />
+        </div>
+        <div class="register-checkbox-group">
+          <label for="checkbox">
+            <input type="checkbox" id="checkbox" name="checkbox" required />
+            By signing up, I agree to the <a href="#">Terms and Conditions</a>
+          </label>
+        </div>
+        <div class="register-form-footer">
+          <button type="submit" class="register-btn">Create my Account</button>
+          <p>Already have an account? <a href="{% url 'login' %}">Login </a></p>
+        </div>
+      </div>
+    </form>
+  </div>
 </div>
 
 {% endblock content %}

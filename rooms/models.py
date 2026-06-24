@@ -7,6 +7,8 @@ from django.core.exceptions import ValidationError
 # Create your models here.
 
 # PROVINCE
+
+
 class Province(models.Model):
     name = models.CharField(max_length=100,unique=True)
 
@@ -14,8 +16,11 @@ class Province(models.Model):
         return self.name
 
 # DISTRICTS
+
+
 class District(models.Model):
-    province = models.ForeignKey(Province, on_delete=models.CASCADE, related_name="districts")
+    province = models.ForeignKey(
+        Province, on_delete=models.CASCADE, related_name="districts")
     name = models.CharField(max_length=100)
 
     class Meta:
@@ -53,16 +58,18 @@ def create_user_profile(sender, instance, created, **kwargs):
         Profile.objects.create(user=instance)
 
 # ROOMS
+
+
 class Room(models.Model):
     ROOM_TYPES = [
-        ("flat","Flat"),
-        ("single","Single Room"),
-        ("2 rooms","2 Rooms"),
-        ("apartment","Apartment"),
-        ("house","House"),
-        ("hostel","Hostel"),
-        ("office space","Office Spaces"),
-        ("shutter","Shutter"),
+        ("flat", "Flat"),
+        ("single", "Single Room"),
+        ("2 rooms", "2 Rooms"),
+        ("apartment", "Apartment"),
+        ("house", "House"),
+        ("hostel", "Hostel"),
+        ("office space", "Office Spaces"),
+        ("shutter", "Shutter"),
     ]
 
     STATUS_CHOICES = [

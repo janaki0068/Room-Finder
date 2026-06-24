@@ -1,0 +1,62 @@
+{% extends "adminpanel/admin_base.html" %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/adminpanel.css' %}">
+{% endblock css %}
+
+{% block admin_content %}
+
+<div class="admin-container">
+    <div class="admin-header">
+        <h1>User Management</h1>
+        <p>Manage registered users of the platform</p>
+    </div>
+
+    <div class="filter-bar">
+        <a href="?role=all" class="filter-chip {% if role_filter == 'all' %}active{% endif %}">All</a>
+        <a href="?role=tenant" class="filter-chip {% if role_filter == 'tenant' %}active{% endif %}">Tenants</a>
+        <a href="?role=landlord" class="filter-chip {% if role_filter == 'landlord' %}active{% endif %}">Landlords</a>
+    </div>
+
+    <div class="admin-table-wrapper">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Joined</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ user.get_full_name|default:user.username }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>
+                        {% if user.is_staff %}Admin
+                        {% elif user.profile.is_landlord %}Landlord
+                        {% else %}Tenant
+                        {% endif %}
+                    </td>
+                    <td>{{ user.date_joined|date:"M d, Y" }}</td>
+                    <td class="action-cell">
+                        <form method="POST" action="{% url 'delete_user' user.id%}" onsubmit="return confirm('Are you sure you want to delete {{ user.email }}? This cannot be undone.')">
+                            {% csrf_token %}
+                            <button type="submit" class="btn-reject">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="empty-row">No users found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock admin_content %}
