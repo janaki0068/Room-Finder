@@ -1,3 +1,5 @@
+from .models import Province, Room
+from .forms import RoomForm
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib import messages
@@ -7,11 +9,13 @@ from django.db.models import Q, Sum
 from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from .decorators import role_required 
+from .decorators import role_required
 
 # Create your views here.
 
 # HOME
+
+
 def home(request):
     rooms = Room.objects.filter(status='active')
 
@@ -26,7 +30,7 @@ def home(request):
             Q(title__icontains=query) |
             Q(city__icontains=query) |
             Q(description__icontains=query)
-)
+        )
 
     # PROVINCE FILTER
     if province_id and province_id != "all":
@@ -49,6 +53,8 @@ def home(request):
     })
 
 # LOGIN
+
+
 def login_view(request):
     if request.method == 'POST':
         email = request.POST.get('email')
@@ -65,19 +71,17 @@ def login_view(request):
 
         if user is not None:
             login(request, user)
-            role = user.profile.role
 
             if user.is_staff:
                 return redirect('admin_dashboard')
-            elif hasattr(user, 'profile') and user.profile.is_landlord:
+            elif user.profile.role == 'landlord':
                 return redirect('landlord_dashboard')
-            elif role == 'admin':
-                return redirect('admin_dashboard')
             else:
-                return redirect('tenant_dashboard')
-
-        messages.error(request, 'Invalid email or password.')
-        return render(request, 'login.html')
+                return redirect('home')
+        
+        else:
+            messages.error(request, 'Invalid email or password.')
+            return render(request, 'login.html')
 
     return render(request, 'login.html')
 
@@ -97,18 +101,16 @@ def register_view(request, role):
                 return render(request, 'register.html', {'form': form})
 
             user = User.objects.create_user(
-                username=email,
-                email=email,
+                username=form.cleaned_data['email'],
+                email=form.cleaned_data['email'],
                 first_name=form.cleaned_data['first_name'],
                 last_name=form.cleaned_data['last_name'],
                 password=form.cleaned_data['password']
-            )
+                )
 
-            Profile.objects.create(
-                user=user,
-                phone_number=form.cleaned_data['phone_number'],
-                role=form.cleaned_data['role']
-            )
+            user.profile.phone = form.cleaned_data['phone_number']
+            user.profile.role = form.cleaned_data['role']
+            user.profile.save()
 
             messages.success(request, 'User registered successfully.')
             return redirect('login')
@@ -118,7 +120,8 @@ def register_view(request, role):
             return render(request, 'register.html', {'form': form, 'role': role})
 
     form = RegisterForm()
-    return render(request, 'register.html', {'form': form, 'role': role})
+    return render(request, 'register.html', {'form': form})
+
 
 def logout_view(request):
     logout(request)
@@ -127,20 +130,20 @@ def logout_view(request):
 
 # SEARCH_ROOMS
 def search_rooms(request):
-    query = request.GET.get('q','')
+    query = request.GET.get('q', '')
     rooms = Room.objects.all()
 
     if query:
         rooms = Room.objects.filter(
-            Q(city__icontains=query)|
-            Q(district__name__icontains=query)|
-            Q(province__name__icontains=query)|
+            Q(city__icontains=query) |
+            Q(district__name__icontains=query) |
+            Q(province__name__icontains=query) |
             Q(title__icontains=query)
         )
 
     return render(request, 'home.html', {
-        'rooms':rooms,
-        'query':query,
+        'rooms': rooms,
+        'query': query,
     })
 
 
@@ -156,13 +159,16 @@ def get_districts(request, province_id):
         'districts': list(districts)
     })
 
+
 @login_required(login_url='login')
 def saved_view(request):
     return render(request, 'saved.html')
 
+
 @login_required(login_url='login')
 def list_view(request):
     return render(request, 'list.html')
+
 
 @login_required(login_url='login')
 def profile_view(request):
@@ -171,7 +177,6 @@ def profile_view(request):
     return render(request, 'profile.html', {
         'profile': profile
     })
-
 
 
 # LANDLORD DASHBOARD
@@ -184,7 +189,6 @@ def landlord_dashboard(request):
         total=Sum('views')
     )['total'] or 0
 
-  
     saved_count = SavedRoom.objects.filter(
         room__owner=request.user
     ).count()
@@ -199,8 +203,9 @@ def landlord_dashboard(request):
         'recent_listings': recent_listings,
     })
 
+
 # My listings page
-from .forms import RoomForm
+
 
 @login_required
 def my_listings(request):
@@ -211,6 +216,8 @@ def my_listings(request):
     })
 
 # My saved rooms
+
+
 @login_required
 def saved_rooms(request):
     saved = SavedRoom.objects.filter(
@@ -222,12 +229,15 @@ def saved_rooms(request):
     })
 
 # My edit profile
+
+
 @login_required
 def edit_profile(request):
     return render(request, "edit_profile.html")
 
+
 # My upload listing
-from .models import Province, Room
+
 
 @login_required
 def upload_listing(request):
@@ -273,6 +283,8 @@ def upload_listing(request):
     )
 
 # My messages
+
+
 @login_required
 def messages_view(request):
     messages_list = Message.objects.filter(
@@ -284,22 +296,26 @@ def messages_view(request):
     })
 
 # My settings
+
+
 @login_required
 def settings_view(request):
     return render(request, "settings.html")
 
 # TENANT DASHBOARD
+
+
 @role_required('tenant')
 def tenant_dashboard(request):
-    saved_rooms = SavedRoom.objects.filter(user=request.user).select_related('room')
+    saved_rooms = SavedRoom.objects.filter(
+        user=request.user).select_related('room')
     saved_count = saved_rooms.count()
 
-    browse_rooms = Room.objects.filter(status='active').order_by('-created_at')[:12]
+    browse_rooms = Room.objects.filter(
+        status='active').order_by('-created_at')[:12]
 
     return render(request, 'tenant_dashboard.html', {
         'saved_rooms': saved_rooms,
         'saved_count': saved_count,
         'browse_rooms': browse_rooms,
     })
-
-
