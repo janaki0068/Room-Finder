@@ -87,6 +87,7 @@ class Room(models.Model):
     room_type = models.CharField(max_length=20, choices=ROOM_TYPES, default="flat")
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='draft')
     is_verified = models.BooleanField(default=False)
+    rejection_reason = models.TextField(blank=True, null=True)
 
     # location
     province = models.ForeignKey(Province, on_delete=models.CASCADE)
