@@ -77,7 +77,7 @@ def login_view(request):
             elif user.profile.role == 'landlord':
                 return redirect('landlord_dashboard')
             else:
-                return redirect('home')
+                return redirect('tenant_dashboard')
         
         else:
             messages.error(request, 'Invalid email or password.')
