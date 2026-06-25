@@ -205,8 +205,6 @@ def landlord_dashboard(request):
 
 
 # My listings page
-
-
 @login_required
 def my_listings(request):
     listings = Room.objects.filter(owner=request.user)
@@ -216,8 +214,6 @@ def my_listings(request):
     })
 
 # My saved rooms
-
-
 @login_required
 def saved_rooms(request):
     saved = SavedRoom.objects.filter(
@@ -229,16 +225,12 @@ def saved_rooms(request):
     })
 
 # My edit profile
-
-
 @login_required
 def edit_profile(request):
     return render(request, "edit_profile.html")
 
 
 # My upload listing
-
-
 @login_required
 def upload_listing(request):
 
@@ -283,8 +275,6 @@ def upload_listing(request):
     )
 
 # My messages
-
-
 @login_required
 def messages_view(request):
     messages_list = Message.objects.filter(
@@ -303,8 +293,6 @@ def settings_view(request):
     return render(request, "settings.html")
 
 # TENANT DASHBOARD
-
-
 @role_required('tenant')
 def tenant_dashboard(request):
     saved_rooms = SavedRoom.objects.filter(
