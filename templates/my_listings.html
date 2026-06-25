@@ -1,0 +1,136 @@
+{% extends 'landlord_base.html' %}
+{% load static %}
+
+{% block title %}My Listings{% endblock %}
+{% block page_title %}My Listings{% endblock %}
+
+{% block content %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/my_listings.css' %}">
+{% endblock %}
+
+<div class="page-top">
+    <a href="{% url 'landlord_dashboard' %}" class="back-btn">← Back </a>
+</div>
+
+
+<section class="dashboard-card">
+
+    <div class="card-header">
+        <h3>My Properties</h3>
+    </div>
+
+    {% if listings %}
+
+    <div class="listing-table-wrapper">
+
+        <table class="listing-table">
+
+            <thead>
+                <tr>
+                    <th>Property</th>
+                    <th>Rent</th>
+                    <th>Status</th>
+                    <th>Views</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+            {% for room in listings %}
+
+                <tr> 
+
+                    <section class="stats-grid">
+
+    <div class="stat-card">
+        <h2>{{ listings.count }}</h2>
+        <p>Total Listings</p>
+    </div>
+
+</section>
+
+                    <td>
+                        <strong>{{ room.title }}</strong><br>
+                        {{ room.city }}
+                    </td>
+
+                    <td>
+                        Rs. {{ room.price }}
+                    </td>
+
+                    <td>
+
+                        {% if room.is_verified %}
+                            <span class="status approved">
+                                Approved ✅
+                            </span>
+                        {% else %}
+                            <span class="status pending">
+                                Pending ⏳
+                            </span>
+                        {% endif %}
+
+                    </td>
+
+                    <td>
+                        {{ room.views }}
+                    </td>
+
+                    <td>
+
+                    <a href="{% url 'room_detail' room.id %}" class="table-btn">
+                        View
+                    </a>
+
+                    <a href="{% url 'edit_listing' room.id %}" class="table-btn">
+                        Edit
+                    </a>
+
+                    <form method="POST"
+                        action="{% url 'delete_listing' room.id %}"
+                        style="display:inline;">
+                        {% csrf_token %}
+
+                        <button type="submit"
+                                class="table-btn delete"
+                                onclick="return confirm('Delete this listing?');">
+                            Delete
+                        </button>
+                    </form>
+
+                </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    {% else %}
+
+    <div class="empty-state">
+
+        <h3>No Listings Found</h3>
+
+        <p>
+            You haven't uploaded any properties yet.
+        </p>
+
+        <a href="{% url 'upload_listing' %}" class="hero-btn">
+            Upload Listing
+        </a>
+
+    </div>
+
+    {% endif %}
+
+</section>
+
+{% endblock %}

@@ -4,7 +4,15 @@ from .models import *
 # Register your models here.
 admin.site.register(Province)
 admin.site.register(District)
-admin.site.register(Room)
 admin.site.register(SavedRoom)
-admin.site.register(VerificationDocument)
+
+class VerificationDocumentInline(admin.StackedInline):
+    model = VerificationDocument
+    extra = 0
+    can_delete = False
+
+
+@admin.register(Room)
+class RoomAdmin(admin.ModelAdmin):
+    inlines = [VerificationDocumentInline]
 

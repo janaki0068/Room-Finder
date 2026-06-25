@@ -158,33 +158,45 @@
 
         <div class="trust-item">
 
-            <div class="trust-icon">
-                <i class="ti ti-user-check"></i>
-            </div>
+    <div class="trust-icon">
+        <i class="ti ti-user-check"></i>
+    </div>
 
-            <div>
-                <h4>Verified Owner</h4>
-                <p>
-                    Identity verified using citizenship documents.
-                </p>
-            </div>
+    <div>
+        <h4>
+            Verified Owner
+            {% if has_verified_property %}
+                ✅
+            {% endif %}
+        </h4>
 
-        </div>
+        <p>
+            Identity verified using citizenship documents.
+        </p>
+    </div>
+
+</div>
 
         <div class="trust-item">
 
-            <div class="trust-icon">
-                <i class="ti ti-shield-check"></i>
-            </div>
+    <div class="trust-icon">
+        <i class="ti ti-shield-check"></i>
+    </div>
 
-            <div>
-                <h4>Verified Property</h4>
-                <p>
-                    Ownership confirmed through Lalpurja verification.
-                </p>
-            </div>
+    <div>
+        <h4>
+            Verified Property
+            {% if has_verified_property %}
+                ✅
+            {% endif %}
+        </h4>
 
-        </div>
+        <p>
+            Ownership confirmed through Lalpurja verification.
+        </p>
+    </div>
+
+</div>
 
     </div>
 
@@ -192,7 +204,6 @@
 
 
 <!-- RECENT LISTINGS -->
-
 <section class="dashboard-card">
 
     <div class="card-header">
@@ -228,21 +239,20 @@
 
                     <td>
 
-                        {% if listing.status == "Approved" %}
-                            <span class="status approved">
-                                Approved
-                            </span>
+                       {% if listing.is_verified %}
+    <span class="status approved">
+        Approved
+    </span>
 
-                        {% elif listing.status == "Rejected" %}
-                            <span class="status rejected">
-                                Rejected
-                            </span>
+{% else %}
+    <span class="status pending">
+        Pending
+    </span>
+{% endif %}
 
-                        {% else %}
-                            <span class="status pending">
-                                Pending
-                            </span>
-                        {% endif %}
+        <span class="status">
+    {{ listing.get_status_display }}
+</span>
 
                     </td>
 

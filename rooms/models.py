@@ -7,8 +7,6 @@ from django.core.exceptions import ValidationError
 # Create your models here.
 
 # PROVINCE
-
-
 class Province(models.Model):
     name = models.CharField(max_length=100,unique=True)
 
@@ -16,8 +14,6 @@ class Province(models.Model):
         return self.name
 
 # DISTRICTS
-
-
 class District(models.Model):
     province = models.ForeignKey(
         Province, on_delete=models.CASCADE, related_name="districts")
@@ -216,3 +212,15 @@ class VerificationDocument(models.Model):
 
     def __str__(self):
         return f"Documents for {self.room.title}"
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
+        if self.is_verified:
+            self.room.is_verified = True
+            self.room.status = "active"
+        else:
+            self.room.is_verified = False
+            self.room.status = "draft"
+
+        self.room.save()

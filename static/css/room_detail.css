@@ -1,0 +1,242 @@
+/* ============================================
+   Room Detail — Pink Theme
+   ============================================ */
+
+:root {
+    --pink-50:  #FBEAF0;
+    --pink-100: #F4C0D1;
+    --pink-200: #ED93B1;
+    --pink-400: #D4537E;
+    --pink-600: #993556;
+    --pink-800: #72243E;
+    --pink-900: #4B1528;
+}
+
+
+/* ── Back Link ─────────────────────────────── */
+
+.page-top {
+    margin-bottom: 18px;
+}
+
+.back-btn {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--pink-600);
+    text-decoration: none;
+    transition: color 0.15s ease;
+}
+
+.back-btn:hover {
+    color: var(--pink-800);
+}
+
+
+/* ── Property Header ───────────────────────── */
+
+.property-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    background: #ffffff;
+    border-radius: 14px;
+    border: 0.5px solid var(--pink-100);
+    padding: 20px 24px;
+    margin-bottom: 20px;
+}
+
+.property-header h1 {
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--pink-900);
+    margin-bottom: 4px;
+}
+
+.property-header p {
+    font-size: 13px;
+    color: #999999;
+    margin-bottom: 12px;
+}
+
+
+/* ── Status Badges ─────────────────────────── */
+
+.status {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.status.approved {
+    background: #edf7ee;
+    color: #2d7a38;
+}
+
+.status.pending {
+    background: var(--pink-50);
+    color: var(--pink-600);
+}
+
+
+/* ── Header Action Buttons ─────────────────── */
+
+.header-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.btn-edit {
+    display: inline-block;
+    padding: 7px 18px;
+    border-radius: 9px;
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: none;
+    border: 0.5px solid var(--pink-200);
+    color: var(--pink-800);
+    background: #ffffff;
+    transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.btn-edit:hover {
+    background: var(--pink-50);
+    border-color: var(--pink-400);
+}
+
+.btn-delete {
+    display: inline-block;
+    padding: 7px 18px;
+    border-radius: 9px;
+    font-size: 13px;
+    font-weight: 500;
+    border: 0.5px solid #f5c6c6;
+    color: #c0392b;
+    background: #ffffff;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.btn-delete:hover {
+    background: #fff0f0;
+    border-color: #e74c3c;
+}
+
+
+/* ── Two-Column Grid ───────────────────────── */
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+    align-items: start;
+}
+
+@media (max-width: 640px) {
+    .detail-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .property-header {
+        flex-direction: column;
+    }
+
+    .header-actions {
+        width: 100%;
+    }
+}
+
+
+/* ── Detail Cards ──────────────────────────── */
+
+.detail-card {
+    background: #ffffff;
+    border-radius: 12px;
+    border: 0.5px solid var(--pink-100);
+    padding: 20px 22px;
+    margin-bottom: 16px;
+    overflow: hidden;
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+
+.detail-card:last-child {
+    margin-bottom: 0;
+}
+
+.detail-grid .detail-card {
+    margin-bottom: 0;
+}
+
+.detail-card h3 {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--pink-800);
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 0.5px solid var(--pink-100);
+}
+
+.detail-card p {
+    font-size: 13px;
+    color: #555555;
+    margin-bottom: 8px;
+    line-height: 1.6;
+}
+
+.detail-card p:last-child {
+    margin-bottom: 0;
+}
+
+.detail-card strong {
+    color: var(--pink-800);
+    font-weight: 500;
+}
+
+
+/* ── Facilities Grid ───────────────────────── */
+
+.facility-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.facility-grid span {
+    display: inline-block;
+    background: var(--pink-50);
+    border: 0.5px solid var(--pink-100);
+    color: var(--pink-800);
+    font-size: 12px;
+    padding: 5px 12px;
+    border-radius: 20px;
+}
+
+
+/* ── Bills List ────────────────────────────── */
+
+.detail-card ul {
+    padding-left: 18px;
+    margin: 0;
+}
+
+.detail-card ul li {
+    font-size: 13px;
+    color: #555555;
+    margin-bottom: 6px;
+    line-height: 1.6;
+}
+
+.detail-card ul li::marker {
+    color: var(--pink-400);
+}
+
+.detail-card ul li:last-child {
+    margin-bottom: 0;
+}

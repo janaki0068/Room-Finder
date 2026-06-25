@@ -148,9 +148,7 @@ def search_rooms(request):
 
 
 def get_districts(request, province_id):
-    districts = District.objects.filter(
-        province_id=province_id
-    ).values(
+    districts = District.objects.filter(province_id=province_id).values(
         'id',
         'name'
     )
@@ -182,36 +180,83 @@ def profile_view(request):
 # LANDLORD DASHBOARD
 @login_required
 def landlord_dashboard(request):
+
     user_listings = Room.objects.filter(owner=request.user)
-    total_listings = user_listings.count()
-    active_listings = user_listings.filter(status='active').count()
-    total_views = user_listings.aggregate(
-        total=Sum('views')
-    )['total'] or 0
-
-    saved_count = SavedRoom.objects.filter(
-        room__owner=request.user
-    ).count()
-
+    listing_count = user_listings.count()
+    approved_count = user_listings.filter(is_verified=True).count()
+    pending_count = user_listings.filter(is_verified=False).count()
+    total_views = user_listings.aggregate(total=Sum('views'))['total'] or 0
     recent_listings = user_listings[:5]
+    has_verified_property = user_listings.filter(is_verified=True).exists()
 
-    return render(request, 'landlord_dashboard.html', {
-        'total_listings': total_listings,
-        'active_listings': active_listings,
-        'total_views': total_views,
-        'saved_count': saved_count,
-        'recent_listings': recent_listings,
+    return render(request, "landlord_dashboard.html", {
+        "listing_count": listing_count,
+        "approved_count": approved_count,
+        "pending_count": pending_count,
+        "total_views": total_views,
+        "recent_listings": recent_listings,
+        "has_verified_property": has_verified_property,
     })
 
 
 # My listings page
 @login_required
 def my_listings(request):
-    listings = Room.objects.filter(owner=request.user)
+    listings = Room.objects.filter(owner=request.user).order_by("-created_at")
 
     return render(request, "my_listings.html", {
         "listings": listings
     })
+
+# Room detail
+from django.shortcuts import render, get_object_or_404
+
+def room_detail(request, room_id):
+    room = get_object_or_404(Room, id=room_id, owner=request.user)
+
+    return render(request, 'room_detail.html', {
+        'room':room
+    })
+
+# Edit listings
+@login_required
+def edit_listing(request, room_id):
+
+    room = get_object_or_404(
+        Room,
+        id=room_id,
+        owner=request.user
+    )
+
+    if request.method == "POST":
+        form = RoomForm(request.POST, instance=room)
+
+        if form.is_valid():
+            form.save()
+            return redirect("my_listings")
+
+    else:
+        form = RoomForm(instance=room)
+
+    return render(request, "edit_listing.html", {
+        "form": form,
+        "room": room
+    })
+
+# Delete listings
+@login_required
+def delete_listing(request, room_id):
+
+    room = get_object_or_404(
+        Room,
+        id=room_id,
+        owner=request.user
+    )
+
+    if request.method == "POST":
+        room.delete()
+
+    return redirect("my_listings")
 
 # My saved rooms
 @login_required
@@ -286,8 +331,6 @@ def messages_view(request):
     })
 
 # My settings
-
-
 @login_required
 def settings_view(request):
     return render(request, "settings.html")

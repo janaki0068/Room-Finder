@@ -6,7 +6,7 @@
 }
 
 body{
-    background:#fff7fa;
+    background:#fdf5f8;
     color:#333;
     padding-bottom:100px;
 }
@@ -50,7 +50,7 @@ header{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    background:#FBD0DD;
+    background:#F4C0D1;
     border-radius:20px;
     padding:14px 24px;
 }
@@ -69,6 +69,7 @@ header{
 .site-title{
     font-size:1.4rem;
     font-weight:700;
+    color:#4B1528;
 }
 
 .nav-buttons{
@@ -78,7 +79,7 @@ header{
 
 .btn-login,
 .btn-signup{
-    background:#FF87AB;
+    background:#D4537E;
     color:white;
     padding:10px 20px;
     border-radius:20px;
@@ -87,7 +88,7 @@ header{
 
 .btn-login:hover,
 .btn-signup:hover{
-    background:#c73e6a;
+    background:#993556;
 }
 
 /* ==========================
@@ -104,40 +105,43 @@ HERO
     display:block;
     font-size:48px;
     margin-bottom:15px;
+    color:#4B1528;
 }
 
 .hero-text small{
     font-size:18px;
-    color:#666;
+    color:#999;
 }
 
 /* ==========================
 SEARCH SECTION
 ========================== */
+
 .search-section{
     margin-bottom:35px;
 }
 
 .search-form{
     display:grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr auto;
+    grid-template-columns:2fr 1fr 1fr 1fr auto;
     gap:15px;
     width:100%;
     align-items:center;
 }
 
 .search-bar{
-    background:#FADDE1;
+    background:#FBEAF0;
     border-radius:16px;
     padding:0 20px;
     display:flex;
     align-items:center;
     height:60px;
+    border:1px solid #F4C0D1;
 }
 
 .search-bar span{
     font-size:22px;
-    color:#ef5f94;
+    color:#D4537E;
 }
 
 .search-bar input{
@@ -147,24 +151,30 @@ SEARCH SECTION
     background:none;
     padding:16px;
     font-size:16px;
+    color:#333;
+}
+
+.search-bar input::placeholder{
+    color:#ccc;
 }
 
 .filter-select{
     width:100%;
     height:60px;
-    border:none;
+    border:1px solid #F4C0D1;
     outline:none;
-    background:#FBD7DE;
+    background:#FBEAF0;
     border-radius:16px;
     padding:0 16px;
     font-size:15px;
+    color:#555;
 }
 
 .search-btn{
     height:60px;
     min-width:140px;
     padding:0 25px;
-    background:#FF87AB;
+    background:#D4537E;
     color:white;
     border:none;
     border-radius:16px;
@@ -173,30 +183,25 @@ SEARCH SECTION
 }
 
 .search-btn:hover{
-    background:#df4b82;
+    background:#993556;
 }
 
-@media (max-width: 992px){
-
+@media (max-width:992px){
     .search-form{
         grid-template-columns:1fr 1fr;
     }
-
     .search-bar{
         grid-column:1 / -1;
     }
-
     .search-btn{
         width:100%;
     }
 }
 
 @media (max-width:768px){
-
     .search-form{
         grid-template-columns:1fr;
     }
-
     .search-bar,
     .filter-select,
     .search-btn{
@@ -204,14 +209,12 @@ SEARCH SECTION
     }
 }
 
-
-
 /* ==========================
 BROWSE TYPE
 ========================== */
 
 .browse-type{
-    background:#FFACC5;
+    background:#ED93B1;
     padding:25px;
     border-radius:18px;
     margin-bottom:35px;
@@ -226,10 +229,12 @@ BROWSE TYPE
 
 .browse-header strong{
     font-size:34px;
+    color:#4B1528;
 }
 
 .browse-header a{
-    color:#222;
+    color:#72243E;
+    font-weight:600;
 }
 
 .type-grid{
@@ -239,15 +244,17 @@ BROWSE TYPE
 }
 
 .type-card{
-    background:#FADDE1;
+    background:#FBEAF0;
     border-radius:14px;
     padding:30px;
     text-align:center;
     transition:.3s;
+    border:1px solid #F4C0D1;
 }
 
 .type-card:hover{
     transform:translateY(-5px);
+    background:#fff;
 }
 
 .type-icon{
@@ -256,12 +263,14 @@ BROWSE TYPE
 
 .type-icon iconify-icon{
     font-size:42px;
-    color:#ef5f94;
+    color:#D4537E;
 }
 
 .type-card span{
     font-weight:600;
+    color:#72243E;
 }
+
 .hidden-types{
     display:none;
     margin-top:20px;
@@ -275,7 +284,6 @@ BROWSE TYPE
 LISTINGS GRID
 ========================== */
 
-
 .listings-grid{
     display:grid;
     grid-template-columns:repeat(2,1fr);
@@ -286,14 +294,16 @@ LISTINGS GRID
 .listing-card{
     background:white;
     border-radius:18px;
-    border:1px solid #f0d4dd;
+    border:1px solid #F4C0D1;
     overflow:hidden;
     transition:.3s;
+    word-break:break-word;
+    overflow-wrap:break-word;
 }
 
 .listing-card:hover{
     transform:translateY(-5px);
-    box-shadow:0 10px 25px rgba(0,0,0,.08);
+    box-shadow:0 10px 25px rgba(212,83,126,.1);
 }
 
 .card-top{
@@ -304,21 +314,31 @@ LISTINGS GRID
 }
 
 .verified-badge{
-    background:#F09BB5;
-    color:white;
+    background:#ED93B1;
+    color:#4B1528;
     padding:6px 14px;
     border-radius:20px;
     font-size:13px;
+    font-weight:600;
 }
 
 .heart{
-    color:#ef5f94;
+    color:#ED93B1;
     font-size:22px;
+    cursor:pointer;
+    background:none;
+    border:none;
+    padding:0;
+    transition:.3s;
+}
+
+.heart:hover{
+    color:#D4537E;
 }
 
 .card-icon{
     height:180px;
-    background:#FADDE1;
+    background:#FBEAF0;
     display:flex;
     justify-content:center;
     align-items:center;
@@ -326,25 +346,29 @@ LISTINGS GRID
 
 .card-icon iconify-icon{
     font-size:80px;
-    color:#ef5f94;
+    color:#ED93B1;
 }
 
 .listing-card h3{
     padding:20px 20px 10px;
     font-size:28px;
+    color:#4B1528;
 }
 
 .location{
     padding:0 20px;
-    color:#777;
+    color:#999;
     display:flex;
     gap:6px;
     align-items:center;
+    font-size:14px;
 }
 
 .desc{
     padding:15px 20px;
-    color:#666;
+    color:#777;
+    word-break:break-word;
+    overflow-wrap:break-word;
 }
 
 .room-features{
@@ -355,12 +379,13 @@ LISTINGS GRID
 }
 
 .room-features span{
-    background:#FADDE1;
-    color:#ef5f94;
+    background:#FBEAF0;
+    color:#993556;
     padding:8px 12px;
     border-radius:20px;
     font-size:13px;
     font-weight:600;
+    border:1px solid #F4C0D1;
 }
 
 .card-footer{
@@ -368,21 +393,27 @@ LISTINGS GRID
     display:flex;
     justify-content:space-between;
     align-items:center;
+    border-top:1px solid #FBEAF0;
 }
 
 .price{
     font-size:24px;
     font-weight:700;
-    color:#ef5f94;
+    color:#D4537E;
 }
 
 .view-details{
-    background:#F09BB5;
+    background:#D4537E;
     color:white;
     padding:10px 18px;
     border-radius:8px;
     font-size:14px;
     font-weight:600;
+    transition:.3s;
+}
+
+.view-details:hover{
+    background:#993556;
 }
 
 /* ==========================
@@ -391,27 +422,35 @@ INLINE ADVERTISEMENT
 
 .listing-ad{
     grid-column:1/-1;
-    background:#FFE0E9;
+    background:#FBEAF0;
     border-radius:18px;
     padding:30px;
     text-align:center;
+    border:1px solid #F4C0D1;
 }
 
 .listing-ad h3{
     margin:12px 0;
     font-size:28px;
+    color:#4B1528;
 }
 
 .listing-ad p{
-    color:#555;
+    color:#777;
     margin-bottom:20px;
 }
 
 .listing-ad button{
-    background:#F09BB5;
+    background:#D4537E;
     color:white;
     padding:12px 24px;
     border-radius:10px;
+    font-weight:600;
+    font-family:'Segoe UI',sans-serif;
+}
+
+.listing-ad button:hover{
+    background:#993556;
 }
 
 /* ==========================
@@ -419,18 +458,20 @@ BOTTOM AD BANNER
 ========================== */
 
 .ad-banner{
-    background:#FFE0E9;
+    background:#FBEAF0;
     border-radius:18px;
     padding:30px;
     display:flex;
     justify-content:space-between;
     align-items:center;
     margin-bottom:40px;
+    border:1px solid #F4C0D1;
 }
 
 .ad-label{
-    background:#FF709C;
-    color:white;
+    display:inline-block;
+    background:#ED93B1;
+    color:#4B1528;
     padding:6px 12px;
     border-radius:20px;
     font-size:12px;
@@ -440,14 +481,20 @@ BOTTOM AD BANNER
 .ad-text p{
     margin-top:12px;
     font-size:18px;
+    color:#4B1528;
 }
 
 .ad-banner button{
-    background:#F09BB5;
+    background:#D4537E;
     color:white;
     padding:14px 28px;
     border-radius:10px;
     font-weight:600;
+    font-family:'Segoe UI',sans-serif;
+}
+
+.ad-banner button:hover{
+    background:#993556;
 }
 
 /* ==========================
@@ -460,8 +507,8 @@ BOTTOM NAV
     left:0;
     width:100%;
     height:75px;
-    background:#f6ccd8;
-    border-top:1px solid #ebc1ce;
+    background:#fff;
+    border-top:1px solid #F4C0D1;
     display:flex;
     justify-content:space-around;
     align-items:center;
@@ -473,12 +520,30 @@ BOTTOM NAV
     flex-direction:column;
     align-items:center;
     gap:5px;
-    color:#555;
+    color:#ccc;
+    font-size:11px;
+    font-weight:600;
+}
+
+.bottom-nav-item img{
+    opacity:.3;
+    transition:.3s;
 }
 
 .bottom-nav-item.active{
-    color:#ef5f94;
-    font-weight:600;
+    color:#D4537E;
+}
+
+.bottom-nav-item.active img{
+    opacity:1;
+}
+
+.bottom-nav-item:hover{
+    color:#D4537E;
+}
+
+.bottom-nav-item:hover img{
+    opacity:.75;
 }
 
 /* ==========================
@@ -486,19 +551,15 @@ TABLET
 ========================== */
 
 @media(max-width:992px){
-
     .search-form{
         grid-template-columns:1fr 1fr;
     }
-
     .search-bar{
         grid-column:1/-1;
     }
-
     .listings-grid{
         grid-template-columns:1fr;
     }
-
     .type-grid{
         grid-template-columns:repeat(2,1fr);
     }
@@ -509,43 +570,34 @@ MOBILE
 ========================== */
 
 @media(max-width:768px){
-
     .navbar{
         flex-direction:column;
         gap:15px;
     }
-
     .hero-text strong{
         font-size:32px;
     }
-
     .search-form{
         grid-template-columns:1fr;
     }
-
     .search-btn{
         height:50px;
     }
-
     .type-grid{
         grid-template-columns:1fr;
     }
-
     .card-footer{
         flex-direction:column;
         align-items:flex-start;
         gap:15px;
     }
-
     .view-details{
         width:100%;
         text-align:center;
     }
-
     .ad-banner{
         flex-direction:column;
         gap:20px;
         text-align:center;
     }
 }
-

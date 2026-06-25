@@ -1,0 +1,146 @@
+{% extends 'landlord_base.html' %}
+{% load static %}
+
+{% block title %}{{ room.title }}{% endblock %}
+{% block page_title %}Property Details{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/room_detail.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="page-top">
+    <a href="{% url 'my_listings' %}" class="back-btn">← Back to My Listings </a>
+</div>
+
+<div class="property-header">
+    <div>
+        <h1>{{ room.title }}</h1>
+
+        <p>{{ room.city }}, {{ room.district }}, {{ room.province }} </p>
+
+        {% if room.is_verified %}
+        <span class="status approved"> Verified ✓ </span>
+
+        {% else %}
+        <span class="status pending"> Pending Verification </span>
+
+        {% endif %}
+    </div>
+
+    <div class="header-actions">
+        <a href="{% url 'edit_listing' room.id %}" class="btn-edit"> Edit Listing </a>
+        
+        <form method="POST" action="{% url 'delete_listing' room.id%}">
+            {% csrf_token %}
+
+            <button type="submit" class="btn-delete" onclick="return confirm('Delete this listing?');"> Delete </button>
+        </form>
+    </div>
+</div>
+
+<div class="detail-grid">
+
+    <!-- LEFT -->
+    <div class="detail-card">
+        <h3>Property Information</h3>
+        <p><strong>Room Type:</strong> {{ room.room_type }}</p>
+        <p><strong>Status:</strong> {{ room.get_status_display }}</p>
+        <p><strong>Price:</strong> Rs. {{ room.price }}</p>
+        <p><strong>Security Deposit:</strong> Rs. {{ room.security_deposit }}</p>
+        <p><strong>Views:</strong> {{ room.views }}</p>
+        <p><strong>Created:</strong> {{ room.created_at }}</p>
+    </div>
+
+    <!-- LOCATION -->
+    <div class="detail-card">
+        <h3>Location</h3>
+        <p><strong>Province:</strong> {{ room.province }}</p>
+        <p><strong>District:</strong> {{ room.district }}</p>
+        <p><strong>City:</strong> {{ room.city }}</p>
+        <p><strong>Area:</strong> {{ room.area }}</p>
+        <p><strong>Address:</strong> {{ room.address }}</p>
+    </div>
+</div>
+
+<!-- DESCRIPTION -->
+<div class="detail-card">
+    <h3>Description</h3>
+    <p>{{ room.description }}</p>
+</div>
+
+<!-- FACILITIES -->
+<div class="detail-card">
+    <h3>Facilities</h3>
+    <div class="facility-grid">
+
+        {% if room.wifi %}
+            <span>📶 WiFi</span>
+        {% endif %}
+
+        {% if room.attached_bathroom %}
+            <span>🚿 Attached Bathroom</span>
+        {% endif %}
+
+        {% if room.furnished %}
+            <span>🛏 Furnished</span>
+        {% endif %}
+
+        {% if room.parking %}
+            <span>🚗 Parking</span>
+        {% endif %}
+
+        {% if room.has_bike_parking %}
+            <span>🏍 Bike Parking</span>
+        {% endif %}
+
+        {% if room.has_drinking_water %}
+            <span>💧 Drinking Water</span>
+        {% endif %}
+
+        {% if room.has_water_24_7 %}
+            <span>🚰 24/7 Water</span>
+        {% endif %}
+
+        {% if room.has_balcony %}
+            <span>🌿 Balcony</span>
+        {% endif %}
+
+        {% if room.has_security_guard %}
+            <span>🛡 Security Guard</span>
+        {% endif %}
+
+        {% if room.has_cctv %}
+            <span>📹 CCTV</span>
+        {% endif %}
+
+        {% if room.pet_allowed %}
+            <span>🐶 Pets Allowed</span>
+        {% endif %}
+    </div>
+</div>
+
+<!-- BILLS -->
+<div class="detail-card">
+    <h3>Bills Included</h3>
+
+    <ul>
+
+        {% if room.bill_water %}
+            <li>Water Bill Included</li>
+        {% endif %}
+
+        {% if room.bill_electricity %}
+            <li>Electricity Bill Included</li>
+        {% endif %}
+
+        {% if room.bill_internet %}
+            <li>Internet Bill Included</li>
+        {% endif %}
+
+    </ul>
+
+</div>
+
+{% endblock %}

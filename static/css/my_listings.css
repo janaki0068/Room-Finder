@@ -1,0 +1,240 @@
+/* ============================================
+   My Listings — Pink Theme
+   ============================================ */
+
+:root {
+    --pink-50:  #FBEAF0;
+    --pink-100: #F4C0D1;
+    --pink-200: #ED93B1;
+    --pink-400: #D4537E;
+    --pink-600: #993556;
+    --pink-800: #72243E;
+    --pink-900: #4B1528;
+}
+
+.page-top {
+    margin-bottom: 18px;
+}
+
+.back-btn {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--pink-600);
+    text-decoration: none;
+    transition: color 0.15s ease;
+}
+
+.back-btn:hover {
+    color: var(--pink-800);
+}
+
+/* ── Dashboard Card ────────────────────────── */
+
+.dashboard-card {
+    background: #ffffff;
+    border-radius: 14px;
+    border: 0.5px solid var(--pink-100);
+    overflow: hidden;
+    margin-bottom: 2rem;
+}
+
+.card-header {
+    background: var(--pink-50);
+    border-bottom: 0.5px solid var(--pink-100);
+    padding: 18px 24px;
+}
+
+.card-header h3 {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--pink-800);
+    margin: 0;
+}
+
+
+/* ── Table Wrapper ─────────────────────────── */
+
+.listing-table-wrapper {
+    overflow-x: auto;
+}
+
+.listing-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.listing-table thead {
+    background: var(--pink-50);
+}
+
+.listing-table thead th {
+    padding: 12px 20px;
+    text-align: left;
+    font-weight: 500;
+    font-size: 12px;
+    color: var(--pink-600);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 0.5px solid var(--pink-100);
+    white-space: nowrap;
+}
+
+.listing-table tbody tr {
+    border-bottom: 0.5px solid var(--pink-50);
+    transition: background 0.15s ease;
+}
+
+.listing-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.listing-table tbody tr:hover {
+    background: var(--pink-50);
+}
+
+.listing-table td {
+    padding: 14px 20px;
+    color: #444444;
+    vertical-align: middle;
+}
+
+.listing-table td strong {
+    color: var(--pink-800);
+    font-weight: 500;
+    display: block;
+    margin-bottom: 2px;
+}
+
+.listing-table td small,
+.listing-table td span:not(.status) {
+    color: #999999;
+    font-size: 12px;
+}
+
+
+/* ── Status Badges ─────────────────────────── */
+
+.status {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.status.approved {
+    background: #edf7ee;
+    color: #2d7a38;
+}
+
+.status.pending {
+    background: var(--pink-50);
+    color: var(--pink-600);
+}
+
+
+/* ── Action Buttons ────────────────────────── */
+
+.table-btn {
+    display: inline-block;
+    padding: 5px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: none;
+    border: 0.5px solid var(--pink-200);
+    color: var(--pink-800);
+    background: #ffffff;
+    cursor: pointer;
+    margin-right: 6px;
+    transition: background 0.15s ease, border-color 0.15s ease;
+    font-family: inherit;
+    line-height: 1.4;
+}
+
+.table-btn:hover {
+    background: var(--pink-50);
+    border-color: var(--pink-400);
+    color: var(--pink-800);
+}
+
+.table-btn.delete {
+    color: #c0392b;
+    border-color: #f5c6c6;
+    background: #ffffff;
+}
+
+.table-btn.delete:hover {
+    background: #fff0f0;
+    border-color: #e74c3c;
+}
+
+
+/* ── Stats Grid ────────────────────────────── */
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+    padding: 20px 24px;
+}
+
+.stat-card {
+    background: var(--pink-50);
+    border-radius: 10px;
+    padding: 16px;
+    text-align: center;
+}
+
+.stat-card h2 {
+    font-size: 28px;
+    font-weight: 500;
+    color: var(--pink-800);
+    margin: 0 0 4px;
+}
+
+.stat-card p {
+    font-size: 13px;
+    color: var(--pink-600);
+    margin: 0;
+}
+
+
+/* ── Empty State ───────────────────────────── */
+
+.empty-state {
+    text-align: center;
+    padding: 60px 24px;
+}
+
+.empty-state h3 {
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--pink-800);
+    margin-bottom: 8px;
+}
+
+.empty-state p {
+    color: #999999;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.hero-btn {
+    display: inline-block;
+    background: var(--pink-400);
+    color: #ffffff;
+    padding: 10px 22px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background 0.15s ease;
+}
+
+.hero-btn:hover {
+    background: var(--pink-600);
+    color: #ffffff;
+}
