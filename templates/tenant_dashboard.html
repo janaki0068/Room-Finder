@@ -1,22 +1,17 @@
 {% load static %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Room Finder - Dashboard</title>
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/tenant_dashboard.css' %}">
+{% endblock css %}
 
-  <link rel="stylesheet" href="{% static 'css/tenant_dashboard.css' %}">
-  <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
-</head>
+{% block content %}
 
 <body>
 
 <!-- NAVBAR -->
 <header>
   <div class="logo">
-    <img src="{% static 'images/roomfinder.jpeg' %}" alt="Room Finder Logo" width="40" height="40"/>
+    <img src="{% static 'images/logo.png' %}" alt="Room Finder Logo" width="40" height="40"/>
     <span>Room Finder</span>
   </div>
 
@@ -34,11 +29,13 @@
       <img src="{% static 'images/default-avatar.png' %}" alt="User Avatar" class="avatar" />
     {% endif %}
 
-    <span class="username">
+    {% comment %} <span class="username">
       {{ request.user.get_full_name|default:request.user.username }}
-    </span>
+    </span> {% endcomment %}
 
-    <a href="{% url 'logout' %}">Logout</a>
+    <a href="{% url 'logout' %}" class="logout-btn" >
+      <i class="fa-solid fa-arrow-right-from-bracket"></i>
+    </a>
   </div>
 </header>
 
@@ -61,23 +58,23 @@
 
     <nav class="sidebar-nav">
       <a href="{% url 'tenant_dashboard' %}">
-        <span class="icon">🏠</span> Dashboard
+        <span class="icon"></span> Dashboard
       </a>
 
       <a href="{% url 'search_rooms' %}">
-        <span class="icon">🔍</span> Browse Rooms
+        <span class="icon"></span> Browse Rooms
       </a>
 
       <a href="{% url 'saved_rooms' %}">
-        <span class="icon">❤️</span> Saved Rooms
+        <span class="icon"></span> Saved Rooms
       </a>
 
       <a href="{% url 'messages' %}">
-        <span class="icon">💬</span> Messages
+        <span class="icon"></span> Messages
       </a>
 
       <a href="{% url 'settings' %}">
-        <span class="icon">⚙️</span> Settings
+        <span class="icon"></span> Settings
       </a>
     </nav>
   </aside>
@@ -125,7 +122,7 @@
             <h4>{{ saved.room.title }}</h4>
 
             <p class="listing-meta">
-              {{ saved.room.room_type }} | 📍 {{ saved.room.city }}
+              {{ saved.room.room_type }} | {{ saved.room.city }}
             </p>
 
             <p class="listing-price">
@@ -139,7 +136,7 @@
 
         </div>
         {% empty %}
-          <p>You haven't saved any rooms yet. <a href="{% url 'search_rooms' %}">Browse listings</a> to find your next place.</p>
+          <p>You haven't saved any rooms yet. To find your next place, go to <a href="{% url 'search_rooms' %}">Browse Listings.</a> </p>
         {% endfor %}
 
       </div>
@@ -172,7 +169,7 @@
             <h4>{{ room.title }}</h4>
 
             <p class="listing-meta">
-              {{ room.room_type }} | 📍 {{ room.city }}
+              {{ room.room_type }} | {{ room.city }}
             </p>
 
             <p class="listing-price">
@@ -180,8 +177,8 @@
             </p>
 
             <div class="listing-stats">
-              <span>👁 {{ room.views }} views</span>
-              <span>❤️ {{ room.saved_count }} saved</span>
+              <span> {{ room.views }} views</span>
+              <span> {{ room.saved_count }} saved</span>
             </div>
           </div>
 
@@ -198,11 +195,12 @@
 
 <!-- BOTTOM NAV -->
 <nav class="bottom-nav">
-  <a href="{% url 'home' %}"><span>🏠</span><small>Home</small></a>
-  <a href="{% url 'search_rooms' %}"><span>🔍</span><small>Search</small></a>
-  <a href="{% url 'saved_rooms' %}"><span>❤️</span><small>Saved</small></a>
-  <a href="{% url 'tenant_dashboard' %}" class="active"><span>👤</span><small>Profile</small></a>
+  <a href="{% url 'home' %}"><span></span><small>Home</small></a>
+  <a href="{% url 'search_rooms' %}"><span></span><small>Search</small></a>
+  <a href="{% url 'saved_rooms' %}"><span></span><small>Saved</small></a>
+  <a href="{% url 'tenant_dashboard' %}" class="active"><span></span><small>Profile</small></a>
 </nav>
 
 </body>
-</html>
+
+{% endblock content %}
