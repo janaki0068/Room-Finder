@@ -4,9 +4,16 @@
 <link rel="stylesheet" href="{% static 'css/tenant_dashboard.css' %}">
 {% endblock css %}
 
+
+<link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    />
+
+
 {% block content %}
 
-<body>
+
 
 <!-- NAVBAR -->
 <header>
@@ -29,17 +36,13 @@
       <img src="{% static 'images/default-avatar.png' %}" alt="User Avatar" class="avatar" />
     {% endif %}
 
-    {% comment %} <span class="username">
-      {{ request.user.get_full_name|default:request.user.username }}
-    </span> {% endcomment %}
-
     <a href="{% url 'logout' %}" class="logout-btn" >
       <i class="fa-solid fa-arrow-right-from-bracket"></i>
     </a>
   </div>
 </header>
 
-<main>
+<div class="dashboard-main">
 
   <!-- SIDEBAR -->
   <aside class="sidebar">
@@ -191,16 +194,16 @@
     </div>
 
   </section>
-</main>
+</div>
 
 <!-- BOTTOM NAV -->
 <nav class="bottom-nav">
-  <a href="{% url 'home' %}"><span></span><small>Home</small></a>
-  <a href="{% url 'search_rooms' %}"><span></span><small>Search</small></a>
-  <a href="{% url 'saved_rooms' %}"><span></span><small>Saved</small></a>
-  <a href="{% url 'tenant_dashboard' %}" class="active"><span></span><small>Profile</small></a>
+  <a href="{% url 'home' %}"><span><i class="fa-solid fa-house"></i></span><small>Home</small></a>
+  <a href="{% url 'search_rooms' %}"><span><i class="fa-solid fa-magnifying-glass"></i></span><small>Search</small></a>
+  <a href="{% url 'saved_rooms' %}"><span><i class="fa-solid fa-heart"></i></span><small>Saved</small></a>
+  <a href="{% url 'tenant_dashboard' %}" class="active"><span><i class="fa-solid fa-user"></i></span><small>Profile</small></a>
 </nav>
 
-</body>
+
 
 {% endblock content %}

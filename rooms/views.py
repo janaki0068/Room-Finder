@@ -141,7 +141,7 @@ def search_rooms(request):
             Q(title__icontains=query)
         )
 
-    return render(request, 'home.html', {
+    return render(request, 'search_rooms.html', {
         'rooms': rooms,
         'query': query,
     })
