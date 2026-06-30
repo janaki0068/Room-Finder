@@ -25,6 +25,16 @@
     font-family: 'Frank Ruhl Libre', serif;
 }
 
+i.fa-solid,
+i.fa-regular,
+i.fa-brands {
+    font-family: "Font Awesome 6 Free" ;
+    font-weight: 900 ;
+    font-style: normal ;
+    display: inline-block ;
+    font-size: 18px ;
+}
+
 /* NAVBAR */
 
 header{
@@ -93,15 +103,8 @@ header nav a:hover {
     color: var(--color-5);
 }
 
-/* .user-actions a {
-    color: var(--color-11);
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 14px;
-} */
-
 .logout-btn{
-    color: var(--color-11);
+    color: var(--color-5);
     font-size: 1.3rem;
     text-decoration: none;
 }
@@ -111,7 +114,7 @@ header nav a:hover {
 }
 
 /* MAIN LAYOUT */
-main {
+.dashboard-main {
     display: flex;
     max-width: 1300px;
     margin: 32px auto;
@@ -188,9 +191,12 @@ main {
     color: var(--color-10);
 }
 
-.sidebar-nav .icon {
-    font-size: 16px;
-}
+/* .sidebar-nav a.active{
+    background-color: var(--color-logo);
+    color: var(--color-5);
+    box-shadow: 0 0 12px var(--color-2);
+} */
+
 
 /* DASHBOARD CONTENT */
 .dashboard-content {
@@ -345,7 +351,7 @@ main {
     color: #999;
 }
 
-/* BOTTOM NAV (mobile) */
+/* BOTTOM NAV */
 .bottom-nav {
     display: none;
     position: fixed;
@@ -372,6 +378,21 @@ main {
     color: var(--color-5);
 }
 
+.bottom-nav a span i {
+    font-size: 18px;
+}
+
+.bottom-nav a.active span i {
+    color: var(--color-5);
+}
+
+/* search rooms(back button) */
+.back-btn{
+    color: var(--color-5);
+    font-size: 1.3rem;
+    text-decoration: none;
+}
+
 /* RESPONSIVE */
 @media (max-width: 900px) {
     main {
@@ -390,9 +411,6 @@ main {
         display: flex;
     }
 
-    header nav {
-        display: none;
-    }
 }
 
 @media (max-width: 600px) {
