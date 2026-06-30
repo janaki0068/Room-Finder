@@ -8,9 +8,6 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout'),
     path('search/', views.search_rooms, name='search_rooms'),
     path('get-districts/<int:province_id>/',views.get_districts, name='get_districts'),
-    path('saved/', views.saved_view, name='saved_view'),
-    path('list/', views.list_view, name='list_view'),
-    path('profile/', views.profile_view, name='profile_view'),
 
     # LANDLORD -->
     path("landlord-dashboard/", views.landlord_dashboard,name="landlord_dashboard"),
@@ -28,5 +25,9 @@ urlpatterns = [
 
     # TENANT -->
     path("tenant-dashboard/", views.tenant_dashboard, name="tenant_dashboard"),
+    path("tsearch/", views.tsearch_rooms, name="tsearch_rooms"),
+    path('saved/', views.saved_view, name='saved_view'),
+    path('unsave/<int:room_id>/', views.unsave_room, name='unsave_room'),
+    path('profile/', views.profile_view, name='profile_view'),
 
 ]

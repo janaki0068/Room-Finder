@@ -155,26 +155,6 @@ def get_districts(request, province_id):
         'districts': list(districts)
     })
 
-
-@login_required(login_url='login')
-def saved_view(request):
-    return render(request, 'tsaved_rooms.html')
-
-
-@login_required(login_url='login')
-def list_view(request):
-    return render(request, 'list.html')
-
-
-@login_required(login_url='login')
-def profile_view(request):
-    profile = request.user.profile
-
-    return render(request, 'profile.html', {
-        'profile': profile
-    })
-
-
 # LANDLORD DASHBOARD
 @login_required
 def landlord_dashboard(request):
@@ -524,4 +504,28 @@ def tenant_dashboard(request):
         'saved_rooms': saved_rooms,
         'saved_count': saved_count,
         'browse_rooms': browse_rooms,
+    })
+
+@login_required(login_url='login')
+def saved_view(request):
+    saved = SavedRoom.objects.filter(user=request.user).select_related('room')
+    return render(request, 'tsaved_rooms.html', {
+        'saved_rooms': saved})
+
+@login_required
+def unsave_room(request, room_id):
+    SavedRoom.objects.filter(user=request.user, room_id=room_id).delete()
+    return redirect('saved_rooms')
+
+@login_required(login_url='login')
+def tsearch_rooms(request):
+    return render(request, 'tsearch_rooms.html')
+
+
+@login_required(login_url='login')
+def profile_view(request):
+    profile = request.user.profile
+
+    return render(request, 'tenant_profile.html', {
+        'profile': profile
     })
