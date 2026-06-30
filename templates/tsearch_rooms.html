@@ -3,33 +3,13 @@
 
 {% block css %}
 <link rel="stylesheet" href="{% static 'css/tenant_dashboard.css' %}" />
-{% endblock css %} 
-
-
 <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
     />
+{% endblock css %} 
 
 {% block content %}
-
-<header>
-  <div class="logo">
-    <img
-      src="{% static 'images/logo.png' %}"
-      alt="Room Finder Logo"
-      width="40"
-      height="40"
-    />
-    <span>Room Finder</span>
-  </div>
-  <nav>
-    <a href="{% url 'home' %}">Home</a>
-    <a href="{% url 'tenant_dashboard' %}">Dashboard</a>
-    <a href="{% url 'search_rooms' %}" class="active">Browse Rooms</a>
-    <a href="{% url 'saved_rooms' %}">Saved</a>
-  </nav>
-</header>
 
 <a href="{% url 'tenant_dashboard' %}" class="back-btn"><i class="fa-solid fa-arrow-left"></i></a>
 
@@ -48,7 +28,7 @@
           border: 1px solid #f0e3e7;
         "
       />
-      <button type="submit" class="register-btn" style="padding: 12px 24px">
+      <button type="submit" class="search-submit-btn" style="padding: 12px 24px">
         Search
       </button>
     </form>
@@ -78,5 +58,6 @@
     </div>
   </section>
 </div>
+
 
 {% endblock content %}

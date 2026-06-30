@@ -25,93 +25,7 @@
     font-family: 'Frank Ruhl Libre', serif;
 }
 
-i.fa-solid,
-i.fa-regular,
-i.fa-brands {
-    font-family: "Font Awesome 6 Free" ;
-    font-weight: 900 ;
-    font-style: normal ;
-    display: inline-block ;
-    font-size: 18px ;
-}
 
-/* NAVBAR */
-
-header{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 16px 32px;
-    background-color: var(--color-1);
-}
-
-header .logo{
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-header .logo img{
-    width: 75px;
-    height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
-    flex-shrink: 0;
-}
-
-header .logo span {
-    font-weight: 700;
-    color: var(--color-5);
-    font-size: 18px;
-    font-family: 'lily script one', cursive;
-}
-
-header nav {
-    display: flex;
-    gap: 28px;
-}
-
-header nav a {
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 14px;
-    color: var(--color-5);
-}
-
-header nav a.active,
-header nav a:hover {
-    color: var(--color-5);
-}
-
-
-.user-actions {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.user-actions .avatar {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    object-fit: cover;
-}
-
-.user-actions .username {
-    font-weight: 600;
-    font-size: 14px;
-    color: var(--color-5);
-}
-
-.logout-btn{
-    color: var(--color-5);
-    font-size: 1.3rem;
-    text-decoration: none;
-}
-
-.logout-btn:hover{
-    color: var(--color-5);
-}
 
 /* MAIN LAYOUT */
 .dashboard-main {
@@ -351,74 +265,24 @@ header nav a:hover {
     color: #999;
 }
 
-/* BOTTOM NAV */
-.bottom-nav {
-    display: none;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background: white;
-    border-top: 1px solid #f0e3e7;
-    justify-content: space-around;
-    padding: 10px 0;
-}
 
-.bottom-nav a {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-decoration: none;
-    color: #888;
-    font-size: 11px;
-    gap: 4px;
-}
-
-.bottom-nav a.active {
-    color: var(--color-5);
-}
-
-.bottom-nav a span i {
-    font-size: 18px;
-}
-
-.bottom-nav a.active span i {
-    color: var(--color-5);
-}
 
 /* search rooms(back button) */
 .back-btn{
     color: var(--color-5);
-    font-size: 1.3rem;
+    font-size: 18 px;
     text-decoration: none;
+    display: inline-block;
+    padding: 20px 24px 0;
 }
 
-/* RESPONSIVE */
-@media (max-width: 900px) {
-    main {
-        flex-direction: column;
-    }
-
-    .sidebar {
-        width: 100%;
-    }
-
-    .listings-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .bottom-nav {
-        display: flex;
-    }
-
-}
-
-@media (max-width: 600px) {
-    .listings-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .stats-row {
-        grid-template-columns: 1fr;
-    }
+/* Search button */
+.search-submit-btn {
+    padding: 12px 24px;
+    background-color: var(--color-5);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
 }

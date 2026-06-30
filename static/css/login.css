@@ -1,5 +1,13 @@
-/* full page layout */
+.back-btn{
+    color: var(--color-5);
+    font-size: 18 px;
+    text-decoration: none;
+    display: inline-block;
+    padding: 20px 24px 0;
+    margin-bottom: 10px;
+}
 
+/* full page layout */
 .login-container{
     display: flex;
     min-height: 80vh;

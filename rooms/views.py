@@ -1,3 +1,4 @@
+from django.shortcuts import render, get_object_or_404
 from .models import Province, Room
 from .forms import RoomForm
 from django.shortcuts import render, redirect
@@ -78,7 +79,7 @@ def login_view(request):
                 return redirect('landlord_dashboard')
             else:
                 return redirect('tenant_dashboard')
-        
+
         else:
             messages.error(request, 'Invalid email or password.')
             return render(request, 'login.html')
@@ -106,7 +107,7 @@ def register_view(request):
                 first_name=form.cleaned_data['first_name'],
                 last_name=form.cleaned_data['last_name'],
                 password=form.cleaned_data['password']
-                )
+            )
 
             user.profile.phone = form.cleaned_data['phone_number']
             user.profile.role = form.cleaned_data['role']
@@ -160,7 +161,7 @@ def get_districts(request, province_id):
 
 @login_required(login_url='login')
 def saved_view(request):
-    return render(request, 'saved.html')
+    return render(request, 'tsaved_rooms.html')
 
 
 @login_required(login_url='login')
@@ -208,17 +209,20 @@ def my_listings(request):
         "listings": listings
     })
 
+
 # Room detail
-from django.shortcuts import render, get_object_or_404
+
 
 def room_detail(request, room_id):
     room = get_object_or_404(Room, id=room_id, owner=request.user)
 
     return render(request, 'room_detail.html', {
-        'room':room
+        'room': room
     })
 
 # Edit listings
+
+
 @login_required
 def edit_listing(request, room_id):
 
@@ -244,6 +248,8 @@ def edit_listing(request, room_id):
     })
 
 # Delete listings
+
+
 @login_required
 def delete_listing(request, room_id):
 
@@ -259,6 +265,8 @@ def delete_listing(request, room_id):
     return redirect("my_listings")
 
 # My saved rooms
+
+
 @login_required
 def saved_rooms(request):
     saved = SavedRoom.objects.filter(
@@ -270,6 +278,8 @@ def saved_rooms(request):
     })
 
 # My edit profile
+
+
 @login_required
 def edit_profile(request):
     return render(request, "edit_profile.html")
@@ -320,6 +330,8 @@ def upload_listing(request):
     )
 
 # My messages
+
+
 @login_required
 def messages_view(request):
     messages_list = Message.objects.filter(
@@ -331,11 +343,15 @@ def messages_view(request):
     })
 
 # My settings
+
+
 @login_required
 def settings_view(request):
     return render(request, "settings.html")
 
 # TENANT DASHBOARD
+
+
 @role_required('tenant')
 def tenant_dashboard(request):
     saved_rooms = SavedRoom.objects.filter(
