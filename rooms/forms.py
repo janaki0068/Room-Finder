@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import User
-from .models import Room
+from .models import Room, UserPreference
 
 # Register
 class RegisterForm(forms.Form):
@@ -71,4 +71,16 @@ class RoomForm(forms.ModelForm):
             'has_cctv',
             'pet_allowed',
             'has_laundry',
+        ]
+
+class UserPreferenceForm(forms.ModelForm):
+
+    class Meta:
+        model = UserPreference
+        fields = [
+            "notify_booking",
+            "notify_messages",
+            "notify_listing_status",
+            "show_phone",
+            "show_email",
         ]

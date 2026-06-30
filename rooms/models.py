@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.dispatch import receiver
 from django.core.exceptions import ValidationError
+from django.conf import settings
 
 
 # Create your models here.
@@ -15,8 +16,7 @@ class Province(models.Model):
 
 # DISTRICTS
 class District(models.Model):
-    province = models.ForeignKey(
-        Province, on_delete=models.CASCADE, related_name="districts")
+    province = models.ForeignKey(Province, on_delete=models.CASCADE, related_name="districts")
     name = models.CharField(max_length=100)
 
     class Meta:
@@ -53,9 +53,8 @@ def create_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
 
+
 # ROOMS
-
-
 class Room(models.Model):
     ROOM_TYPES = [
         ("flat", "Flat"),
@@ -169,29 +168,10 @@ class SavedRoom(models.Model):
     def __str__(self):
         return f"{self.user.username} - {self.room.title}"
     
-# MESSAGES
-class Message(models.Model):
-    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_messages')
-    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='received_messages')
-    room = models.ForeignKey(Room, on_delete=models.SET_NULL, null=True, blank=True, related_name='messages')
-    body = models.TextField()
-    is_read = models.BooleanField(default=False)
-    sent_at = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        ordering = ['sent_at']
-
-    def __str__(self):
-        return f"From{self.sender.username} → {self.receiver.username}"
 
 # IDENTITY VERIFICATION 
 class VerificationDocument(models.Model):
-    room = models.OneToOneField(
-        Room,
-        on_delete=models.CASCADE,
-        related_name="documents"
-    )
-
+    room = models.OneToOneField(Room,on_delete=models.CASCADE,related_name="documents")
     citizenship_front = models.ImageField(upload_to="documents/")
     citizenship_back = models.ImageField(upload_to="documents/")
     lalpurja = models.ImageField(upload_to="documents/")
@@ -199,6 +179,7 @@ class VerificationDocument(models.Model):
 
     # Verification fields
     is_verified = models.BooleanField(default=False)
+
     verified_by = models.ForeignKey(
         User,
         on_delete=models.SET_NULL,
@@ -206,8 +187,8 @@ class VerificationDocument(models.Model):
         blank=True,
         related_name="verified_documents"
     )
-    verified_at = models.DateTimeField(null=True, blank=True)
 
+    verified_at = models.DateTimeField(null=True, blank=True)
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -224,3 +205,32 @@ class VerificationDocument(models.Model):
             self.room.status = "draft"
 
         self.room.save()
+
+
+# MESSAGES
+class Message(models.Model):
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_messages')
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='received_messages')
+    room = models.ForeignKey(Room, on_delete=models.SET_NULL, null=True, blank=True, related_name='messages')
+    body = models.TextField()
+    is_read = models.BooleanField(default=False)
+    sent_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['sent_at']
+
+    def __str__(self):
+        return f"From{self.sender.username} → {self.receiver.username}" 
+    
+
+# SETTINGS
+class UserPreference(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='preferences')
+    notify_booking = models.BooleanField(default=True)
+    notify_messages = models.BooleanField(default=True)
+    notify_listing_status = models.BooleanField(default=True)
+    show_phone = models.BooleanField(default=True)
+    show_email = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"Preferences for {self.user}"
