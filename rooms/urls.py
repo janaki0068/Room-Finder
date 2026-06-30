@@ -12,21 +12,21 @@ urlpatterns = [
     path('list/', views.list_view, name='list_view'),
     path('profile/', views.profile_view, name='profile_view'),
 
+    # LANDLORD -->
     path("landlord-dashboard/", views.landlord_dashboard,name="landlord_dashboard"),
     path("upload-listing/", views.upload_listing, name="upload_listing"),
     path("my-listings/", views.my_listings, name="my_listings"),
     path('room/<int:room_id>/', views.room_detail, name="room_detail"),
     path('edit-listing/<int:room_id>/', views.edit_listing, name="edit_listing"),
     path('delete-listing/<int:room_id>/', views.delete_listing, name="delete_listing"),
-
     path("saved-rooms/", views.saved_rooms, name="saved_rooms"),
     path("edit-profile/", views.edit_profile, name="edit_profile"),
-   
     path("messages/", views.messages_view, name="messages"),
+    path("messages/<int:user_id>/<int:room_id>/",views.chat_room,name="chat_room"),
     path("settings/", views.settings_view, name="settings"),
+    
 
-    path('get-districts/<int:province_id>/',views.get_districts, name='get_districts'),
-
+    # TENANT -->
     path("tenant-dashboard/", views.tenant_dashboard, name="tenant_dashboard"),
 
 ]

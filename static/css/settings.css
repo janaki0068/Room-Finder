@@ -1,0 +1,242 @@
+
+
+:root {
+    --pink-50:  #FBEAF0;
+    --pink-100: #F4C0D1;
+    --pink-200: #ED93B1;
+    --pink-400: #D4537E;
+    --pink-600: #993556;
+    --pink-800: #72243E;
+    --pink-900: #4B1528;
+}
+
+
+/* ── Page Top ─────────────────────────────── */
+
+.page-top {
+    margin-bottom: 26px;
+}
+
+.page-top h1 {
+    font-size: 23px;
+    font-weight: 500;
+    color: var(--pink-900);
+    letter-spacing: -0.01em;
+    margin-bottom: 5px;
+}
+
+.page-top p {
+    font-size: 13px;
+    color: #999999;
+    margin: 0;
+}
+
+
+/* ── Container ────────────────────────────── */
+
+.settings-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+
+/* ── Cards ────────────────────────────────── */
+
+.settings-card {
+    background: #ffffff;
+    border: 0.5px solid var(--pink-100);
+    border-left: 3px solid transparent;
+    border-radius: 14px;
+    padding: 22px 26px;
+    transition: border-color .18s ease,
+                box-shadow .18s ease,
+                transform .18s ease;
+}
+
+.settings-card:hover {
+    border-color: var(--pink-200);
+    border-left-color: var(--pink-400);
+    box-shadow: 0 6px 18px rgba(75, 21, 40, .07);
+}
+
+.settings-card h3 {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--pink-900);
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+
+/* ── Rows ─────────────────────────────────── */
+
+.setting-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 0;
+    border-bottom: .5px solid var(--pink-50);
+    transition: padding-left .15s ease;
+}
+
+.setting-row:last-child {
+    border-bottom: none;
+}
+
+.setting-row:hover {
+    padding-left: 4px;
+}
+
+.setting-row span {
+    font-size: 13px;
+    color: #888888;
+}
+
+.setting-row strong {
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--pink-800);
+    text-align: right;
+}
+
+
+/* ── Description ──────────────────────────── */
+
+.setting-description {
+    font-size: 13px;
+    color: #999999;
+    margin-bottom: 18px;
+    line-height: 1.65;
+}
+
+
+/* ── Checkboxes ───────────────────────────── */
+
+.checkbox-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    font-size: 13px;
+    color: #444444;
+    cursor: pointer;
+    border-bottom: .5px solid var(--pink-50);
+    transition: padding-left .15s ease;
+}
+
+.checkbox-row:last-child {
+    border-bottom: none;
+}
+
+.checkbox-row:hover {
+    padding-left: 4px;
+}
+
+.checkbox-row:hover span {
+    color: var(--pink-800);
+}
+
+.checkbox-row input[type="checkbox"] {
+    width: 17px;
+    height: 17px;
+    accent-color: var(--pink-600);
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.checkbox-row span {
+    flex: 1;
+    transition: color .15s ease;
+}
+
+
+/* ── Buttons ──────────────────────────────── */
+
+.setting-btn {
+    display: inline-block;
+    margin-top: 18px;
+    padding: 9px 20px;
+    border-radius: 10px;
+    background: var(--pink-50);
+    border: 0.5px solid var(--pink-200);
+    color: var(--pink-800);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    transition: background .15s ease, border-color .15s ease, color .15s ease;
+}
+
+.setting-btn:hover {
+    background: var(--pink-600);
+    border-color: var(--pink-600);
+    color: #ffffff;
+}
+
+
+/* ── Save Button ──────────────────────────── */
+
+.save-card {
+    text-align: right;
+    border: none;
+    padding: 4px 0 0;
+    background: transparent;
+}
+
+.save-card:hover {
+    border-left-color: transparent;
+    box-shadow: none;
+}
+
+.save-btn {
+    background: var(--pink-600);
+    color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    padding: 11px 30px;
+    font-size: 13.5px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background .15s ease, transform .1s ease;
+    font-family: inherit;
+}
+
+.save-btn:hover {
+    background: var(--pink-800);
+}
+
+.save-btn:active {
+    transform: scale(0.98);
+}
+
+
+/* ── Responsive ───────────────────────────── */
+
+@media (max-width: 768px) {
+
+    .settings-card {
+        padding: 18px;
+    }
+
+    .setting-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+
+    .setting-row strong {
+        text-align: left;
+    }
+
+    .save-card {
+        text-align: center;
+    }
+
+    .save-btn {
+        width: 100%;
+    }
+
+}

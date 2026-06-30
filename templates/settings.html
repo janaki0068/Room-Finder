@@ -1,0 +1,152 @@
+{% extends "landlord_base.html" %}
+{% load static %}
+
+{% block title %}Settings{% endblock %}
+{% block page_title %}Settings{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/settings.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="page-top">
+    <h1>Settings</h1>
+    <p>Manage your account, privacy and notification preferences.</p>
+</div>
+
+<form method="POST">
+
+    {% csrf_token %}
+
+    <div class="settings-container">
+
+        <!-- Account -->
+
+        <div class="settings-card">
+
+            <h3>Account</h3>
+
+            <div class="setting-row">
+                <span>Full Name</span>
+                <strong>
+                    {{ request.user.get_full_name|default:request.user.username }}
+                </strong>
+            </div>
+
+            <div class="setting-row">
+                <span>Email</span>
+                <strong>{{ request.user.email }}</strong>
+            </div>
+
+            <div class="setting-row">
+                <span>Phone</span>
+                <strong>{{ request.user.profile.phone }}</strong>
+            </div>
+
+            <div class="setting-row">
+                <span>Role</span>
+                <strong>{{ request.user.profile.get_role_display }}</strong>
+            </div>
+
+            <a href="{% url 'edit_profile' %}" class="setting-btn">
+                Edit Profile
+            </a>
+
+        </div>
+
+
+        <!-- Notifications -->
+
+        <div class="settings-card">
+
+            <h3>Notification Preferences</h3>
+
+            <label class="checkbox-row">
+                {{ form.notify_booking }}
+                <span>Booking Notifications</span>
+            </label>
+
+            <label class="checkbox-row">
+                {{ form.notify_messages }}
+                <span>New Message Notifications</span>
+            </label>
+
+            <label class="checkbox-row">
+                {{ form.notify_listing_status }}
+                <span>Listing Status Notifications</span>
+            </label>
+
+        </div>
+
+
+        <!-- Privacy -->
+
+        <div class="settings-card">
+
+            <h3>Privacy</h3>
+
+            <label class="checkbox-row">
+                {{ form.show_phone }}
+                <span>Show my phone number to tenants</span>
+            </label>
+
+            <label class="checkbox-row">
+                {{ form.show_email }}
+                <span>Show my email address to tenants</span>
+            </label>
+
+        </div>
+
+
+        <!-- Security -->
+
+        <div class="settings-card">
+
+            <h3>Security</h3>
+
+            <p class="setting-description">
+                Keep your account secure by changing your password regularly.
+            </p>
+
+            <a href="{% url 'password_change' %}" class="setting-btn">
+                Change Password
+            </a>
+
+        </div>
+
+
+        <!-- Verification -->
+
+        <div class="settings-card">
+
+            <h3>Verification</h3>
+
+            <div class="setting-row">
+                <span>Owner Verification</span>
+                <strong>✅ Verified</strong>
+            </div>
+
+            <div class="setting-row">
+                <span>Property Verification</span>
+                <strong>✅ Verified</strong>
+            </div>
+
+        </div>
+
+
+        <!-- Save -->
+
+        <div class="settings-card save-card">
+
+            <button type="submit" class="save-btn">
+                Save Changes
+            </button>
+
+        </div>
+
+    </div>
+
+</form>
+
+{% endblock %}

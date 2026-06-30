@@ -1,0 +1,165 @@
+{% extends "landlord_base.html" %}
+{% load static %}
+
+{% block title %}Messages{% endblock %}
+{% block page_title %}Messages{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/messages.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="messages-container">
+
+    <!-- Conversation List -->
+    <div class="conversation-panel">
+
+        <div class="panel-header">
+            <h2>Messages</h2>
+        </div>
+
+{% for conversation in conversations %}
+
+    {% if conversation.room %}
+
+    <a href="{% url 'chat_room' conversation.user.id conversation.room.id %}"
+       class="conversation-card">
+
+        <div class="conversation-info">
+
+            <h4>
+                {{ conversation.user.get_full_name|default:conversation.user.username }}
+            </h4>
+
+            <p>{{ conversation.room.title }}</p>
+
+            <small>
+                {{ conversation.last_message.body|truncatechars:35 }}
+            </small>
+
+        </div>
+
+    </a>
+
+    {% endif %}
+
+{% empty %}
+
+<p>No conversations yet.</p>
+
+{% endfor %}
+
+    </div>
+
+
+
+    <!-- Chat -->
+
+    <div class="chat-panel">
+
+        {% if other_user %}
+
+        <div class="chat-header">
+
+            <h3>
+
+                {{ other_user.get_full_name|default:other_user.username }}
+
+            </h3>
+
+            <small>
+
+                {{ room.title }}
+
+            </small>
+
+        </div>
+
+
+        <div class="chat-body">
+
+            {% for message in messages %}
+
+                {% if message.sender == request.user %}
+
+                    <div class="message outgoing">
+
+                        <div class="bubble">
+
+                            {{ message.body }}
+
+                        </div>
+
+                        <small>
+
+                            {{ message.sent_at|date:"M d, H:i" }}
+
+                        </small>
+
+                    </div>
+
+                {% else %}
+
+                    <div class="message incoming">
+
+                        <div class="bubble">
+
+                            {{ message.body }}
+
+                        </div>
+
+                        <small>
+
+                            {{ message.sent_at|date:"M d, H:i" }}
+
+                        </small>
+
+                    </div>
+
+                {% endif %}
+
+            {% empty %}
+
+                <p>No messages yet.</p>
+
+            {% endfor %}
+
+        </div>
+
+
+        <form method="POST" class="message-form">
+
+            {% csrf_token %}
+
+            <textarea
+                name="body"
+                rows="2"
+                placeholder="Type a message..."
+                required></textarea>
+
+            <button type="submit">
+
+                Send
+
+            </button>
+
+        </form>
+
+        {% else %}
+
+        <div class="empty-chat">
+
+            <h3>Select a conversation</h3>
+
+            <p>Your messages will appear here.</p>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

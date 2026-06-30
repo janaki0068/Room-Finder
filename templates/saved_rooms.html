@@ -1,0 +1,116 @@
+{% extends "landlord_base.html" %}
+{% load static %}
+
+{% block title %}Saved Properties{% endblock %}
+{% block page_title %}Saved Properties{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/saved_rooms.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="page-top">
+    <a href="#" onclick="history.back(); return false;" class="back-btn">
+    ← Back
+    </a>
+</div>
+
+
+
+{% if rooms %}
+
+<div class="saved-grid">
+
+{% for room in rooms %}
+
+<div class="saved-card">
+
+    <div class="saved-image">
+
+        {% if room.image %}
+            <img src="{{ room.image.url }}" alt="{{ room.title }}">
+        {% else %}
+            <img src="{% static 'images/no-image.png' %}" alt="">
+        {% endif %}
+
+    </div>
+
+    <div class="saved-content">
+
+        <h2>{{ room.title }}</h2>
+
+        <p>
+            {{ room.city }},
+            {{ room.district }}
+        </p>
+
+        <h3>Rs. {{ room.price }}/month</h3>
+
+        <div class="save-count">
+            ❤️ <strong>{{ room.saved_by.count }}</strong>
+            tenant{{ room.saved_by.count|pluralize }} saved this property
+        </div>
+
+        <div class="tenant-list">
+
+            <h4>Saved By</h4>
+
+            {% if room.saved_by.count %}
+
+                {% for saved in room.saved_by.all %}
+
+                    <div class="tenant-item">
+
+                        <span>
+                            {{ saved.user.get_full_name|default:saved.user.username }}
+                        </span>
+
+                        <small>
+                            {{ saved.saved_at|date:"M d, Y" }}
+                        </small>
+
+                    </div>
+
+                {% endfor %}
+
+            {% else %}
+
+                <p>No tenants have saved this property yet.</p>
+
+            {% endif %}
+
+        </div>
+
+        <a href="{% url 'room_detail' room.id %}" class="view-btn">
+            View Property
+        </a>
+
+    </div>
+
+</div>
+
+{% empty %}
+
+<p>No properties found.</p>
+
+{% endfor %}
+
+</div>
+
+{% else %}
+
+<div class="detail-card">
+
+    <h3>No Saves Yet</h3>
+
+    <p>
+        Your properties haven't been saved by any tenants yet.
+        Once a tenant saves one of your listings, it will appear here.
+    </p>
+
+</div>
+
+{% endif %}
+
+{% endblock %}

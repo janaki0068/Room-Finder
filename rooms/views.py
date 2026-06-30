@@ -15,8 +15,6 @@ from .decorators import role_required
 # Create your views here.
 
 # HOME
-
-
 def home(request):
     rooms = Room.objects.filter(status='active')
 
@@ -53,9 +51,8 @@ def home(request):
         "query": query,
     })
 
+
 # LOGIN
-
-
 def login_view(request):
     if request.method == 'POST':
         email = request.POST.get('email')
@@ -269,12 +266,18 @@ def delete_listing(request, room_id):
 
 @login_required
 def saved_rooms(request):
-    saved = SavedRoom.objects.filter(
-        user=request.user
-    ).select_related('room')
+    rooms = (
+        Room.objects.filter(
+            owner=request.user,
+            saved_by__isnull=False
+        )
+        .prefetch_related("saved_by__user")
+        .distinct()
+        .order_by("-id")
+    )
 
     return render(request, "saved_rooms.html", {
-        "saved_rooms": saved
+        "rooms": rooms
     })
 
 # My edit profile
@@ -330,24 +333,180 @@ def upload_listing(request):
     )
 
 # My messages
+from django.db.models import Q
+
 
 
 @login_required
 def messages_view(request):
-    messages_list = Message.objects.filter(
-        receiver=request.user
-    )
+
+    all_messages = Message.objects.filter(
+        Q(sender=request.user) |
+        Q(receiver=request.user)
+    ).select_related(
+        "sender",
+        "receiver",
+        "room"
+    ).order_by("-sent_at")
+
+    conversations = []
+    seen = set()
+
+    for msg in all_messages:
+
+        other_user = (
+            msg.receiver
+            if msg.sender == request.user
+            else msg.sender
+        )
+
+        key = (
+            other_user.id,
+            msg.room.id if msg.room else None
+        )
+
+        if key not in seen:
+
+            seen.add(key)
+
+            conversations.append({
+
+                "user": other_user,
+                "room": msg.room,
+                "last_message": msg
+
+            })
+
+    return render(request,"messages.html",{
+
+        "conversations": conversations
+
+    })
+
+# Chatbox
+@login_required
+def chat_room(request, user_id, room_id):
+
+    other_user = get_object_or_404(User, id=user_id)
+    room = get_object_or_404(Room, id=room_id)
+
+    # Handle sending a new message
+    if request.method == "POST":
+        body = request.POST.get("body")
+
+        if body:
+            Message.objects.create(
+                sender=request.user,
+                receiver=other_user,
+                room=room,
+                body=body
+            )
+
+        return redirect("chat_room", user_id=user_id, room_id=room_id)
+
+    # Get current conversation
+    messages = Message.objects.filter(
+        room=room
+    ).filter(
+        Q(sender=request.user, receiver=other_user) |
+        Q(sender=other_user, receiver=request.user)
+    ).order_by("sent_at")
+
+    # Mark received messages as read
+    messages.filter(
+        receiver=request.user,
+        is_read=False
+    ).update(is_read=True)
+
+    # -----------------------------
+    # Build conversation list
+    # -----------------------------
+    all_messages = Message.objects.filter(
+        Q(sender=request.user) | Q(receiver=request.user)
+    ).select_related(
+        "sender",
+        "receiver",
+        "room"
+    ).order_by("-sent_at")
+
+    conversations = []
+    seen = set()
+
+    for msg in all_messages:
+
+        other = msg.receiver if msg.sender == request.user else msg.sender
+
+        key = (
+            other.id,
+            msg.room.id if msg.room else None
+        )
+
+        if key not in seen:
+            seen.add(key)
+
+            conversations.append({
+                "user": other,
+                "room": msg.room,
+                "last_message": msg,
+            })
 
     return render(request, "messages.html", {
-        "messages": messages_list
+        "conversations": conversations,
+        "messages": messages,
+        "room": room,
+        "other_user": other_user,
     })
 
 # My settings
 
 
+from .forms import UserPreferenceForm
+
+
 @login_required
 def settings_view(request):
-    return render(request, "settings.html")
+
+    preferences, created = UserPreference.objects.get_or_create(
+        user=request.user
+    )
+
+    if request.method == "POST":
+
+        form = UserPreferenceForm(
+            request.POST,
+            instance=preferences
+        )
+
+        if form.is_valid():
+
+            form.save()
+
+            messages.success(
+                request,
+                "Settings updated successfully."
+            )
+
+            return redirect("settings")
+
+    else:
+
+        form = UserPreferenceForm(
+            instance=preferences
+        )
+
+    return render(
+        request,
+        "settings.html",
+        {
+            "form": form,
+            "preferences": preferences,
+        }
+    )
+
+
+
+
+
 
 # TENANT DASHBOARD
 
