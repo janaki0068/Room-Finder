@@ -1,0 +1,159 @@
+{% extends "landlord_base.html" %}
+{% load static %}
+
+{% block title %}Edit{{ room.title }}{% endblock %}
+{% block page_title %}Edit Property{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href={% static 'css/edit_listing.css' %}>
+{% endblock %}
+
+{% block content %}
+
+<div class="page-top">
+    <a href="#" onclick="history.back(); return false;" class="back-btn">
+        ← Back
+    </a>
+</div>
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="property-header">
+        <div>
+            <h1>Edit Property</h1>
+            <p>Update your listing information.</p>
+        </div>
+
+    <div class="header-actions">
+        <button type="submit" class="btn-edit">
+            Save Changes
+        </button>
+
+        <a href="{% url 'room_detail' room.id %}" class="btn-delete">Cancel</a>
+    </div>
+</div>
+
+<div class="detail-gride">
+
+    <!-- Property info -->
+    <div class="detail-card">
+        <h3>Property Information</h3>
+
+        <p>
+            <label>Title</label><br>
+            {{ form.title }}
+        </p>
+
+        <p>
+            <label>Room Type</label><br>
+            {{ form.room_type }}
+        </p>
+
+        <p>
+            <label>Status</label><br>
+            {{ form.status }}
+        </p>
+
+        <p>
+            <label>Price</label><br>
+            {{ form.price }}
+        </p>
+
+        <p>
+            <label>Security Deposit</label><br>
+            {{ form.security_deposit }}
+        </p>
+
+     </div>
+
+    <!-- Location -->
+    <div class="detail-card">
+        <h3>Location</h3>
+
+        <p>
+            <label>Province</label><br>
+            {{ form.province }}
+        </p>
+
+        <p>
+            <label>District</label><br>
+            {{ form.district }}
+        </p>
+
+        <p>
+            <label>City</label><br>
+            {{ form.city }}
+        </p>
+
+        <p>
+            <label>Area</label><br>
+            {{ form.area }}
+        </p>
+
+        <p>
+            <label>Address</label><br>
+            {{ form.address }}
+        </p>
+    </div>
+</div>
+
+<!-- Description -->
+<div class="detail-card">
+    <h3>Description</h3>
+
+    {{ form.description }}
+</div>
+
+<!-- Facilities -->
+<div class="detail-card">
+    <h3>Facilities</h3>
+
+    <div class="facility-grid">
+
+        <label>{{ form.wifi }} WiFi</label>
+
+        <label>{{ form.attached_bathroom }} Attached Bathroom</label>
+
+        <label>{{ form.furnished }} Furnished</label>
+
+        <label>{{ form.parking }} Parking</label>
+
+        <label>{{ form.has_bike_parking }} Bike Parking</label>
+
+        <label>{{ form.has_drinking_water }} Drinking Water</label>
+
+        <label>{{ form.has_water_24_7 }} 24/7 Water</label>
+
+        <label>{{ form.has_balcony }} Balcony</label>
+
+        <label>{{ form.has_security_guard }} Security Guard</label>
+
+        <label>{{ form.has_cctv }} CCTV</label>
+
+        <label>{{ form.pet_allowed }} Pets Allowed</label>
+
+    </div>
+</div>
+
+<!-- Bills -->
+<div class="detail-card">
+    <h3>Bills Included</h3>
+
+    <label>{{ form.bill_water }} Water Bill</label><br>
+
+    <label>{{ form.bill_electricity }} Electricity Bill</label><br>
+
+    <label>{{ form.bill_internet }} Internet Bill</label>
+</div>
+
+<!-- Images -->
+<div class="detail-card">
+    <h3>Property Images</h3>
+
+    {{ form.image }}
+</div>
+
+
+{% endblock content %}
+

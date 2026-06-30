@@ -1,0 +1,322 @@
+/* ============================================
+   Edit Room — Pink Theme
+   ============================================ */
+
+:root {
+    --pink-50:  #FBEAF0;
+    --pink-100: #F4C0D1;
+    --pink-200: #ED93B1;
+    --pink-400: #D4537E;
+    --pink-600: #993556;
+    --pink-800: #72243E;
+    --pink-900: #4B1528;
+}
+
+
+/* ── Back Link ─────────────────────────────── */
+
+.page-top {
+    margin-bottom: 18px;
+}
+
+.back-btn {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--pink-600);
+    text-decoration: none;
+    transition: color 0.15s ease;
+}
+
+.back-btn:hover {
+    color: var(--pink-800);
+}
+
+
+/* ── Property Header ───────────────────────── */
+
+.property-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    background: #ffffff;
+    border-radius: 14px;
+    border: 0.5px solid var(--pink-100);
+    padding: 20px 24px;
+    margin-bottom: 20px;
+}
+
+.property-header h1 {
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--pink-900);
+    margin-bottom: 4px;
+}
+
+.property-header p {
+    font-size: 13px;
+    color: #999999;
+    margin-bottom: 0;
+}
+
+
+/* ── Header Action Buttons ─────────────────── */
+
+.header-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.btn-edit {
+    display: inline-block;
+    padding: 7px 18px;
+    border-radius: 9px;
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: none;
+    border: none;
+    color: #ffffff;
+    background: var(--pink-600);
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.15s ease;
+}
+
+.btn-edit:hover {
+    background: var(--pink-800);
+}
+
+.btn-delete {
+    display: inline-block;
+    padding: 7px 18px;
+    border-radius: 9px;
+    font-size: 13px;
+    font-weight: 500;
+    border: 0.5px solid var(--pink-200);
+    color: var(--pink-800);
+    background: #ffffff;
+    text-decoration: none;
+    transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.btn-delete:hover {
+    background: var(--pink-50);
+    border-color: var(--pink-400);
+}
+
+
+/* ── Two-Column Grid ───────────────────────── */
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+    align-items: start;
+}
+
+@media (max-width: 640px) {
+    .detail-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .property-header {
+        flex-direction: column;
+    }
+
+    .header-actions {
+        width: 100%;
+    }
+
+    .btn-edit,
+    .btn-delete {
+        flex: 1;
+        text-align: center;
+    }
+}
+
+
+/* ── Detail Cards ──────────────────────────── */
+
+.detail-card {
+    background: #ffffff;
+    border-radius: 12px;
+    border: 0.5px solid var(--pink-100);
+    padding: 20px 22px;
+    margin-bottom: 16px;
+    overflow: hidden;
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+
+.detail-card:last-child {
+    margin-bottom: 0;
+}
+
+.detail-grid .detail-card {
+    margin-bottom: 0;
+}
+
+.detail-card h3 {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--pink-800);
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 0.5px solid var(--pink-100);
+}
+
+
+/* ── Form Labels ───────────────────────────── */
+
+.detail-card p {
+    margin-bottom: 14px;
+}
+
+.detail-card p:last-child {
+    margin-bottom: 0;
+}
+
+.detail-card label {
+    display: block;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--pink-800);
+    margin-bottom: 5px;
+}
+
+
+/* ── Form Inputs ───────────────────────────── */
+
+.detail-card input[type="text"],
+.detail-card input[type="number"],
+.detail-card input[type="email"],
+.detail-card input[type="file"],
+.detail-card select,
+.detail-card textarea {
+    width: 100%;
+    padding: 8px 12px;
+    font-size: 13px;
+    font-family: inherit;
+    color: #333333;
+    background: #ffffff;
+    border: 0.5px solid var(--pink-100);
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    box-sizing: border-box;
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+.detail-card select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23993556' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 32px;
+}
+
+.detail-card textarea {
+    resize: vertical;
+    min-height: 110px;
+    line-height: 1.6;
+}
+
+.detail-card input[type="text"]:focus,
+.detail-card input[type="number"]:focus,
+.detail-card input[type="email"]:focus,
+.detail-card select:focus,
+.detail-card textarea:focus {
+    border-color: var(--pink-400);
+    box-shadow: 0 0 0 3px var(--pink-50);
+}
+
+.detail-card input[type="file"] {
+    padding: 7px 10px;
+    color: #777777;
+    cursor: pointer;
+}
+
+.detail-card input[type="file"]::-webkit-file-upload-button {
+    padding: 5px 14px;
+    background: var(--pink-50);
+    border: 0.5px solid var(--pink-200);
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--pink-800);
+    cursor: pointer;
+    font-family: inherit;
+    margin-right: 10px;
+    transition: background 0.15s ease;
+}
+
+.detail-card input[type="file"]::-webkit-file-upload-button:hover {
+    background: var(--pink-100);
+}
+
+
+/* ── Facilities Grid (checkboxes) ──────────── */
+
+.facility-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.facility-grid label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--pink-50);
+    border: 0.5px solid var(--pink-100);
+    color: var(--pink-800);
+    font-size: 12px;
+    font-weight: 500;
+    padding: 6px 14px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+    user-select: none;
+    margin-bottom: 0;
+}
+
+.facility-grid label:hover {
+    background: var(--pink-100);
+    border-color: var(--pink-200);
+}
+
+.facility-grid input[type="checkbox"] {
+    accent-color: var(--pink-600);
+    width: 13px;
+    height: 13px;
+    flex-shrink: 0;
+}
+
+
+/* ── Bills (checkboxes inline) ─────────────── */
+
+.detail-card > label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 400;
+    color: #555555;
+    cursor: pointer;
+    margin-bottom: 10px;
+    user-select: none;
+}
+
+.detail-card > label:last-of-type {
+    margin-bottom: 0;
+}
+
+.detail-card > label input[type="checkbox"] {
+    accent-color: var(--pink-600);
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+}
