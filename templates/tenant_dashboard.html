@@ -1,56 +1,35 @@
-{% extends "base.html" %}
-{% load static %}
-
-{% block css %}
-<link rel="stylesheet" href="{% static 'css/tenant_dashboard.css' %}">
-{% endblock css %}
-
-
-{% block content %}
+{% extends "base.html" %} {% load static %} {% block css %}
+<link rel="stylesheet" href="{% static 'css/tenant_dashboard.css' %}" />
+{% endblock css %} {% block content %}
 
 <div class="dashboard-main">
-
   <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="profile-card">
       {% if request.user.profile.image %}
-        <img src="{{ request.user.profile.image.url }}" class="profile-photo" />
+      <img src="{{ request.user.profile.image.url }}" class="profile-photo" />
       {% else %}
-        <img src="{% static 'images/default-avatar.png' %}" class="profile-photo" />
+      <img
+        src="{% static 'images/default-avatar.png' %}"
+        class="profile-photo"
+      />
       {% endif %}
 
       <h3>{{ request.user.get_full_name|default:request.user.username }}</h3>
       <p>{{ request.user.email }}</p>
 
-      <a href="{% url 'edit_profile' %}">Edit Profile</a>
     </div>
 
     <nav class="sidebar-nav">
-      <a href="{% url 'tenant_dashboard' %}">
-        <span class="icon"></span> Dashboard
-      </a>
-
-      <a href="{% url 'search_rooms' %}">
-        <span class="icon"></span> Browse Rooms
-      </a>
-
-      <a href="{% url 'saved_rooms' %}">
-        <span class="icon"></span> Saved Rooms
-      </a>
-
-      <a href="{% url 'messages' %}">
-        <span class="icon"></span> Messages
-      </a>
-
-      <a href="{% url 'settings' %}">
-        <span class="icon"></span> Settings
-      </a>
+      <a href="#">Edit Profile</a>
+      <a href="#">Notifications</a>
+      <a href="#">Settings</a>
+      <a href="#">Logout</a>
     </nav>
   </aside>
 
   <!-- DASHBOARD CONTENT -->
   <section class="dashboard-content">
-
     <!-- STATS ROW -->
     <div class="stats-row">
       <div class="stat-card">
@@ -72,19 +51,20 @@
       </div>
 
       <div class="listings-grid">
-
         {% for saved in saved_rooms %}
         <div class="listing-card">
-
           <div class="listing-img-wrap">
-            {% with saved.room.images.first as cover %}
-              {% if cover %}
-                <img src="{{ cover.image.url }}" alt="{{ saved.room.title }}" />
-              {% else %}
-                <img src="{% static 'images/default-room.png' %}" alt="{{ saved.room.title }}" />
-              {% endif %}
-            {% endwith %}
-            <span class="badge {{ saved.room.status }}">{{ saved.room.status }}</span>
+            {% with saved.room.images.first as cover %} {% if cover %}
+            <img src="{{ cover.image.url }}" alt="{{ saved.room.title }}" />
+            {% else %}
+            <img
+              src="{% static 'images/default-room.png' %}"
+              alt="{{ saved.room.title }}"
+            />
+            {% endif %} {% endwith %}
+            <span class="badge {{ saved.room.status }}"
+              >{{ saved.room.status }}</span
+            >
           </div>
 
           <div class="listing-info">
@@ -94,20 +74,19 @@
               {{ saved.room.room_type }} | {{ saved.room.city }}
             </p>
 
-            <p class="listing-price">
-              NPR {{ saved.room.price }} / month
-            </p>
+            <p class="listing-price">NPR {{ saved.room.price }} / month</p>
 
             <div class="listing-stats">
               <span>👁 {{ saved.room.views }} views</span>
             </div>
           </div>
-
         </div>
         {% empty %}
-          <p>You haven't saved any rooms yet. To find your next place, go to <a href="{% url 'search_rooms' %}">Browse Listings.</a> </p>
+        <p>
+          You haven't saved any rooms yet. To find your next place, go to
+          <a href="{% url 'search_rooms' %}">Browse Listings.</a>
+        </p>
         {% endfor %}
-
       </div>
     </div>
 
@@ -119,46 +98,38 @@
       </div>
 
       <div class="listings-grid">
-
         {% for room in browse_rooms %}
         <div class="listing-card">
-
           <div class="listing-img-wrap">
-            {% with room.images.first as cover %}
-              {% if cover %}
-                <img src="{{ cover.image.url }}" alt="{{ room.title }}" />
-              {% else %}
-                <img src="{% static 'images/default-room.png' %}" alt="{{ room.title }}" />
-              {% endif %}
-            {% endwith %}
+            {% with room.images.first as cover %} {% if cover %}
+            <img src="{{ cover.image.url }}" alt="{{ room.title }}" />
+            {% else %}
+            <img
+              src="{% static 'images/default-room.png' %}"
+              alt="{{ room.title }}"
+            />
+            {% endif %} {% endwith %}
             <span class="badge {{ room.status }}">{{ room.status }}</span>
           </div>
 
           <div class="listing-info">
             <h4>{{ room.title }}</h4>
 
-            <p class="listing-meta">
-              {{ room.room_type }} | {{ room.city }}
-            </p>
+            <p class="listing-meta">{{ room.room_type }} | {{ room.city }}</p>
 
-            <p class="listing-price">
-              NPR {{ room.price }} / month
-            </p>
+            <p class="listing-price">NPR {{ room.price }} / month</p>
 
             <div class="listing-stats">
               <span> {{ room.views }} views</span>
               <span> {{ room.saved_count }} saved</span>
             </div>
           </div>
-
         </div>
         {% empty %}
-          <p>No listings available right now.</p>
+        <p>No listings available right now.</p>
         {% endfor %}
-
       </div>
     </div>
-
   </section>
 </div>
 

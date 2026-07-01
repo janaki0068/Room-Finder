@@ -40,19 +40,31 @@
 
     {% if user.is_authenticated %}
     <nav class="bottom-nav">
-      <a href="{% url 'tenant_dashboard' %}"
-        ><span><i class="fa-solid fa-house"></i></span><small>Home</small></a
+      <a
+        href="{% url 'tenant_dashboard' %}"
+        class="{% if request.resolver_match.url_name == 'tenant_dashboard' %}active{% endif %}"
       >
-      <a href="{% url 'tsearch_rooms' %}"
-        ><span><i class="fa-solid fa-magnifying-glass"></i></span
-        ><small>Search</small></a
+        <span><i class="fa-solid fa-house"></i></span><small>Home</small></a
       >
-      <a href="{% url 'saved_view' %}"
-        ><span><i class="fa-solid fa-heart"></i></span><small>Saved</small></a
+      <a
+        href="{% url 'tsearch_rooms' %}"
+        class="{% if request.resolver_match.url_name == 'tsearch_rooms' %}active{% endif %}"
       >
-      <a href="{% url 'profile_view' %}"
-        ><span><i class="fa-solid fa-user"></i></span><small>Profile</small></a
+        <span><i class="fa-solid fa-magnifying-glass"></i></span
+        ><small>Search</small>
+      </a>
+      <a
+        href="{% url 'saved_view' %}"
+        class="{% if request.resolver_match.url_name == 'saved_view' %}active{% endif %}"
       >
+        <span><i class="fa-solid fa-heart"></i></span><small>Saved</small>
+      </a>
+      <a
+        href="{% url 'profile_view' %}"
+        class="{% if request.resolver_match.url_name == 'profile_view' %}active{% endif %}"
+      >
+        <span><i class="fa-solid fa-user"></i></span><small>Profile</small>
+      </a>
     </nav>
     {% endif %}
   </body>

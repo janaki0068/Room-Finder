@@ -515,7 +515,7 @@ def saved_view(request):
 @login_required
 def unsave_room(request, room_id):
     SavedRoom.objects.filter(user=request.user, room_id=room_id).delete()
-    return redirect('saved_rooms')
+    return redirect('saved')
 
 @login_required(login_url='login')
 def tsearch_rooms(request):

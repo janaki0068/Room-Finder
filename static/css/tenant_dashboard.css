@@ -71,15 +71,6 @@
     margin-bottom: 14px;
 }
 
-.profile-card a {
-    display: inline-block;
-    padding: 8px 18px;
-    color: var(--color-5);
-    border-radius: 8px;
-    text-decoration: none;
-    font-size: 13px;
-    font-weight: 600;
-}
 
 .sidebar-nav {
     background: var(--color-9);
@@ -285,4 +276,52 @@
     border-radius: 8px;
     font-weight: 600;
     cursor: pointer;
+}
+
+
+/* tenant profile */
+
+.profile-details {
+    display: flex;
+    gap: 32px;
+    background: white;
+    border-radius: 14px;
+    padding: 32px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+}
+
+.profile-photo-large img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.profile-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.info-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--color-1);
+}
+
+.info-label {
+    width: 140px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-13);
+    text-transform: uppercase;
+    flex-shrink: 0;
+}
+
+.info-value {
+    font-size: 15px;
+    color: #333;
 }

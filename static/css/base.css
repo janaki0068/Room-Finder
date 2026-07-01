@@ -61,11 +61,11 @@ header .logo span {
 i.fa-solid,
 i.fa-regular,
 i.fa-brands {
-    font-family: "Font Awesome 6 Free" ;
-    font-weight: 900 ;
-    font-style: normal ;
-    display: inline-block ;
-    font-size: 18px ;
+    font-family: "Font Awesome 6 Free" !important;
+    font-weight: 900 !important;
+    font-style: normal !important;
+    display: inline-block !important;
+    font-size: 18px !important;
 }
 
 .bottom-nav {
@@ -98,7 +98,9 @@ i.fa-brands {
 
 .bottom-nav i {
     font-size: 18px;
+    color: inherit;
 }
+
 
 body {
     padding-bottom: 80px;
