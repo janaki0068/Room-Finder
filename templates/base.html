@@ -26,9 +26,12 @@
       </div>
 
       {% if user.is_authenticated %}
-      <a href="{% url 'logout' %}" class="logout-btn">
-        <i class="fa-solid fa-arrow-right-from-bracket"></i>
-      </a>
+      <form method="POST" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="logout-btn">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i>
+        </button>
+      </form>
       {% else %}
       <div class="nav-buttons">
         <a href="{% url 'login' %}" class="btn-login">Login</a>

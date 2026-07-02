@@ -529,3 +529,34 @@ def profile_view(request):
     return render(request, 'tenant_profile.html', {
         'profile': profile
     })
+
+
+@login_required
+def tenant_edit_profile(request):
+    profile = request.user.profile
+
+    if request.method == 'POST':
+        request.user.first_name = request.POST.get('first_name','')
+        request.user.last_name = request.POST.get('last_name','')
+        request.user.save()
+
+        profile.phone = request.POST.get('phone','')
+        if request.FILES.get('image'):
+            profile.image = request.FILES.get('image')
+        profile.save()
+
+        messages.success(request, 'Profile updated successfully.')
+        return redirect('profile_view')
+    
+    return render(request, 'tenant_edit_profile.html', {
+        'profile': profile 
+    })
+
+
+@login_required
+def notifications(request):
+    return render(request, 'notifications.html')
+
+@login_required
+def settings_view(request):
+    return render(request, 'settings.html')

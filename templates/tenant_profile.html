@@ -8,31 +8,18 @@
 
 <div class="dashboard-main">
   <aside class="sidebar">
-    <div class="profile-card">
-      {% if profile.image %}
-      <img src="{{ profile.image.url }}" class="profile-photo" />
-      {% else %}
-      <img
-        src="{% static 'images/default-avatar.png' %}"
-        class="profile-photo"
-      />
-      {% endif %}
-      <h3>{{ request.user.get_full_name|default:request.user.username }}</h3>
-      <p>{{ request.user.email }}</p>
-    </div>
 
     <nav class="sidebar-nav">
-      <a href="#">Edit Profile</a>
-      <a href="#">Notifications</a>
-      <a href="#">Settings</a>
-      <a href="#">Logout</a>
+      <a href="{% url "tenant_edit_profile" %}" >Edit Profile</a>
+      <a href="{% url "notifications" %}">Notifications</a>
+      <a href="{% url "settings_view" %}">Settings</a>
+      <a href="{% url "logout" %}">Logout</a>
     </nav>
   </aside>
 
   <section class="dashboard-content">
     <div class="section-header">
       <h2>My Profile</h2>
-      <span>Edit Profile</span>
     </div>
 
     <div class="profile-details">

@@ -21,10 +21,10 @@
     </div>
 
     <nav class="sidebar-nav">
-      <a href="#">Edit Profile</a>
-      <a href="#">Notifications</a>
-      <a href="#">Settings</a>
-      <a href="#">Logout</a>
+      <a href="{% url "tenant_edit_profile" %}" class="active">Edit Profile</a>
+      <a href="{% url "notifications" %}" class="active">Notifications</a>
+      <a href="{% url "settings_view" %}" class="active">Settings</a>
+      <a href="{% url "logout" %}">Logout</a>
     </nav>
   </aside>
 

@@ -56,6 +56,8 @@ header .logo span {
     color: var(--color-5);
     font-size: 1.3rem;
     text-decoration: none;
+    background: none;
+    border: none;
 }
 
 i.fa-solid,
