@@ -1,5 +1,4 @@
 
-
 :root {
     --pink-50:  #FBEAF0;
     --pink-100: #F4C0D1;
@@ -9,6 +8,24 @@
     --pink-800: #72243E;
     --pink-900: #4B1528;
 }
+
+.page-top {
+    margin-bottom: 18px;
+}
+
+.back-btn {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--pink-600);
+    text-decoration: none;
+    transition: color 0.15s ease;
+}
+
+.back-btn:hover {
+    color: var(--pink-800);
+}
+
+
 
 
 /* ── Layout ─────────────────────────────────── */

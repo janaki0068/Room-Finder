@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('', views.home, name='home'),
@@ -24,6 +25,8 @@ urlpatterns = [
     path("messages/", views.messages_view, name="messages"),
     path("messages/<int:user_id>/<int:room_id>/",views.chat_room,name="chat_room"),
     path("settings/", views.settings_view, name="settings"),
+
+    path('settings/password/', auth_views.PasswordChangeView.as_view(), name='password_change'),
     
 
     # TENANT -->

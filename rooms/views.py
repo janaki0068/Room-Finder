@@ -226,11 +226,14 @@ def edit_listing(request, room_id):
     )
 
     if request.method == "POST":
-        form = RoomForm(request.POST, instance=room)
+        form = RoomForm(request.POST, request.FILES, instance=room)
 
         if form.is_valid():
             form.save()
-            return redirect("my_listings")
+            messages.success(request, "Property updated successfully.")
+            return redirect("edit_listing", room_id=room.id)
+        else:
+            messages.error(request, "Please correct the errors below.")
 
     else:
         form = RoomForm(instance=room)
@@ -273,9 +276,24 @@ def saved_rooms(request):
     })
 
 # My edit profile
+from .forms import EditProfileForm
+
 @login_required
 def edit_profile(request):
-    return render(request, "edit_profile.html")
+    profile = request.user.profile
+
+    if request.method == "POST":
+        form = EditProfileForm(request.POST, instance=profile, user=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Profile updated successfully.")
+            return redirect("settings")
+        else:
+            messages.error(request, "Please correct the errors below.")
+    else:
+        form = EditProfileForm(instance=profile, user=request.user)
+
+    return render(request, "edit_profile.html", {"form": form})
 
 
 # My upload listing
@@ -406,9 +424,7 @@ def chat_room(request, user_id, room_id):
         is_read=False
     ).update(is_read=True)
 
-    # -----------------------------
-    # Build conversation list
-    # -----------------------------
+    # conversation lists
     all_messages = Message.objects.filter(
         Q(sender=request.user) | Q(receiver=request.user)
     ).select_related(
