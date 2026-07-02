@@ -7,9 +7,68 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Room Finder</title>
     <link rel="stylesheet" href="{% static 'css/base.css' %}" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    />
     {% block css %}{% endblock css %}
   </head>
   <body>
+    <header>
+      <div class="logo">
+        <img
+          src="{% static 'images/logo.png' %}"
+          alt="Room Finder Logo"
+          width="40"
+          height="40"
+        />
+        <span>Room Finder</span>
+      </div>
+
+      {% if user.is_authenticated %}
+      <form method="POST" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="logout-btn">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i>
+        </button>
+      </form>
+      {% else %}
+      <div class="nav-buttons">
+        <a href="{% url 'login' %}" class="btn-login">Login</a>
+        <a href="{% url 'register' %}" class="btn-signup">Register</a>
+      </div>
+      {% endif %}
+    </header>
     <main>{% block content %}{% endblock content %}</main>
+
+    {% if user.is_authenticated %}
+    <nav class="bottom-nav">
+      <a
+        href="{% url 'tenant_dashboard' %}"
+        class="{% if request.resolver_match.url_name == 'tenant_dashboard' %}active{% endif %}"
+      >
+        <span><i class="fa-solid fa-house"></i></span><small>Home</small></a
+      >
+      <a
+        href="{% url 'tsearch_rooms' %}"
+        class="{% if request.resolver_match.url_name == 'tsearch_rooms' %}active{% endif %}"
+      >
+        <span><i class="fa-solid fa-magnifying-glass"></i></span
+        ><small>Search</small>
+      </a>
+      <a
+        href="{% url 'saved_view' %}"
+        class="{% if request.resolver_match.url_name == 'saved_view' %}active{% endif %}"
+      >
+        <span><i class="fa-solid fa-heart"></i></span><small>Saved</small>
+      </a>
+      <a
+        href="{% url 'profile_view' %}"
+        class="{% if request.resolver_match.url_name == 'profile_view' %}active{% endif %}"
+      >
+        <span><i class="fa-solid fa-user"></i></span><small>Profile</small>
+      </a>
+    </nav>
+    {% endif %}
   </body>
 </html>

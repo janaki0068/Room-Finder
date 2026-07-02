@@ -1,90 +1,35 @@
-{% load static %}
-
-{% block css %}
-<link rel="stylesheet" href="{% static 'css/tenant_dashboard.css' %}">
-{% endblock css %}
-
-
-<link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-    />
-
-
-{% block content %}
-
-
-
-<!-- NAVBAR -->
-<header>
-  <div class="logo">
-    <img src="{% static 'images/logo.png' %}" alt="Room Finder Logo" width="40" height="40"/>
-    <span>Room Finder</span>
-  </div>
-
-  <nav>
-    <a href="{% url 'home' %}">Home</a>
-    <a href="{% url 'tenant_dashboard' %}" class="active">Dashboard</a>
-    <a href="{% url 'search_rooms' %}">Browse Rooms</a>
-    <a href="{% url 'saved_rooms' %}">Saved</a>
-  </nav>
-
-  <div class="user-actions">
-    {% if request.user.profile.image %}
-      <img src="{{ request.user.profile.image.url }}" alt="User Avatar" class="avatar" />
-    {% else %}
-      <img src="{% static 'images/default-avatar.png' %}" alt="User Avatar" class="avatar" />
-    {% endif %}
-
-    <a href="{% url 'logout' %}" class="logout-btn" >
-      <i class="fa-solid fa-arrow-right-from-bracket"></i>
-    </a>
-  </div>
-</header>
+{% extends "base.html" %} {% load static %} {% block css %}
+<link rel="stylesheet" href="{% static 'css/tenant_dashboard.css' %}" />
+{% endblock css %} {% block content %}
 
 <div class="dashboard-main">
-
   <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="profile-card">
       {% if request.user.profile.image %}
-        <img src="{{ request.user.profile.image.url }}" class="profile-photo" />
+      <img src="{{ request.user.profile.image.url }}" class="profile-photo" />
       {% else %}
-        <img src="{% static 'images/default-avatar.png' %}" class="profile-photo" />
+      <img
+        src="{% static 'images/default-avatar.png' %}"
+        class="profile-photo"
+      />
       {% endif %}
 
       <h3>{{ request.user.get_full_name|default:request.user.username }}</h3>
       <p>{{ request.user.email }}</p>
 
-      <a href="{% url 'edit_profile' %}">Edit Profile</a>
     </div>
 
     <nav class="sidebar-nav">
-      <a href="{% url 'tenant_dashboard' %}">
-        <span class="icon"></span> Dashboard
-      </a>
-
-      <a href="{% url 'search_rooms' %}">
-        <span class="icon"></span> Browse Rooms
-      </a>
-
-      <a href="{% url 'saved_rooms' %}">
-        <span class="icon"></span> Saved Rooms
-      </a>
-
-      <a href="{% url 'messages' %}">
-        <span class="icon"></span> Messages
-      </a>
-
-      <a href="{% url 'settings' %}">
-        <span class="icon"></span> Settings
-      </a>
+      <a href="{% url "tenant_edit_profile" %}" class="active">Edit Profile</a>
+      <a href="{% url "notifications" %}" class="active">Notifications</a>
+      <a href="{% url "settings_view" %}" class="active">Settings</a>
+      <a href="{% url "logout" %}">Logout</a>
     </nav>
   </aside>
 
   <!-- DASHBOARD CONTENT -->
   <section class="dashboard-content">
-
     <!-- STATS ROW -->
     <div class="stats-row">
       <div class="stat-card">
@@ -106,19 +51,20 @@
       </div>
 
       <div class="listings-grid">
-
         {% for saved in saved_rooms %}
         <div class="listing-card">
-
           <div class="listing-img-wrap">
-            {% with saved.room.images.first as cover %}
-              {% if cover %}
-                <img src="{{ cover.image.url }}" alt="{{ saved.room.title }}" />
-              {% else %}
-                <img src="{% static 'images/default-room.png' %}" alt="{{ saved.room.title }}" />
-              {% endif %}
-            {% endwith %}
-            <span class="badge {{ saved.room.status }}">{{ saved.room.status }}</span>
+            {% with saved.room.images.first as cover %} {% if cover %}
+            <img src="{{ cover.image.url }}" alt="{{ saved.room.title }}" />
+            {% else %}
+            <img
+              src="{% static 'images/default-room.png' %}"
+              alt="{{ saved.room.title }}"
+            />
+            {% endif %} {% endwith %}
+            <span class="badge {{ saved.room.status }}"
+              >{{ saved.room.status }}</span
+            >
           </div>
 
           <div class="listing-info">
@@ -128,20 +74,19 @@
               {{ saved.room.room_type }} | {{ saved.room.city }}
             </p>
 
-            <p class="listing-price">
-              NPR {{ saved.room.price }} / month
-            </p>
+            <p class="listing-price">NPR {{ saved.room.price }} / month</p>
 
             <div class="listing-stats">
               <span>👁 {{ saved.room.views }} views</span>
             </div>
           </div>
-
         </div>
         {% empty %}
-          <p>You haven't saved any rooms yet. To find your next place, go to <a href="{% url 'search_rooms' %}">Browse Listings.</a> </p>
+        <p>
+          You haven't saved any rooms yet. To find your next place, go to
+          <a href="{% url 'search_rooms' %}">Browse Listings.</a>
+        </p>
         {% endfor %}
-
       </div>
     </div>
 
@@ -153,57 +98,39 @@
       </div>
 
       <div class="listings-grid">
-
         {% for room in browse_rooms %}
         <div class="listing-card">
-
           <div class="listing-img-wrap">
-            {% with room.images.first as cover %}
-              {% if cover %}
-                <img src="{{ cover.image.url }}" alt="{{ room.title }}" />
-              {% else %}
-                <img src="{% static 'images/default-room.png' %}" alt="{{ room.title }}" />
-              {% endif %}
-            {% endwith %}
+            {% with room.images.first as cover %} {% if cover %}
+            <img src="{{ cover.image.url }}" alt="{{ room.title }}" />
+            {% else %}
+            <img
+              src="{% static 'images/default-room.png' %}"
+              alt="{{ room.title }}"
+            />
+            {% endif %} {% endwith %}
             <span class="badge {{ room.status }}">{{ room.status }}</span>
           </div>
 
           <div class="listing-info">
             <h4>{{ room.title }}</h4>
 
-            <p class="listing-meta">
-              {{ room.room_type }} | {{ room.city }}
-            </p>
+            <p class="listing-meta">{{ room.room_type }} | {{ room.city }}</p>
 
-            <p class="listing-price">
-              NPR {{ room.price }} / month
-            </p>
+            <p class="listing-price">NPR {{ room.price }} / month</p>
 
             <div class="listing-stats">
               <span> {{ room.views }} views</span>
               <span> {{ room.saved_count }} saved</span>
             </div>
           </div>
-
         </div>
         {% empty %}
-          <p>No listings available right now.</p>
+        <p>No listings available right now.</p>
         {% endfor %}
-
       </div>
     </div>
-
   </section>
 </div>
-
-<!-- BOTTOM NAV -->
-<nav class="bottom-nav">
-  <a href="{% url 'home' %}"><span><i class="fa-solid fa-house"></i></span><small>Home</small></a>
-  <a href="{% url 'search_rooms' %}"><span><i class="fa-solid fa-magnifying-glass"></i></span><small>Search</small></a>
-  <a href="{% url 'saved_rooms' %}"><span><i class="fa-solid fa-heart"></i></span><small>Saved</small></a>
-  <a href="{% url 'tenant_dashboard' %}" class="active"><span><i class="fa-solid fa-user"></i></span><small>Profile</small></a>
-</nav>
-
-
 
 {% endblock content %}

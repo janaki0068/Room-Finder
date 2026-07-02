@@ -1,0 +1,73 @@
+{% extends "base.html" %} {% load static %} {% block css %}
+<link rel="stylesheet" href="{% static 'css/tenant_dashboard.css' %}" />
+{% endblock css %} {% block content %}
+
+<a href="{% url 'tenant_dashboard' %}" class="back-btn"
+  ><i class="fa-solid fa-arrow-left"></i
+></a>
+
+<div class="dashboard-main">
+  <aside class="sidebar">
+
+    <nav class="sidebar-nav">
+      <a href="{% url "tenant_edit_profile" %}" >Edit Profile</a>
+      <a href="{% url "notifications" %}">Notifications</a>
+      <a href="{% url "settings_view" %}">Settings</a>
+      <a href="{% url "logout" %}">Logout</a>
+    </nav>
+  </aside>
+
+  <section class="dashboard-content">
+    <div class="section-header">
+      <h2>My Profile</h2>
+    </div>
+
+    <div class="profile-details">
+      <div class="profile-photo-large">
+        {% if profile.image %}
+        <img src="{{ profile.image.url }}" alt="Profile Photo" />
+        {% else %}
+        <img
+          src="{% static 'images/default-avatar.png' %}"
+          alt="Profile Photo"
+        />
+        {% endif %}
+      </div>
+
+      <div class="profile-info">
+        <div class="info-row">
+          <span class="info-label">First Name</span>
+          <span class="info-value"
+            >{{ request.user.first_name|default:"—" }}</span
+          >
+        </div>
+        <div class="info-row">
+          <span class="info-label">Last Name</span>
+          <span class="info-value"
+            >{{ request.user.last_name|default:"—" }}</span
+          >
+        </div>
+        <div class="info-row">
+          <span class="info-label">Email</span>
+          <span class="info-value">{{ request.user.email }}</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Phone</span>
+          <span class="info-value">{{ profile.phone|default:"—" }}</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Role</span>
+          <span class="info-value">{{ profile.role|capfirst }}</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Member Since</span>
+          <span class="info-value"
+            >{{ request.user.date_joined|date:"M d, Y" }}</span
+          >
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+{% endblock content %}

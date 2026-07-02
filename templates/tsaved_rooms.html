@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/tenant_dashboard.css' %}" />
+{% endblock css %}
+
+{% block content %}
+
+<a href="{% url 'tenant_dashboard' %}" class="back-btn"
+  ><i class="fa-solid fa-arrow-left"></i
+></a>
+
+<div class="dashboard-main">
+    <aside class="sidebar">
+        
+        <nav class="sidebar-nav">
+            <a href="#">Edit Profile</a>
+            <a href="#">Notifications</a>
+            <a href="#">Settings</a>
+            <a href="#">Logout</a>
+        </nav>
+    </aside>
+
+    <section class="dashboard-content">
+        <div class="section-header">
+            <h2>Saved Rooms</h2>
+        </div>
+
+        <div class="listings-grid">
+           {% for saved in saved_rooms %}
+           <div class="listing-card">
+            <div class="listing-img-wrap">
+                {% with saved.room.images.first as cover %}
+                    {% if cover %}
+                        <img src="{{ cover.image.url }}" alt="{{ saved.room.title }}" />
+                    {% else %}
+                        <img src="{% static 'images/default-room.png' %}" alt="{{ saved.room.title }}" />
+                    {% endif %}
+                {% endwith %}
+                <span class="badge {{ saved.room.status }}">{{ saved.room.status }}</span>
+            </div>
+            <div class="listing-info">
+                <h4>{{ saved.room.title }}</h4>
+                <p class="listing-meta">{{ saved.room.room_type }} | {{ saved.room.city }}</p>
+                <p class="listing-price">NPR {{ saved.room.price }} / month</p>
+                <form method="POST" action="{% url 'unsave_room' saved.room.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="search-submit-btn" style="width:100%;margin-top:8px;">Remove from Saved</button>
+                </form>
+            </div>
+           </div>
+           {% empty %}
+           <p>You haven't saved any rooms yet. <a href="{% url 'search_rooms' %}">Browse listings</a> to find your next place.</p>
+           {% endfor %}
+        </div>
+    </section>
+</div>
+{% endblock content %}

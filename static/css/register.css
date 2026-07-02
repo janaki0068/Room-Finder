@@ -1,3 +1,13 @@
+.back-btn{
+    color: var(--color-5);
+    font-size: 18 px;
+    text-decoration: none;
+    display: inline-block;
+    padding: 20px 24px 0;
+    margin-bottom: 10px;
+}
+
+
 /* full page layout */
 .register-container{
     display: flex;

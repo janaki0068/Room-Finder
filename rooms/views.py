@@ -1,3 +1,4 @@
+from django.shortcuts import render, get_object_or_404
 from .models import Province, Room
 from .forms import RoomForm
 from django.shortcuts import render, redirect
@@ -75,7 +76,7 @@ def login_view(request):
                 return redirect('landlord_dashboard')
             else:
                 return redirect('tenant_dashboard')
-        
+
         else:
             messages.error(request, 'Invalid email or password.')
             return render(request, 'login.html')
@@ -103,7 +104,7 @@ def register_view(request):
                 first_name=form.cleaned_data['first_name'],
                 last_name=form.cleaned_data['last_name'],
                 password=form.cleaned_data['password']
-                )
+            )
 
             user.profile.phone = form.cleaned_data['phone_number']
             user.profile.role = form.cleaned_data['role']
@@ -154,26 +155,6 @@ def get_districts(request, province_id):
         'districts': list(districts)
     })
 
-
-@login_required(login_url='login')
-def saved_view(request):
-    return render(request, 'saved.html')
-
-
-@login_required(login_url='login')
-def list_view(request):
-    return render(request, 'list.html')
-
-
-@login_required(login_url='login')
-def profile_view(request):
-    profile = request.user.profile
-
-    return render(request, 'profile.html', {
-        'profile': profile
-    })
-
-
 # LANDLORD DASHBOARD
 @login_required
 def landlord_dashboard(request):
@@ -205,17 +186,20 @@ def my_listings(request):
         "listings": listings
     })
 
+
 # Room detail
-from django.shortcuts import render, get_object_or_404
+
 
 def room_detail(request, room_id):
     room = get_object_or_404(Room, id=room_id, owner=request.user)
 
     return render(request, 'room_detail.html', {
-        'room':room
+        'room': room
     })
 
 # Edit listings
+
+
 @login_required
 def edit_listing(request, room_id):
 
@@ -244,6 +228,8 @@ def edit_listing(request, room_id):
     })
 
 # Delete listings
+
+
 @login_required
 def delete_listing(request, room_id):
 
@@ -259,6 +245,8 @@ def delete_listing(request, room_id):
     return redirect("my_listings")
 
 # My saved rooms
+
+
 @login_required
 def saved_rooms(request):
     rooms = (
@@ -277,6 +265,7 @@ def saved_rooms(request):
 
 # My edit profile
 from .forms import EditProfileForm
+
 
 @login_required
 def edit_profile(request):
@@ -342,6 +331,8 @@ def upload_listing(request):
 
 # My messages
 from django.db.models import Q
+
+
 
 @login_required
 def messages_view(request):
@@ -462,6 +453,8 @@ def chat_room(request, user_id, room_id):
     })
 
 # My settings
+
+
 from .forms import UserPreferenceForm
 
 
@@ -511,6 +504,8 @@ def settings_view(request):
 
 
 # TENANT DASHBOARD
+
+
 @role_required('tenant')
 def tenant_dashboard(request):
     saved_rooms = SavedRoom.objects.filter(
@@ -525,3 +520,58 @@ def tenant_dashboard(request):
         'saved_count': saved_count,
         'browse_rooms': browse_rooms,
     })
+
+@login_required(login_url='login')
+def saved_view(request):
+    saved = SavedRoom.objects.filter(user=request.user).select_related('room')
+    return render(request, 'tsaved_rooms.html', {
+        'saved_rooms': saved})
+
+@login_required
+def unsave_room(request, room_id):
+    SavedRoom.objects.filter(user=request.user, room_id=room_id).delete()
+    return redirect('saved')
+
+@login_required(login_url='login')
+def tsearch_rooms(request):
+    return render(request, 'tsearch_rooms.html')
+
+
+@login_required(login_url='login')
+def profile_view(request):
+    profile = request.user.profile
+
+    return render(request, 'tenant_profile.html', {
+        'profile': profile
+    })
+
+
+@login_required
+def tenant_edit_profile(request):
+    profile = request.user.profile
+
+    if request.method == 'POST':
+        request.user.first_name = request.POST.get('first_name','')
+        request.user.last_name = request.POST.get('last_name','')
+        request.user.save()
+
+        profile.phone = request.POST.get('phone','')
+        if request.FILES.get('image'):
+            profile.image = request.FILES.get('image')
+        profile.save()
+
+        messages.success(request, 'Profile updated successfully.')
+        return redirect('profile_view')
+    
+    return render(request, 'tenant_edit_profile.html', {
+        'profile': profile 
+    })
+
+
+@login_required
+def notifications(request):
+    return render(request, 'notifications.html')
+
+@login_required
+def settings_view(request):
+    return render(request, 'settings.html')
