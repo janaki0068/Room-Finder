@@ -14,6 +14,7 @@
     {% block css %}{% endblock css %}
   </head>
   <body>
+    {% block site_header %}
     <header>
       <div class="logo">
         <img
@@ -39,8 +40,10 @@
       </div>
       {% endif %}
     </header>
+    {% endblock site_header %}
     <main>{% block content %}{% endblock content %}</main>
 
+    {% block site_bottom_nav %}
     {% if user.is_authenticated %}
     <nav class="bottom-nav">
       <a
@@ -70,5 +73,6 @@
       </a>
     </nav>
     {% endif %}
+    {% endblock site_bottom_nav %}
   </body>
 </html>

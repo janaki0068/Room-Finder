@@ -1,136 +1,114 @@
-{% extends 'landlord_base.html' %}
-{% load static %}
+{% extends 'landlord_base.html' %} 
+{% load static %} 
 
-{% block title %}My Listings{% endblock %}
-{% block page_title %}My Listings{% endblock %}
+{% block title %}
+My Listings
+{% endblock %} 
 
-{% block content %}
+{% block page_title %} My Listings {% endblock %} 
+
+{% block content %} 
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/my_listings.css' %}">
+<link rel="stylesheet" href="{% static 'css/my_listings.css' %}" />
 {% endblock %}
 
+
 <div class="page-top">
-    <a href="{% url 'landlord_dashboard' %}" class="back-btn">← Back </a>
+  <a href="{% url 'landlord_dashboard' %}" class="back-btn">← Back </a>
 </div>
 
-
 <section class="dashboard-card">
+  <div class="card-header">
+    <h3>My Properties</h3>
+  </div>
 
-    <div class="card-header">
-        <h3>My Properties</h3>
-    </div>
+  {% if listings %}
 
-    {% if listings %}
+  <div class="listing-table-wrapper">
+    <table class="listing-table">
+      <thead>
+        <tr>
+          <th>Property</th>
+          <th>Rent</th>
+          <th>Status</th>
+          <th>Views</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
 
-    <div class="listing-table-wrapper">
+      <section class="stats-grid">
+        <div class="stat-card">
+          <h2>{{ listings.count }}</h2>
+          <p>Total Listings</p>
+        </div>
+      </section>
+      <tbody>
+          
+          {% for room in listings %}
+        <tr>
+          <td>
+            <strong>{{ room.title }}</strong><br />
+            {{ room.city }}
+          </td>
 
-        <table class="listing-table">
+          <td>Rs. {{ room.price }}</td>
 
-            <thead>
-                <tr>
-                    <th>Property</th>
-                    <th>Rent</th>
-                    <th>Status</th>
-                    <th>Views</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
+          <td>
+            <span class="status {{ room.status }}">
+              {{ room.get_status_display }} 
+              {% if room.status == 'approved' %}
+            {% elif room.status == 'pending' %}
+            {% elif room.status == 'rejected' %}
+            {% endif %}
+            </span>
+          </td>
 
-            <tbody>
+          <td>{{ room.views }}</td>
 
-            {% for room in listings %}
+          <td>
+            <a href="{% url 'room_detail' room.id %}" class="table-btn">
+              View
+            </a>
 
-                <tr> 
+            <a href="{% url 'edit_listing' room.id %}" class="table-btn">
+              Edit
+            </a>
 
-                    <section class="stats-grid">
+            <form
+              method="POST"
+              action="{% url 'delete_listing' room.id %}"
+              style="display: inline"
+            >
+              {% csrf_token %}
 
-    <div class="stat-card">
-        <h2>{{ listings.count }}</h2>
-        <p>Total Listings</p>
-    </div>
+              <button
+                type="submit"
+                class="table-btn delete"
+                onclick="return confirm('Delete this listing?');"
+              >
+                Delete
+              </button>
+            </form>
+          </td>
+        </tr>
 
-</section>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 
-                    <td>
-                        <strong>{{ room.title }}</strong><br>
-                        {{ room.city }}
-                    </td>
+  {% else %}
 
-                    <td>
-                        Rs. {{ room.price }}
-                    </td>
+  <div class="empty-state">
+    <h3>No Listings Found</h3>
 
-                    <td>
+    <p>You haven't uploaded any properties yet.</p>
 
-                        {% if room.is_verified %}
-                            <span class="status approved">
-                                Approved ✅
-                            </span>
-                        {% else %}
-                            <span class="status pending">
-                                Pending ⏳
-                            </span>
-                        {% endif %}
+    <a href="{% url 'upload_listing' %}" class="hero-btn"> Upload Listing </a>
+  </div>
 
-                    </td>
-
-                    <td>
-                        {{ room.views }}
-                    </td>
-
-                    <td>
-
-                    <a href="{% url 'room_detail' room.id %}" class="table-btn">
-                        View
-                    </a>
-
-                    <a href="{% url 'edit_listing' room.id %}" class="table-btn">
-                        Edit
-                    </a>
-
-                    <form method="POST"
-                        action="{% url 'delete_listing' room.id %}"
-                        style="display:inline;">
-                        {% csrf_token %}
-
-                        <button type="submit"
-                                class="table-btn delete"
-                                onclick="return confirm('Delete this listing?');">
-                            Delete
-                        </button>
-                    </form>
-
-                </td>
-
-                </tr>
-
-            {% endfor %}
-
-            </tbody>
-
-        </table>
-
-    </div>
-
-    {% else %}
-
-    <div class="empty-state">
-
-        <h3>No Listings Found</h3>
-
-        <p>
-            You haven't uploaded any properties yet.
-        </p>
-
-        <a href="{% url 'upload_listing' %}" class="hero-btn">
-            Upload Listing
-        </a>
-
-    </div>
-
-    {% endif %}
-
+  {% endif %}
 </section>
 
 {% endblock %}

@@ -1,3 +1,6 @@
+from .forms import UserPreferenceForm
+from django.db.models import Q
+from .forms import EditProfileForm
 from django.shortcuts import render, get_object_or_404
 from .models import Province, Room
 from .forms import RoomForm
@@ -15,6 +18,8 @@ from .decorators import role_required
 # Create your views here.
 
 # HOME
+
+
 def home(request):
     rooms = Room.objects.filter(status='active')
 
@@ -156,13 +161,15 @@ def get_districts(request, province_id):
     })
 
 # LANDLORD DASHBOARD
+
+
 @login_required
 def landlord_dashboard(request):
 
     user_listings = Room.objects.filter(owner=request.user)
     listing_count = user_listings.count()
-    approved_count = user_listings.filter(is_verified=True).count()
-    pending_count = user_listings.filter(is_verified=False).count()
+    approved_count = user_listings.filter(status='approved').count()
+    pending_count = user_listings.filter(status='pending').count()
     total_views = user_listings.aggregate(total=Sum('views'))['total'] or 0
     recent_listings = user_listings[:5]
     has_verified_property = user_listings.filter(is_verified=True).exists()
@@ -263,8 +270,8 @@ def saved_rooms(request):
         "rooms": rooms
     })
 
+
 # My edit profile
-from .forms import EditProfileForm
 
 
 @login_required
@@ -272,7 +279,8 @@ def edit_profile(request):
     profile = request.user.profile
 
     if request.method == "POST":
-        form = EditProfileForm(request.POST, instance=profile, user=request.user)
+        form = EditProfileForm(
+            request.POST, instance=profile, user=request.user)
         if form.is_valid():
             form.save()
             messages.success(request, "Profile updated successfully.")
@@ -297,7 +305,7 @@ def upload_listing(request):
 
             room = form.save(commit=False)
             room.owner = request.user
-            room.status = "draft"
+            room.status = "pending"
             room.is_verified = False
 
             room.save()
@@ -329,9 +337,8 @@ def upload_listing(request):
         }
     )
 
-# My messages
-from django.db.models import Q
 
+# My messages
 
 
 @login_required
@@ -374,13 +381,15 @@ def messages_view(request):
 
             })
 
-    return render(request,"messages.html",{
+    return render(request, "messages.html", {
 
         "conversations": conversations
 
     })
 
 # Chatbox
+
+
 @login_required
 def chat_room(request, user_id, room_id):
 
@@ -455,9 +464,6 @@ def chat_room(request, user_id, room_id):
 # My settings
 
 
-from .forms import UserPreferenceForm
-
-
 @login_required
 def settings_view(request):
 
@@ -499,10 +505,6 @@ def settings_view(request):
     )
 
 
-
-
-
-
 # TENANT DASHBOARD
 
 
@@ -521,16 +523,19 @@ def tenant_dashboard(request):
         'browse_rooms': browse_rooms,
     })
 
+
 @login_required(login_url='login')
 def saved_view(request):
     saved = SavedRoom.objects.filter(user=request.user).select_related('room')
     return render(request, 'tsaved_rooms.html', {
         'saved_rooms': saved})
 
+
 @login_required
 def unsave_room(request, room_id):
     SavedRoom.objects.filter(user=request.user, room_id=room_id).delete()
     return redirect('saved')
+
 
 @login_required(login_url='login')
 def tsearch_rooms(request):
@@ -551,26 +556,27 @@ def tenant_edit_profile(request):
     profile = request.user.profile
 
     if request.method == 'POST':
-        request.user.first_name = request.POST.get('first_name','')
-        request.user.last_name = request.POST.get('last_name','')
+        request.user.first_name = request.POST.get('first_name', '')
+        request.user.last_name = request.POST.get('last_name', '')
         request.user.save()
 
-        profile.phone = request.POST.get('phone','')
+        profile.phone = request.POST.get('phone', '')
         if request.FILES.get('image'):
             profile.image = request.FILES.get('image')
         profile.save()
 
         messages.success(request, 'Profile updated successfully.')
         return redirect('profile_view')
-    
+
     return render(request, 'tenant_edit_profile.html', {
-        'profile': profile 
+        'profile': profile
     })
 
 
 @login_required
 def notifications(request):
     return render(request, 'notifications.html')
+
 
 @login_required
 def settings_view(request):

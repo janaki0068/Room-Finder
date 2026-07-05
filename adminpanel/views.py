@@ -65,9 +65,9 @@ def user_management(request):
     users = User.objects.exclude(is_staff=True).select_related('profile') 
 
     if role_filter == 'tenant':
-        users = users.filter(profile__is_landlord=False)
+        users = users.filter(profile__role='tenant')
     elif role_filter == 'landlord':
-        users = users.filter(profile__is_landlord=True)
+        users = users.filter(profile__role='landlord')
 
     return render(request, "adminpanel/user_management.html", {
         "users": users,

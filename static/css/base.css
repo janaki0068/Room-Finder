@@ -112,9 +112,8 @@ body {
 .btn-login, .btn-signup{
     color: var(--color-5);
     background-color: var(--color-logo);
-    border: 1px solid var(--color-5);
+    border: 2px solid var(--color-5);
+    border-radius: 20px;
+    text-decoration: none;
+    padding: 6px 14px;
 }
-
-
-
-

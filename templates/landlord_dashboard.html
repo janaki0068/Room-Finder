@@ -239,18 +239,7 @@
 
                     <td>
 
-                       {% if listing.is_verified %}
-    <span class="status approved">
-        Approved
-    </span>
-
-{% else %}
-    <span class="status pending">
-        Pending
-    </span>
-{% endif %}
-
-        <span class="status">
+        <span class="status {{ listing.status}}">
     {{ listing.get_status_display }}
 </span>
 

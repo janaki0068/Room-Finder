@@ -173,6 +173,7 @@
 .admin-layout{
     display: flex;
     min-height: 100vh;
+    align-items: stretch;
 }
 
 .admin-sidebar{
@@ -183,7 +184,8 @@
     padding: 24px 0;
     position: sticky;
     top: 0;
-    height: 100vh;
+    min-height: 100vh;
+    align-self: stretch;
 }           
 
 .sidebar-logo{
