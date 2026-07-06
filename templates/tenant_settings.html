@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/tenant_dashboard.css' %}">
+{% endblock css %}
+
+{% block content %}
+
+<div class="dashboard-main">
+
+  <aside class="sidebar">
+    <div class="profile-card">
+      {% if request.user.profile.image %}
+        <img src="{{ request.user.profile.image.url }}" class="profile-photo" />
+      {% else %}
+        <img src="{% static 'images/default-avatar.png' %}" class="profile-photo" />
+      {% endif %}
+      <h3>{{ request.user.get_full_name|default:request.user.username }}</h3>
+      <p>{{ request.user.email }}</p>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="{% url 'tenant_edit_profile' %}">Edit Profile</a>
+      <a href="{% url 'notifications' %}">Notifications</a>
+      <a href="{% url 'settings_view' %}" class="active">Settings</a>
+      <a href="{% url 'logout' %}">Logout</a>
+    </nav>
+  </aside>
+
+  <section class="dashboard-content">
+
+    <div class="section-header" style="margin-bottom: 24px;">
+      <h2>Settings</h2>
+    </div>
+
+    {% if messages %}
+      {% for message in messages %}
+        <p style="color:green; margin-bottom:16px;">{{ message }}</p>
+      {% endfor %}
+    {% endif %}
+
+    <!-- CHANGE PASSWORD -->
+    <div class="edit-profile-form" style="margin-bottom: 24px;">
+      <h3 style="color:var(--color-5); margin-bottom:20px;">Change Password</h3>
+      <form method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="change_password">
+
+        {% for field in password_form %}
+        <div class="form-field">
+          <label>{{ field.label }}</label>
+          {{ field }}
+          {% if field.errors %}
+            <small style="color:red;">{{ field.errors.0 }}</small>
+          {% endif %}
+        </div>
+        {% endfor %}
+
+        <button type="submit" class="search-submit-btn">Update Password</button>
+      </form>
+    </div>
+
+    <!-- DELETE ACCOUNT -->
+    <div class="edit-profile-form" style="border: 2px solid #FFC4D6;">
+      <h3 style="color:#e23b3b; margin-bottom:12px;">Delete Account</h3>
+      <p style="color:var(--color-13); margin-bottom:20px; font-size:14px;">
+        This action is permanent and cannot be undone. All your saved rooms and profile data will be deleted.
+      </p>
+      <form method="POST" onsubmit="return confirm('Are you absolutely sure? This cannot be undone.')">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="delete_account">
+        <button type="submit" style="background-color:#e23b3b; color:white; border:none; padding:12px 24px; border-radius:8px; font-weight:600; cursor:pointer;">
+          Delete My Account
+        </button>
+      </form>
+    </div>
+
+  </section>
+
+</div>
+
+{% endblock content %}

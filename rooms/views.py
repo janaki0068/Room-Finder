@@ -14,6 +14,8 @@ from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from .decorators import role_required
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
 
 # Create your views here.
 
@@ -21,7 +23,7 @@ from .decorators import role_required
 
 
 def home(request):
-    rooms = Room.objects.filter(status='active')
+    rooms = Room.objects.filter(status='approved')
 
     # GET FILTER VALUES
     query = request.GET.get('q')
@@ -515,7 +517,7 @@ def tenant_dashboard(request):
     saved_count = saved_rooms.count()
 
     browse_rooms = Room.objects.filter(
-        status='active').order_by('-created_at')[:12]
+        status='approved').order_by('-created_at')[:12]
 
     return render(request, 'tenant_dashboard.html', {
         'saved_rooms': saved_rooms,
@@ -539,7 +541,8 @@ def unsave_room(request, room_id):
 
 @login_required(login_url='login')
 def tsearch_rooms(request):
-    return render(request, 'tsearch_rooms.html')
+    rooms = Room.objects.filter(status='approved')
+    return render(request, 'tsearch_rooms.html', {'rooms': rooms})
 
 
 @login_required(login_url='login')
@@ -580,4 +583,24 @@ def notifications(request):
 
 @login_required
 def settings_view(request):
-    return render(request, 'settings.html')
+    password_form = PasswordChangeForm(user=request.user)
+
+    if request.method == 'POST':
+        action = request.POST.get('action')
+
+        if action == 'change_password':
+            password_form = PasswordChangeForm(request.user, request.POST)
+            if password_form.is_valid():
+                user = password_form.save()
+                update_session_auth_hash(request, user)  
+                messages.success(request, 'Your password was successfully updated!')
+                return redirect('settings_view')
+            else:
+                messages.error(request, 'Please try again. The password was not updated.')
+
+        elif action == 'delete_account':
+            request.user.delete()
+            messages.success(request, 'Your account has been deleted.')
+            return redirect('home')
+    return render(request, 'tenant_settings.html', {'password_form': password_form})
+

@@ -16,10 +16,10 @@
     <aside class="sidebar">
         
         <nav class="sidebar-nav">
-            <a href="#">Edit Profile</a>
-            <a href="#">Notifications</a>
-            <a href="#">Settings</a>
-            <a href="#">Logout</a>
+            <a href="{% url 'tenant_edit_profile' %}">Edit Profile</a>
+            <a href="{% url 'notifications' %}">Notifications</a>
+            <a href="{% url 'settings_view' %}">Settings</a>
+            <a href="{% url 'logout' %}" class="nav-logout-btn">Logout</a>
         </nav>
     </aside>
 

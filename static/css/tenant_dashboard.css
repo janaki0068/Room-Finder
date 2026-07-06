@@ -52,21 +52,21 @@
 }
 
 .profile-photo {
-    width: 80px;
-    height: 80px;
+    width: 150px;
+    height: 150px;
     border-radius: 50%;
     object-fit: cover;
     margin-bottom: 12px;
 }
 
 .profile-card h3 {
-    font-size: 16px;
+    font-size: 20px;
     color: var(--color-5);
     margin-bottom: 4px;
 }
 
 .profile-card p {
-    font-size: 13px;
+    font-size: 15px;
     color: var(--color-10);
     margin-bottom: 14px;
 }
@@ -85,7 +85,7 @@
     padding: 12px 20px;
     text-decoration: none;
     color: var(--color-5);
-    font-size: 14px;
+    font-size: 18px;
     font-weight: 600;
     display: flex;
     align-items: center;
@@ -96,10 +96,8 @@
     color: var(--color-10);
 }
 
-.sidebar-nav a.active{
-    background-color: var(--color-logo);
-    color: var(--color-5);
-    box-shadow: 0 0 12px var(--color-2);
+.nav-logout-btn {
+    border-top: 2px solid var(--color-1);
 }
 
 
@@ -123,14 +121,14 @@
 }
 
 .stat-card h4 {
-    font-size: 13px;
+    font-size: 18px;
     color: var(--color-13);
     text-transform: uppercase;
     margin-bottom: 8px;
 }
 
 .stat-number {
-    font-size: 32px;
+    font-size: 35px;
     font-weight: 800;
     color: var(--color-5);
 }
@@ -150,13 +148,13 @@
 }
 
 .section-header h2 {
-    font-size: 20px;
+    font-size: 25px;
     color: var(--color-13);
 }
 
 .section-header a {
     color: var(--color-5);
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 600;
     text-decoration: none;
 }
@@ -395,4 +393,19 @@
     text-align: center;
     color: var(--color-13);
     box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+}
+
+/* SETTINGS */
+.edit-profile-form input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--color-8);
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+    margin-top: 4px;
+}
+
+.edit-profile-form input[type="password"]:focus {
+    border-color: var(--color-5);
 }
