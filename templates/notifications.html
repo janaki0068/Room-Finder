@@ -11,6 +11,7 @@
   <aside class="sidebar">
     <nav class="sidebar-nav">
       <a href="{% url 'tenant_edit_profile' %}">Edit Profile</a>
+      <a href="{% url 'tenant_messages' %}">Messages</a>
       <a href="{% url 'notifications' %}" class="active">Notifications</a>
       <a href="{% url 'settings_view' %}">Settings</a>
       <a href="{% url 'logout' %}">Logout</a>
@@ -18,13 +19,24 @@
   </aside>
 
   <section class="dashboard-content">
-    <div class="section-header">
-      <h2>Notifications</h2>
+  <div class="section-header" style="margin-bottom:24px;">
+    <h2>Notifications</h2>
+  </div>
+
+  {% if unread_count > 0 %}
+  <div class="notification-item alert">
+    <span class="notif-icon"><i class="fa-solid fa-envelope"></i></span>
+    <div class="notif-content">
+      <p>You have <strong>{{ unread_count }} unread message{{ unread_count|pluralize }}</strong>.</p>
+      <a href="{% url 'tenant_messages' %}">View Messages →</a>
     </div>
-    <div class="placeholder-box">
-      <p>No notifications yet, check back later.</p>
-    </div>
-  </section>
+  </div>
+  {% else %}
+  <div class="placeholder-box">
+    <p>You're all caught up, no new notifications.</p>
+  </div>
+  {% endif %}
+</section>
 </div>
 
 {% endblock content %}

@@ -38,5 +38,6 @@ urlpatterns = [
     path('profile/', views.profile_view, name='profile_view'),
     path('profile/edit/', views.tenant_edit_profile, name='tenant_edit_profile'),
     path('notifications/', views.notifications, name='notifications'),
-    path('settings/', views.settings_view, name='settings_view'),
+    path('tsettings/', views.settings_view, name='settings_view'),
+    path('tmessages/', views.tenant_messages, name='tenant_messages'),
 ]

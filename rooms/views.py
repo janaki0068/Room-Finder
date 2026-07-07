@@ -617,3 +617,30 @@ def settings_view(request):
             return redirect('home')
     return render(request, 'tenant_settings.html', {'password_form': password_form})
 
+@login_required
+def tenant_messages(request):
+    received = Message.objects.filter(
+        receiver=request.user
+    ).order_by('-sent_at')
+    
+    sent = Message.objects.filter(
+        sender=request.user
+    ).order_by('-sent_at')
+    
+    return render(request, 'tenant_messages.html', {
+        'received': received,
+        'sent': sent,
+    })
+
+
+
+@login_required
+def notifications(request):
+    unread_count = Message.objects.filter(
+        receiver=request.user,
+        is_read=False
+    ).count()
+
+    return render(request, 'notifications.html', {
+        'unread_count': unread_count,
+    })

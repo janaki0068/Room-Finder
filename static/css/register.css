@@ -34,9 +34,9 @@
 
 /* LOGO */
 
-.logo img{
-    width: 200px;
-    height: 200px;
+.logo img {
+    width: 400px;
+    height: 400px;
     object-fit: contain;
 }
 
@@ -208,6 +208,7 @@ form {
 
 .register-form-footer a:hover {
     text-decoration: underline;
+    
 }
 
 /* RESPONSIVE */
