@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/tenant_dashboard.css' %}">
+{% endblock css %}
+
+{% block content %}
+
+<div class="dashboard-main">
+
+  <aside class="sidebar">
+    <div class="profile-card">
+      {% if request.user.profile.image %}
+        <img src="{{ request.user.profile.image.url }}" class="profile-photo" />
+      {% else %}
+        <img src="{% static 'images/default-avatar.png' %}" class="profile-photo" />
+      {% endif %}
+      <h3>{{ request.user.get_full_name|default:request.user.username }}</h3>
+      <p>{{ request.user.email }}</p>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="{% url 'tenant_edit_profile' %}">Edit Profile</a>
+      <a href="{% url 'tenant_messages' %}">Messages</a>
+      <a href="{% url 'notifications' %}">Notifications</a>
+      <a href="{% url 'settings_view' %}">Settings</a>
+      <a href="{% url 'logout' %}">Logout</a>
+    </nav>
+  </aside>
+
+  <section class="dashboard-content">
+
+    <div class="section-header" style="margin-bottom:24px;">
+      <h2>Messages</h2>
+    </div>
+
+    <!-- RECEIVED -->
+    <div class="my-listings-section">
+      <div class="section-header">
+        <h3 style="color:var(--color-5);">Inbox</h3>
+      </div>
+
+      {% if received %}
+        {% for message in received %}
+        <div class="message-item {% if not message.is_read %}unread{% endif %}">
+          <div class="message-meta">
+            <span class="message-sender">
+              From: {{ message.sender.get_full_name|default:message.sender.username }}
+            </span>
+            {% if message.room %}
+              <span class="message-room">Re: {{ message.room.title }}</span>
+            {% endif %}
+            <span class="message-time">{{ message.sent_at|date:"M d, Y - H:i" }}</span>
+          </div>
+          <p class="message-body">{{ message.body }}</p>
+          {% if not message.is_read %}
+            <span class="unread-badge">New</span>
+          {% endif %}
+        </div>
+        {% endfor %}
+      {% else %}
+        <div class="placeholder-box">
+          <p>No messages received yet.</p>
+        </div>
+      {% endif %}
+    </div>
+
+  </section>
+</div>
+
+{% endblock content %}
