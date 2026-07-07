@@ -601,3 +601,30 @@ MOBILE
         text-align:center;
     }
 }
+
+
+/* NO ROOM AVAILABLE */
+.no-rooms{
+    grid-column:1/-1;
+    background:#FBEAF0;
+    border-radius:18px;
+    padding:60px 30px;
+    text-align:center;
+    border:1px solid #F4C0D1;
+}
+.no-rooms-icon{
+    margin-bottom:20px;
+}
+.no-rooms-icon iconify-icon{
+    font-size:60px;
+    color:#ED93B1;
+}
+.no-rooms h3{
+    font-size:28px;
+    color:#4B1528;
+    margin-bottom:10px;
+}
+.no-rooms p{
+    color:#777;
+    font-size:15px;
+}

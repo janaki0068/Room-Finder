@@ -16,8 +16,6 @@ class Province(models.Model):
         return self.name
 
 # DISTRICTS
-
-
 class District(models.Model):
     province = models.ForeignKey(
         Province, on_delete=models.CASCADE, related_name="districts")
@@ -87,7 +85,7 @@ class Room(models.Model):
     room_type = models.CharField(
         max_length=20, choices=ROOM_TYPES, default="flat")
     status = models.CharField(
-        max_length=10, choices=STATUS_CHOICES, default='draft')
+        max_length=10, choices=STATUS_CHOICES, default='pending')
     is_verified = models.BooleanField(default=False)
     rejection_reason = models.TextField(blank=True, null=True)
 

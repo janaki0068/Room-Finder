@@ -1,5 +1,5 @@
 {% extends "base.html" %} {% load static %} {% block css %}
-<link rel="stylesheet" href="{% static 'css/register.css' %}" />
+<link rel="stylesheet" href="{% static 'css/register.css' %}">
 {% endblock css %} {% block content %}
 
 <a href="{% url 'home' %}" class="back-btn"><i class="fa-solid fa-arrow-left"></i></a>
@@ -17,6 +17,15 @@
   </div>
   <div class="right-side">
     <h2>Sign Up Here</h2>
+
+      {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+          {{ message }}
+        </div>
+      {% endfor %}
+      {% endif %}
+
     <form method="POST">
       {% csrf_token %}
       <div class="register-form-grid">

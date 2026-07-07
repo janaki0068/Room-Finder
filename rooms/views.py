@@ -20,15 +20,15 @@ from django.contrib.auth.forms import PasswordChangeForm
 # Create your views here.
 
 # HOME
-
-
 def home(request):
-    rooms = Room.objects.filter(status='approved')
+    rooms = Room.objects.filter(status='active')
 
     # GET FILTER VALUES
     query = request.GET.get('q')
     province_id = request.GET.get('province')
     district_id = request.GET.get('district')
+    sort = request.GET.get('sort')
+    room_type = request.GET.get('room_type')
 
     # SEARCH FILTER
     if query:
@@ -46,6 +46,17 @@ def home(request):
     if district_id:
         rooms = rooms.filter(district__id=district_id)
 
+    if room_type:
+        rooms = rooms.filter(room_type=room_type)
+
+    # SORT FILTER
+    if sort == 'low-high':
+        rooms = rooms.order_by('price')
+    elif sort == 'high-low':
+        rooms = rooms.order_by('-price')
+    else:
+        rooms = rooms.order_by('-created_at')  # default = latest
+
     provinces = Province.objects.all()
     districts = District.objects.all()
 
@@ -56,6 +67,8 @@ def home(request):
         "selected_province": province_id,
         "selected_district": district_id,
         "query": query,
+        "selected_sort": sort,
+        "selected_type": room_type,
     })
 
 

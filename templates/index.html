@@ -1,4 +1,3 @@
-
 {% load static %}
 
 <!DOCTYPE html>
@@ -31,14 +30,16 @@
         Login
     </a>
 
-    <a href="{% url 'register' %}">Register</a>
+    <a href="{% url 'register' %}" class="btn-login">
+        Register
+    </a>
 </div>
 
     </div>
 </header>
 
-<!-- HERO -->
 
+<!-- HERO -->
 <section class="hero-text">
 
     <strong>
@@ -50,6 +51,7 @@
     </small>
 
 </section>
+
 
 <!-- SEARCH + FILTERS -->
 <section class="search-section">
@@ -71,37 +73,39 @@
 
         </div>
 
-    <select id="province-select" name="province" class="filter-select">
-    <option value="">Province</option>
+        <select id="province-select" name="province" class="filter-select">
+        <option value="">Province</option>
 
-    {% for province in provinces %}
-    <option value="{{ province.id }}">
-        {{ province.name }}
-    </option>
-    {% endfor %}
-    </select>
+        {% for province in provinces %}
+        <option value="{{ province.id }}" {% if selected_province == province.id|stringformat:"s" %}selected{% endif %}>
+            {{ province.name }}
+        </option>
+        {% endfor %}
+        </select>
 
 
-    <select id="district-select" name="district" class="filter-select">
-    <option value="">District</option>
-    </select>
+        <select id="district-select" name="district" class="filter-select">
+        <option value="">District</option>
+        {% for district in districts %}
+        <option value="{{ district.id }}" {% if selected_district == district.id|stringformat:"s" %}selected{% endif %}>
+            {{ district.name }}
+        </option>
+        {% endfor %}
+        </select>
 
 
         <select name="sort" class="filter-select">
-
-            <option value="latest">
-                Latest
-            </option>
-
-            <option value="low-high">
-                Price Low → High
-            </option>
-
-            <option value="high-low">
-                Price High → Low
-            </option>
-
+        <option value="latest" {% if selected_sort == "latest" or not selected_sort %}selected{% endif %}>
+            Latest
+        </option>
+        <option value="low-high" {% if selected_sort == "low-high" %}selected{% endif %}>
+            Price Low → High
+        </option>
+        <option value="high-low" {% if selected_sort == "high-low" %}selected{% endif %}>
+            Price High → Low
+        </option>
         </select>
+        
 
         <button type="submit" class="search-btn">
             Search
@@ -112,128 +116,102 @@
 </section>
 
 
-
 <!-- BROWSE BY TYPE -->
-
 <section class="browse-type">
 
     <div class="browse-header">
-
-        <strong>
-            Browse by Type -
-        </strong>
-
-        <a href="javascript:void(0)"
-   id="seeAllBtn">
-    See all
-</a>
-
+        <strong>Browse by Type -</strong>
+        <a href="javascript:void(0)" id="seeAllBtn">See all</a>
     </div>
 
     <div class="type-grid">
 
-        <div class="type-card">
-            <div class="type-icon">
-                <iconify-icon icon="mingcute:building-2-line"></iconify-icon>
-            </div>
+        <div class="type-card" data-type="flat">
+            <div class="type-icon"><iconify-icon icon="mingcute:building-2-line"></iconify-icon></div>
             <span>Flat</span>
         </div>
 
-        <div class="type-card">
-            <div class="type-icon">
-                <iconify-icon icon="mingcute:door-line"></iconify-icon>
-            </div>
+        <div class="type-card" data-type="single">
+            <div class="type-icon"><iconify-icon icon="mingcute:door-line"></iconify-icon></div>
             <span>Single Room</span>
         </div>
 
-        <div class="type-card">
-            <div class="type-icon">
-                <iconify-icon icon="mingcute:building-3-line"></iconify-icon>
-            </div>
+        <div class="type-card" data-type="apartment">
+            <div class="type-icon"><iconify-icon icon="mingcute:building-3-line"></iconify-icon></div>
             <span>Apartment</span>
         </div>
 
-        <div class="type-card">
-            <div class="type-icon">
-                <iconify-icon icon="mingcute:home-2-line"></iconify-icon>
-            </div>
+        <div class="type-card" data-type="house">
+            <div class="type-icon"><iconify-icon icon="mingcute:home-2-line"></iconify-icon></div>
             <span>House</span>
         </div>
 
     </div>
 
-<div class="type-grid hidden-types" id="allTypes">
+    <div class="type-grid hidden-types" id="allTypes">
 
-    <div class="type-card">
-        <div class="type-icon">
-            <iconify-icon icon="mdi:bed"></iconify-icon>
+        <div class="type-card" data-type="2 rooms">
+            <div class="type-icon"><iconify-icon icon="mdi:door-sliding"></iconify-icon></div>
+            <span>2 Rooms</span>
         </div>
-        <span>Hostel</span>
-    </div>
 
-    <div class="type-card">
-        <div class="type-icon">
-            <iconify-icon icon="mdi:office-building"></iconify-icon>
+        <div class="type-card" data-type="hostel">
+            <div class="type-icon"><iconify-icon icon="mdi:bed"></iconify-icon></div>
+            <span>Hostel</span>
         </div>
-        <span>Office Space</span>
-    </div>
 
-    <div class="type-card">
-        <div class="type-icon">
-            <iconify-icon icon="mdi:store"></iconify-icon>
+        <div class="type-card" data-type="office space">
+            <div class="type-icon"><iconify-icon icon="mdi:office-building"></iconify-icon></div>
+            <span>Office Space</span>
         </div>
-        <span>Shop</span>
-    </div>
 
-    <div class="type-card">
-        <div class="type-icon">
-            <iconify-icon icon="mdi:warehouse"></iconify-icon>
+        <div class="type-card" data-type="shutter">
+            <div class="type-icon"><iconify-icon icon="mdi:store"></iconify-icon></div>
+            <span>Shutter</span>
         </div>
-        <span>Commercial</span>
-    </div>
 
-</div>
+    </div>
 
 </section>
 
-<!-- LISTINGS -->
 
-<section class="listings-grid">
+<!-- LISTINGS -->
+<section class="listings-grid" id="results">
 
     {% for room in rooms %}
 
     <div class="listing-card">
 
         <div class="card-top">
-
+            
             {% if room.status == "verified" %}
             <span class="verified-badge">
                 Verified
             </span>
-            {% endif %}
 
+            {% endif %}
             <span class="heart">
                 &#10084;
             </span>
 
         </div>
 
-<div class="card-icon">
+        <div class="card-icon">
 
-    {% if room.room_type == "flat" %}
-        <iconify-icon icon="mingcute:building-2-line"></iconify-icon>
+        {% if room.room_type == "flat" %}
+            <iconify-icon icon="mingcute:building-2-line"></iconify-icon>
 
-    {% elif room.room_type == "single" %}
-        <iconify-icon icon="mingcute:door-line"></iconify-icon>
+        {% elif room.room_type == "single" %}
+            <iconify-icon icon="mingcute:door-line"></iconify-icon>
 
-    {% elif room.room_type == "apartment" %}
-        <iconify-icon icon="mingcute:building-3-line"></iconify-icon>
+        {% elif room.room_type == "apartment" %}
+            <iconify-icon icon="mingcute:building-3-line"></iconify-icon>
 
-    {% else %}
-        <iconify-icon icon="mingcute:home-2-line"></iconify-icon>
-    {% endif %}
+        {% else %}
+            <iconify-icon icon="mingcute:home-2-line"></iconify-icon>
+        {% endif %}
 
-</div>
+        </div>
 
         <h3>
             {{ room.title }}
@@ -282,8 +260,8 @@
 
     </div>
 
-    <!-- INLINE ADVERTISEMENT -->
 
+    <!-- INLINE ADVERTISEMENT -->
     {% if forloop.counter|divisibleby:6 %}
 
     <div class="listing-ad">
@@ -310,16 +288,20 @@
 
     {% empty %}
 
-      <div style="padding: 20px">
-        <h3>No rooms available.</h3>
-    </div>
+        <div class="no-rooms">
+            <div class="no-rooms-icon">
+                <iconify-icon icon="mdi:home-search-outline"></iconify-icon>
+            </div>
+            <h3>No rooms available</h3>
+            <p>Try adjusting your filters or check back later for new listings.</p>
+        </div>
 
     {% endfor %}
 
 </section>
 
-<!-- LARGE BANNER AD -->
 
+<!-- LARGE BANNER AD -->
 <section class="ad-banner">
 
     <div class="ad-text">
@@ -344,8 +326,8 @@
 
 </section>
 
-<!-- BOTTOM NAV -->
 
+<!-- BOTTOM NAV -->
 <nav class="bottom-nav">
 
     <a href="/" class="bottom-nav-item active">
@@ -375,6 +357,10 @@
 
 </nav>
 
+
+<!-- ===================================================
+     BOTTOM NAV TAB SWITCHING (Home/Search/Saved/List/Profile)
+=================================================== -->
 <script>
 function setActive(el) {
     document.querySelectorAll('.tab').forEach(tab => {
@@ -385,6 +371,9 @@ function setActive(el) {
 }
 </script>
 
+<!-- ===================================================
+     PROVINCE → DISTRICT AJAX LOADER
+=================================================== -->
 <script>
 document.getElementById('province-select').addEventListener('change', function() {
 
@@ -414,18 +403,58 @@ document.getElementById('province-select').addEventListener('change', function()
 });
 </script>
 
+<!-- ===================================================
+     AUTO-SCROLL TO RESULTS
+=================================================== -->
 <script>
-const btn = document.getElementById('seeAllBtn');
-const types = document.getElementById('allTypes');
+document.addEventListener('DOMContentLoaded', function () {
+    const params = new URLSearchParams(window.location.search);
+    if (
+        params.has('q') ||
+        params.has('province') ||
+        params.has('district') ||
+        params.has('sort') ||
+        params.has('room_type')
+    ) {
+        const resultsSection = document.getElementById('results');
+        if (resultsSection) {
+            resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
+});
+</script>
 
-btn.addEventListener('click', function(){
+<!-- ===================================================
+     BROWSE BY TYPE — click handling + "See all/Show less" toggle
+=================================================== -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
 
-    types.classList.toggle('show');
+    const hiddenTypes = ['2 rooms', 'hostel', 'office space', 'shutter'];
 
-    if(types.classList.contains('show')){
-        btn.textContent = 'Show less';
-    }else{
-        btn.textContent = 'See all';
+    document.querySelectorAll('.type-card').forEach(function (card) {
+        card.addEventListener('click', function () {
+            const type = this.dataset.type;
+            window.location.href = `{% url 'home' %}?room_type=${encodeURIComponent(type)}`;
+        });
+    });
+
+    const seeAllBtn = document.getElementById('seeAllBtn');
+    const allTypes = document.getElementById('allTypes');
+
+    if (seeAllBtn && allTypes) {
+        seeAllBtn.addEventListener('click', function () {
+            allTypes.classList.toggle('hidden-types');
+            seeAllBtn.textContent = allTypes.classList.contains('hidden-types') ? 'See all' : 'Show less';
+        });
+
+        const params = new URLSearchParams(window.location.search);
+        const selectedType = params.get('room_type');
+
+        if (selectedType && hiddenTypes.includes(selectedType)) {
+            allTypes.classList.remove('hidden-types');
+            seeAllBtn.textContent = 'Show less';
+        }
     }
 
 });

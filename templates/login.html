@@ -22,6 +22,15 @@
     </div>
     <div class="right-side">
         <h2>Welcome To Room Finder</h2>
+
+        {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+            </div>
+        {% endfor %}
+        {% endif %}
+
         <form method="POST">
             {% csrf_token %}
             <div class="login-form-group">
