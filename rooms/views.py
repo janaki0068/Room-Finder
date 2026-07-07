@@ -502,7 +502,7 @@ def settings_view(request):
                 "Settings updated successfully."
             )
 
-            return redirect("settings")
+            return redirect("tenant_settings")
 
     else:
 
@@ -512,7 +512,7 @@ def settings_view(request):
 
     return render(
         request,
-        "settings.html",
+        "tenant_settings.html",
         {
             "form": form,
             "preferences": preferences,
@@ -595,7 +595,7 @@ def notifications(request):
 
 
 @login_required
-def settings_view(request):
+def tenant_settings(request):
     password_form = PasswordChangeForm(user=request.user)
 
     if request.method == 'POST':
@@ -607,7 +607,7 @@ def settings_view(request):
                 user = password_form.save()
                 update_session_auth_hash(request, user)  
                 messages.success(request, 'Your password was successfully updated!')
-                return redirect('settings_view')
+                return redirect('tenant_settings')
             else:
                 messages.error(request, 'Please try again. The password was not updated.')
 
