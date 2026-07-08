@@ -24,6 +24,13 @@
     font-family: 'Frank Ruhl Libre', serif;
 }
 
+.logo-link {
+    text-decoration: none;
+    color: inherit;
+    display: block; 
+}
+
+
 header {
     display: flex;
     align-items: center;
