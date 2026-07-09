@@ -19,7 +19,7 @@
             <a href="{% url 'tenant_edit_profile' %}">Edit Profile</a>
             <a href="{% url 'tenant_messages' %}">Messages</a>
             <a href="{% url 'notifications' %}">Notifications</a>
-            <a href="{% url 'settings_view' %}">Settings</a>
+            <a href="{% url 'tenant_settings' %}">Settings</a>
             <a href="{% url 'logout' %}" class="nav-logout-btn">Logout</a>
         </nav>
     </aside>
@@ -53,7 +53,7 @@
             </div>
            </div>
            {% empty %}
-           <p>You haven't saved any rooms yet. <a href="{% url 'search_rooms' %}">Browse listings</a> to find your next place.</p>
+           <p>You haven't saved any rooms yet. <a href="{% url 'tsearch_rooms' %}">Browse listings</a> to find your next place.</p>
            {% endfor %}
         </div>
     </section>

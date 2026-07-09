@@ -1,6 +1,11 @@
-{% extends "base.html" %} {% load static %} {% block css %}
+{% extends "base.html" %} 
+{% load static %} 
+
+{% block css %}
 <link rel="stylesheet" href="{% static 'css/tenant_dashboard.css' %}" />
-{% endblock css %} {% block content %}
+{% endblock css %} 
+
+{% block content %}
 
 <div class="dashboard-main">
   <!-- SIDEBAR -->
@@ -17,7 +22,6 @@
 
       <h3>{{ request.user.get_full_name|default:request.user.username }}</h3>
       <p>{{ request.user.email }}</p>
-
     </div>
 
     <nav class="sidebar-nav">
@@ -85,7 +89,7 @@
         {% empty %}
         <p>
           You haven't saved any rooms yet. To find your next place, go to
-          <a href="{% url 'search_rooms' %}">Browse Listings.</a>
+          <a href="{% url 'tsearch_rooms' %}">Browse Listings.</a>
         </p>
         {% endfor %}
       </div>

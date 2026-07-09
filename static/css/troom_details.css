@@ -1,0 +1,272 @@
+.room-detail-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px;
+}
+
+.back-btn{
+    padding-bottom: 20px;
+}
+
+/* GALLERY */
+.gallery {
+    margin-bottom: 32px;
+}
+
+.main-image {
+    width: 100%;
+    height: 420px;
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 12px;
+}
+
+.main-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.thumbnail-row {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+}
+
+.thumbnail {
+    width: 100px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 8px;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+    flex-shrink: 0;
+}
+
+.thumbnail.active,
+.thumbnail:hover {
+    opacity: 1;
+    outline: 2px solid var(--color-5);
+}
+
+/* BODY LAYOUT */
+.detail-body {
+    display: flex;
+    gap: 32px;
+    align-items: flex-start;
+}
+
+.detail-main {
+    flex: 1;
+}
+
+.detail-sidebar {
+    width: 300px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 20px;
+}
+
+/* HEADER */
+.detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+}
+
+.detail-header h1 {
+    font-size: 26px;
+    color: #333;
+    margin-bottom: 6px;
+}
+
+.detail-location {
+    color: var(--color-13);
+    font-size: 14px;
+}
+
+.detail-price {
+    text-align: right;
+}
+
+.detail-price span {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--color-5);
+}
+
+.detail-price small {
+    display: block;
+    color: var(--color-13);
+    font-size: 13px;
+}
+
+/* VERIFIED BANNER */
+.verified-banner {
+    background: #e7f9ed;
+    color: #16a34a;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* SECTIONS */
+.detail-section {
+    margin-bottom: 28px;
+}
+
+.detail-section h3 {
+    font-size: 18px;
+    color: var(--color-5);
+    margin-bottom: 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--color-1);
+}
+
+.detail-section p {
+    color: #555;
+    line-height: 1.7;
+    font-size: 14px;
+}
+
+/* DETAIL GRID */
+.detail-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.detail-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    background: var(--color-logo);
+    padding: 12px 16px;
+    border-radius: 8px;
+}
+
+.detail-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--color-13);
+    text-transform: uppercase;
+}
+
+.detail-value {
+    font-size: 14px;
+    color: #333;
+    font-weight: 600;
+}
+
+/* FACILITIES */
+.facilities-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.facility-chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: var(--color-1);
+    color: var(--color-5);
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* ACTION CARD */
+.action-card {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.owner-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--color-1);
+}
+
+.owner-name {
+    font-weight: 700;
+    color: #333;
+    font-size: 15px;
+}
+
+.owner-label {
+    font-size: 12px;
+    color: var(--color-13);
+}
+
+.save-btn, .unsave-btn, .contact-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    border: none;
+    text-decoration: none;
+    width: 100%;
+}
+
+.save-btn {
+    background: var(--color-5);
+    color: white;
+}
+
+.save-btn:hover {
+    background: var(--color-4);
+}
+
+.unsave-btn {
+    background: var(--color-1);
+    color: var(--color-5);
+    border: 1px solid var(--color-5);
+}
+
+.contact-btn {
+    background: var(--color-10);
+    color: white;
+}
+
+.room-stats {
+    display: flex;
+    justify-content: space-around;
+    font-size: 13px;
+    color: var(--color-13);
+    padding-top: 8px;
+    border-top: 1px solid var(--color-1);
+}
+
+@media (max-width: 900px) {
+    .detail-body {
+        flex-direction: column;
+    }
+    .detail-sidebar {
+        width: 100%;
+        position: static;
+    }
+    .detail-grid {
+        grid-template-columns: 1fr;
+    }
+}

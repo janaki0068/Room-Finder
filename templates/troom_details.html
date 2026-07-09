@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/tenant_dashboard.css' %}">
+<link rel="stylesheet" href="{% static 'css/troom_details.css' %}">
+{% endblock css %}
+
+{% block content %}
+
+<div class="room-detail-container">
+
+  <a href="{% url 'tsearch_rooms' %}" class="back-btn">
+    <i class="fa-solid fa-arrow-left"></i> Back to Search
+  </a>
+
+  <div class="gallery">
+    {% if images %}
+      <div class="main-image">
+        <img src="{{ images.0.image.url }}" alt="{{ room.title }}" id="mainImg">
+      </div>
+      {% if images|length > 1 %}
+      <div class="thumbnail-row">
+        {% for img in images %}
+        <img src="{{ img.image.url }}" alt="{{ room.title }}"
+          class="thumbnail {% if forloop.first %}active{% endif %}"
+          onclick="document.getElementById('mainImg').src='{{ img.image.url }}'; 
+                   document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
+                   this.classList.add('active');">
+        {% endfor %}
+      </div>
+      {% endif %}
+    {% else %}
+      <div class="main-image">
+        <img src="{% static 'images/default-room.png' %}" alt="{{ room.title }}">
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="detail-body">
+
+    <div class="detail-main">
+
+      <div class="detail-header">
+        <div>
+          <h1>{{ room.title }}</h1>
+          <p class="detail-location">
+            <i class="fa-solid fa-location-dot"></i>
+            {{ room.city }}, {{ room.district.name }}, {{ room.province.name }}
+          </p>
+        </div>
+        <div class="detail-price">
+          <span>NPR {{ room.price }}</span>
+          <small>/month</small>
+        </div>
+      </div>
+
+      {% if room.is_verified %}
+      <div class="verified-banner">
+        <i class="fa-solid fa-shield-check"></i>
+        Verified Listing — Documents checked by Room Finder
+      </div>
+      {% endif %}
+
+      <div class="detail-section">
+        <h3>Description</h3>
+        <p>{{ room.description }}</p>
+      </div>
+
+      <div class="detail-section">
+        <h3>Property Details</h3>
+        <div class="detail-grid">
+          <div class="detail-item">
+            <span class="detail-label">Type</span>
+            <span class="detail-value">{{ room.get_room_type_display }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Security Deposit</span>
+            <span class="detail-value">NPR {{ room.security_deposit }}</span>
+          </div>
+          {% if room.ward_number %}
+          <div class="detail-item">
+            <span class="detail-label">Ward Number</span>
+            <span class="detail-value">{{ room.ward_number }}</span>
+          </div>
+          {% endif %}
+          <div class="detail-item">
+            <span class="detail-label">Address</span>
+            <span class="detail-value">{{ room.address }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="detail-section">
+        <h3>Facilities</h3>
+        <div class="facilities-grid">
+          {% if room.wifi %}<div class="facility-chip"><i class="fa-solid fa-wifi"></i> WiFi</div>{% endif %}
+          {% if room.furnished %}<div class="facility-chip"><i class="fa-solid fa-couch"></i> Furnished</div>{% endif %}
+          {% if room.parking %}<div class="facility-chip"><i class="fa-solid fa-car"></i> Parking</div>{% endif %}
+          {% if room.attached_bathroom %}<div class="facility-chip"><i class="fa-solid fa-shower"></i> Attached Bathroom</div>{% endif %}
+          {% if room.has_drinking_water %}<div class="facility-chip"><i class="fa-solid fa-droplet"></i> Drinking Water</div>{% endif %}
+          {% if room.has_water_24_7 %}<div class="facility-chip"><i class="fa-solid fa-faucet"></i> 24/7 Water</div>{% endif %}
+          {% if room.has_balcony %}<div class="facility-chip"><i class="fa-solid fa-building"></i> Balcony</div>{% endif %}
+          {% if room.has_cctv %}<div class="facility-chip"><i class="fa-solid fa-camera"></i> CCTV</div>{% endif %}
+          {% if room.has_security_guard %}<div class="facility-chip"><i class="fa-solid fa-shield"></i> Security Guard</div>{% endif %}
+          {% if room.pet_allowed %}<div class="facility-chip"><i class="fa-solid fa-paw"></i> Pet Allowed</div>{% endif %}
+          {% if room.has_laundry %}<div class="facility-chip"><i class="fa-solid fa-shirt"></i> Laundry</div>{% endif %}
+          {% if room.has_bike_parking %}<div class="facility-chip"><i class="fa-solid fa-bicycle"></i> Bike Parking</div>{% endif %}
+        </div>
+      </div>
+
+      {% if room.bill_water or room.bill_electricity or room.bill_internet %}
+      <div class="detail-section">
+        <h3>Bills Included</h3>
+        <div class="facilities-grid">
+          {% if room.bill_water %}<div class="facility-chip"><i class="fa-solid fa-droplet"></i> Water</div>{% endif %}
+          {% if room.bill_electricity %}<div class="facility-chip"><i class="fa-solid fa-bolt"></i> Electricity</div>{% endif %}
+          {% if room.bill_internet %}<div class="facility-chip"><i class="fa-solid fa-wifi"></i> Internet</div>{% endif %}
+        </div>
+      </div>
+      {% endif %}
+
+    </div>
+
+    <div class="detail-sidebar">
+
+      <div class="action-card">
+        <div class="owner-info">
+          <i class="fa-solid fa-user-circle fa-2x" style="color:var(--color-5)"></i>
+          <div>
+            <p class="owner-name">{{ room.owner.get_full_name|default:room.owner.username }}</p>
+            <p class="owner-label">Property Owner</p>
+          </div>
+        </div>
+
+        {% if user.is_authenticated %}
+          <form method="POST">
+            {% csrf_token %}
+            <button type="submit" class="{% if is_saved %}unsave-btn{% else %}save-btn{% endif %}">
+              <i class="fa-{% if is_saved %}solid{% else %}regular{% endif %} fa-heart"></i>
+              {% if is_saved %}Remove from Saved{% else %}Save Room{% endif %}
+            </button>
+          </form>
+
+          <a href="{% url 'tenant_messages' %}" class="contact-btn">
+            <i class="fa-solid fa-message"></i> Contact Landlord
+          </a>
+        {% else %}
+          <a href="{% url 'login' %}" class="save-btn">Login to Save or Contact</a>
+        {% endif %}
+
+        <div class="room-stats">
+          <span><i class="fa-solid fa-eye"></i> {{ room.views }} views</span>
+          <span><i class="fa-solid fa-heart"></i> {{ room.saved_count }} saved</span>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+{% endblock content %}

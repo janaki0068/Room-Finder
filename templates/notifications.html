@@ -5,7 +5,11 @@
 <link rel="stylesheet" href="{% static 'css/tenant_dashboard.css' %}">
 {% endblock css %}
 
+
 {% block content %}
+<a href="{% url 'tenant_dashboard' %}" class="back-btn"
+  ><i class="fa-solid fa-arrow-left"></i
+></a>
 
 <div class="dashboard-main">
   <aside class="sidebar">
@@ -13,7 +17,7 @@
       <a href="{% url 'tenant_edit_profile' %}">Edit Profile</a>
       <a href="{% url 'tenant_messages' %}">Messages</a>
       <a href="{% url 'notifications' %}" class="active">Notifications</a>
-      <a href="{% url 'settings_view' %}">Settings</a>
+      <a href="{% url 'tenant_settings' %}">Settings</a>
       <a href="{% url 'logout' %}">Logout</a>
     </nav>
   </aside>
