@@ -20,6 +20,8 @@ from django.contrib.auth.forms import PasswordChangeForm
 # Create your views here.
 
 # HOME
+
+
 def home(request):
     rooms = Room.objects.filter(status='active')
 
@@ -74,6 +76,14 @@ def home(request):
 
 # LOGIN
 def login_view(request):
+    if request.user.is_authenticated:
+        if request.user.is_staff:
+            return redirect('admin_dashboard')
+        elif request.user.profile.role == 'landlord':
+            return redirect('landlord_dashboard')
+        else:
+            return redirect('tenant_dashboard')
+
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
@@ -106,6 +116,14 @@ def login_view(request):
 
 # REGISTER
 def register_view(request):
+    if request.user.is_authenticated:
+        if request.user.is_staff:
+            return redirect('admin_dashboard')
+        elif request.user.profile.role == 'landlord':
+            return redirect('landlord_dashboard')
+        else:
+            return redirect('tenant_dashboard')
+
     if request.method == 'POST':
         form = RegisterForm(request.POST)
 
@@ -159,7 +177,7 @@ def search_rooms(request):
             Q(title__icontains=query)
         )
 
-    return render(request, 'search_rooms.html', {
+    return render(request, 'tsearch_rooms.html', {
         'rooms': rooms,
         'query': query,
     })
@@ -549,13 +567,70 @@ def saved_view(request):
 @login_required
 def unsave_room(request, room_id):
     SavedRoom.objects.filter(user=request.user, room_id=room_id).delete()
-    return redirect('saved')
+    return redirect('saved_view')
 
 
 @login_required(login_url='login')
 def tsearch_rooms(request):
     rooms = Room.objects.filter(status='approved')
-    return render(request, 'tsearch_rooms.html', {'rooms': rooms})
+
+    query = request.GET.get('q', '')
+    if query:
+        rooms = rooms.filter(
+            Q(title__icontains=query) |
+            Q(city__icontains=query) |
+            Q(description__icontains=query) |
+            Q(district__name__icontains=query) |
+            Q(province__name__icontains=query)
+        )
+
+    room_type = request.GET.get('room_type', '')
+    province_id = request.GET.get('province', '')
+    district_id = request.GET.get('district', '')
+    min_price = request.GET.get('min_price', '')
+    max_price = request.GET.get('max_price', '')
+    wifi = request.GET.get('wifi', '')
+    furnished = request.GET.get('furnished', '')
+    parking = request.GET.get('parking', '')
+    attached_bathroom = request.GET.get('attached_bathroom', '')
+
+    if room_type:
+        rooms = rooms.filter(room_type=room_type)
+    if province_id:
+        rooms = rooms.filter(province_id=province_id)
+    if district_id:
+        rooms = rooms.filter(district_id=district_id)
+    if min_price:
+        rooms = rooms.filter(price__gte=min_price)
+    if max_price:
+        rooms = rooms.filter(price__lte=max_price)
+    if wifi:
+        rooms = rooms.filter(wifi=True)
+    if furnished:
+        rooms = rooms.filter(furnished=True)
+    if parking:
+        rooms = rooms.filter(parking=True)
+    if attached_bathroom:
+        rooms = rooms.filter(attached_bathroom=True)
+
+    provinces = Province.objects.all()
+    districts = District.objects.filter(province_id=province_id) if province_id else District.objects.all()
+
+    return render(request, 'tsearch_rooms.html', {
+        'rooms': rooms,
+        'query': query,
+        'provinces': provinces,
+        'districts': districts,
+        'room_type': room_type,
+        'province_id': province_id,
+        'district_id': district_id,
+        'min_price': min_price,
+        'max_price': max_price,
+        'wifi': wifi,
+        'furnished': furnished,
+        'parking': parking,
+        'attached_bathroom': attached_bathroom
+    })
 
 
 @login_required(login_url='login')
@@ -605,11 +680,13 @@ def tenant_settings(request):
             password_form = PasswordChangeForm(request.user, request.POST)
             if password_form.is_valid():
                 user = password_form.save()
-                update_session_auth_hash(request, user)  
-                messages.success(request, 'Your password was successfully updated!')
+                update_session_auth_hash(request, user)
+                messages.success(
+                    request, 'Your password was successfully updated!')
                 return redirect('tenant_settings')
             else:
-                messages.error(request, 'Please try again. The password was not updated.')
+                messages.error(
+                    request, 'Please try again. The password was not updated.')
 
         elif action == 'delete_account':
             request.user.delete()
@@ -617,21 +694,21 @@ def tenant_settings(request):
             return redirect('home')
     return render(request, 'tenant_settings.html', {'password_form': password_form})
 
+
 @login_required
 def tenant_messages(request):
     received = Message.objects.filter(
         receiver=request.user
     ).order_by('-sent_at')
-    
+
     sent = Message.objects.filter(
         sender=request.user
     ).order_by('-sent_at')
-    
+
     return render(request, 'tenant_messages.html', {
         'received': received,
         'sent': sent,
     })
-
 
 
 @login_required
@@ -643,4 +720,30 @@ def notifications(request):
 
     return render(request, 'notifications.html', {
         'unread_count': unread_count,
+    })
+
+
+def room_detail(request, room_id):
+    room = get_object_or_404(Room, id=room_id, status='approved')
+    images = room.images.all()  
+
+    is_saved = False
+    if request.user.is_authenticated:
+        is_saved = SavedRoom.objects.filter(
+            user=request.user, room=room).exists()
+        
+    if request.method == 'POST' and request.user.is_authenticated:
+        if is_saved:
+            SavedRoom.objects.filter(user=request.user, room=room).delete()
+            is_saved = False
+        else:
+            SavedRoom.objects.create(user=request.user, room=room)
+            is_saved = True
+
+    room.increment_views()  
+
+    return render(request, 'troom_details.html', {
+        'room': room,
+        'images': images,
+        'is_saved': is_saved
     })

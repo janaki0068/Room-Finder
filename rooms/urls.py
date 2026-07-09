@@ -40,4 +40,5 @@ urlpatterns = [
     path('notifications/', views.notifications, name='notifications'),
     path('tsettings/', views.tenant_settings, name='tenant_settings'),
     path('tmessages/', views.tenant_messages, name='tenant_messages'),
+    path('room/<int:room_id>/', views.room_detail, name='room_detail'),
 ]

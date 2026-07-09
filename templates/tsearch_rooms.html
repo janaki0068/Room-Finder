@@ -1,10 +1,18 @@
-{% extends "base.html" %} {% load static %} {% block css %}
+{% extends "base.html" %} 
+
+{% load static %} 
+
+{% block css %}
 <link rel="stylesheet" href="{% static 'css/tenant_dashboard.css' %}" />
 <link
   rel="stylesheet"
   href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
 />
-{% endblock css %} {% block content %}
+<link rel="stylesheet" href="{% static 'css/search.css' %}">
+
+{% endblock css %} 
+
+{% block content %}
 
 <a href="{% url 'tenant_dashboard' %}" class="back-btn"
   ><i class="fa-solid fa-arrow-left"></i
@@ -18,60 +26,173 @@
       <a href="{% url 'tenant_edit_profile' %}">Edit Profile</a>
       <a href="{% url 'tenant_messages' %}">Messages</a>
       <a href="{% url 'notifications' %}">Notifications</a>
-      <a href="{% url 'settings_view' %}">Settings</a>
+      <a href="{% url 'tenant_settings' %}">Settings</a>
       <a href="{% url 'logout' %}" class="nav-logout-btn">Logout</a>
     </nav>
   </aside>
 
-  <section class="dashboard-content" style="width: 100%">
-    <form method="GET" class="search-form" style="margin-bottom: 24px">
-      <input
-        type="text"
-        name="q"
-        value="{{ query }}"
-        placeholder="Search by title, city, district..."
-        style="
-          padding: 12px;
-          width: 60%;
-          border-radius: 8px;
-          border: 1px solid #f0e3e7;
-        "
-      />
-      <button
-        type="submit"
-        class="search-submit-btn"
-        style="padding: 12px 24px"
-      >
-        Search
-      </button>
+  <section class="dashboard-content">
+
+    <!-- SEARCH BAR -->
+    <form method="GET" id="search-form">
+      <div class="search-bar-row">
+        <input type="text" name="q" value="{{ query }}"
+          placeholder="Search by title, city, district..."
+          class="search-input">
+        <button type="button" class="filter-toggle-btn" onclick="toggleFilters()">
+          <i class="fa-solid fa-sliders"></i> Filters
+        </button>
+        <button type="submit" class="search-submit-btn">Search</button>
+      </div>
+
+      <!-- FILTER PANEL (hidden by default) -->
+      <div class="filter-panel" id="filterPanel" style="display:none;">
+
+        <div class="filter-grid">
+
+          <div class="filter-group">
+            <label>Property Type</label>
+            <select name="room_type">
+              <option value="">All Types</option>
+              <option value="flat" {% if room_type == 'flat' %}selected{% endif %}>Flat</option>
+              <option value="single" {% if room_type == 'single' %}selected{% endif %}>Single Room</option>
+              <option value="2 rooms" {% if room_type == '2 rooms' %}selected{% endif %}>2 Rooms</option>
+              <option value="apartment" {% if room_type == 'apartment' %}selected{% endif %}>Apartment</option>
+              <option value="house" {% if room_type == 'house' %}selected{% endif %}>House</option>
+              <option value="hostel" {% if room_type == 'hostel' %}selected{% endif %}>Hostel</option>
+              <option value="office space" {% if room_type == 'office space' %}selected{% endif %}>Office Space</option>
+              <option value="shutter" {% if room_type == 'shutter' %}selected{% endif %}>Shutter</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label>Province</label>
+            <select name="province" id="province-select" onchange="loadDistricts(this.value)">
+              <option value="">All Provinces</option>
+              {% for province in provinces %}
+              <option value="{{ province.id }}" {% if province_id == province.id|stringformat:'s' %}selected{% endif %}>
+                {{ province.name }}
+              </option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label>District</label>
+            <select name="district" id="district-select">
+              <option value="">All Districts</option>
+              {% for district in districts %}
+              <option value="{{ district.id }}" {% if district_id == district.id|stringformat:'s' %}selected{% endif %}>
+                {{ district.name }}
+              </option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label>Min Price (NPR)</label>
+            <input type="number" name="min_price" value="{{ min_price }}" placeholder="e.g. 5000">
+          </div>
+
+          <div class="filter-group">
+            <label>Max Price (NPR)</label>
+            <input type="number" name="max_price" value="{{ max_price }}" placeholder="e.g. 20000">
+          </div>
+
+        </div>
+
+        <div class="filter-checkboxes">
+          <label class="checkbox-label">
+            <input type="checkbox" name="wifi" value="1" {% if wifi %}checked{% endif %}> WiFi
+          </label>
+          <label class="checkbox-label">
+            <input type="checkbox" name="furnished" value="1" {% if furnished %}checked{% endif %}> Furnished
+          </label>
+          <label class="checkbox-label">
+            <input type="checkbox" name="parking" value="1" {% if parking %}checked{% endif %}> Parking
+          </label>
+          <label class="checkbox-label">
+            <input type="checkbox" name="attached_bathroom" value="1" {% if attached_bathroom %}checked{% endif %}> Attached Bathroom
+          </label>
+        </div>
+
+        <div style="margin-top:16px; display:flex; gap:12px;">
+          <button type="submit" class="search-submit-btn">Apply Filters</button>
+          <a href="{% url 'tsearch_rooms' %}" class="clear-btn">Clear All</a>
+        </div>
+
+      </div>
     </form>
+
+    <p class="results-count">
+      {% if query or room_type or province_id or min_price or max_price %}
+        {{ rooms|length }} result{{ rooms|length|pluralize }} found
+        {% if query %} for "<strong>{{ query }}</strong>"{% endif %}
+      {% endif %}
+    </p>
 
     <div class="listings-grid">
       {% for room in rooms %}
-      <div class="listing-card">
-        <div class="listing-img-wrap">
-          {% with room.images.first as cover %} 
-            {% if cover %}
-              <img src="{{ cover.image.url }}" alt="{{ room.title }}" />
-            {% else %}
-              <img
-                src="{% static 'images/default-room.png' %}"
-                alt="{{ room.title }}"
-              />
-            {% endif %} 
-          {% endwith %}
+      <a href="{% url 'room_detail' room.id %}" class="listing-card-link">
+        <div class="listing-card">
+          <div class="listing-img-wrap">
+            {% with room.images.first as cover %}
+              {% if cover %}
+                <img src="{{ cover.image.url }}" alt="{{ room.title }}" />
+              {% else %}
+                <img src="{% static 'images/default-room.png' %}" alt="{{ room.title }}" />
+              {% endif %}
+            {% endwith %}
+            <span class="badge {{ room.status }}">{{ room.get_status_display }}</span>
+          </div>
+          <div class="listing-info">
+            <h4>{{ room.title }}</h4>
+            <p class="listing-meta">{{ room.get_room_type_display }} | {{ room.city }}</p>
+            <p class="listing-price">NPR {{ room.price }} / month</p>
+            <div class="listing-facilities">
+              {% if room.wifi %}<span class="facility-tag">WiFi</span>{% endif %}
+              {% if room.furnished %}<span class="facility-tag">Furnished</span>{% endif %}
+              {% if room.parking %}<span class="facility-tag">Parking</span>{% endif %}
+              {% if room.attached_bathroom %}<span class="facility-tag">Attached Bath</span>{% endif %}
+            </div>
+          </div>
         </div>
-        <div class="listing-info">
-          <h4>{{ room.title }}</h4>
-          <p class="listing-meta">{{ room.room_type }} | {{ room.city }}</p>
-          <p class="listing-price">NPR {{ room.price }} / month</p>
-        </div>
-      </div>
+      </a>
       {% empty %}
-      <p>No rooms found{% if query %} for "{{ query }}"{% endif %}.</p>
+      <div class="no-results">
+        <i class="fa-solid fa-house-circle-xmark"></i>
+        <p>No rooms found{% if query %} for "{{ query }}"{% endif %}.</p>
+        <a href="{% url 'tsearch_rooms' %}" class="clear-btn">Clear search</a>
+      </div>
       {% endfor %}
     </div>
+
   </section>
 </div>
+
+<script>
+function toggleFilters() {
+    const panel = document.getElementById('filterPanel');
+    panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+}
+
+function loadDistricts(provinceId) {
+    const districtSelect = document.getElementById('district-select');
+    districtSelect.innerHTML = '<option value="">All Districts</option>';
+    if (!provinceId) return;
+    fetch(`/get-districts/${provinceId}/`)
+        .then(r => r.json())
+        .then(data => {
+            data.districts.forEach(d => {
+                districtSelect.innerHTML += `<option value="${d.id}">${d.name}</option>`;
+            });
+        });
+}
+
+// Show filters if any filter is active on page load
+{% if room_type or province_id or district_id or min_price or max_price or wifi or furnished or parking or attached_bathroom %}
+document.getElementById('filterPanel').style.display = 'block';
+{% endif %}
+</script>
 
 {% endblock content %}
