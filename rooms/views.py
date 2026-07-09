@@ -95,7 +95,8 @@ def home(request):
 
     # WATER FACILITY (checkboxes - 24/7 / drinking, independent, OR logic if both checked)
     if water_247 and drinking_water:
-        rooms = rooms.filter(Q(has_water_24_7=True) | Q(has_drinking_water=True))
+        rooms = rooms.filter(Q(has_water_24_7=True) |
+                             Q(has_drinking_water=True))
     elif water_247:
         rooms = rooms.filter(has_water_24_7=True)
     elif drinking_water:
@@ -304,6 +305,8 @@ def room_detail(request, room_id):
     })
 
 # Edit listings
+
+
 @login_required
 def edit_listing(request, room_id):
 
@@ -332,6 +335,8 @@ def edit_listing(request, room_id):
     })
 
 # Delete listings
+
+
 @login_required
 def delete_listing(request, room_id):
 
@@ -347,6 +352,8 @@ def delete_listing(request, room_id):
     return redirect("my_listings")
 
 # My saved rooms
+
+
 @login_required
 def saved_rooms(request):
     rooms = (
@@ -477,6 +484,8 @@ def messages_view(request):
     })
 
 # Chatbox
+
+
 @login_required
 def chat_room(request, user_id, room_id):
 
@@ -549,6 +558,8 @@ def chat_room(request, user_id, room_id):
     })
 
 # My settings
+
+
 @login_required
 def settings_view(request):
 
@@ -572,7 +583,7 @@ def settings_view(request):
                 "Settings updated successfully."
             )
 
-            return redirect("tenant_settings")
+            return redirect("settings.html")
 
     else:
 
@@ -664,7 +675,8 @@ def tsearch_rooms(request):
         rooms = rooms.filter(attached_bathroom=True)
 
     provinces = Province.objects.all()
-    districts = District.objects.filter(province_id=province_id) if province_id else District.objects.all()
+    districts = District.objects.filter(
+        province_id=province_id) if province_id else District.objects.all()
 
     return render(request, 'tsearch_rooms.html', {
         'rooms': rooms,
@@ -775,13 +787,13 @@ def notifications(request):
 
 def room_detail(request, room_id):
     room = get_object_or_404(Room, id=room_id, status='approved')
-    images = room.images.all()  
+    images = room.images.all()
 
     is_saved = False
     if request.user.is_authenticated:
         is_saved = SavedRoom.objects.filter(
             user=request.user, room=room).exists()
-        
+
     if request.method == 'POST' and request.user.is_authenticated:
         if is_saved:
             SavedRoom.objects.filter(user=request.user, room=room).delete()
@@ -790,7 +802,7 @@ def room_detail(request, room_id):
             SavedRoom.objects.create(user=request.user, room=room)
             is_saved = True
 
-    room.increment_views()  
+    room.increment_views()
 
     return render(request, 'troom_details.html', {
         'room': room,
