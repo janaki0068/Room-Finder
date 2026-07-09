@@ -336,6 +336,35 @@
 
 </section>
 
+<!-- ==========================
+     PROPERTY PHOTOS
+========================== -->
+
+<section class="form-card">
+
+    <h2>Property Photos</h2>
+
+    <p class="upload-note">
+        Upload between 3 and 15 photos of your property (JPG/PNG).
+    </p>
+
+    <div class="gallery-upload-box" id="gallery-drop-area">
+        <i class="ti ti-photo-plus"></i>
+        <p>Click to select photos or drag and drop</p>
+        <input type="file"
+               name="images"
+               id="gallery-input"
+               accept="image/*"
+               multiple
+               required>
+    </div>
+
+    <p id="gallery-count-msg" class="upload-note"></p>
+
+    <div class="gallery-preview-grid" id="gallery-preview"></div>
+
+</section>
+
         <!-- ==========================
              DOCUMENTS
         ========================== -->
@@ -417,11 +446,17 @@
 
 {% endblock %}
 
+
+
+
+
 {% block extra_js %}
 
 <script>
 
 document.addEventListener('DOMContentLoaded', function () {
+
+    // ===== PROVINCE / DISTRICT CODE (existing) =====
 
     const provinceSelect =
         document.getElementById('province');
@@ -466,6 +501,80 @@ document.addEventListener('DOMContentLoaded', function () {
 
             });
 
+    });
+
+    // ===== GALLERY UPLOAD CODE (new) =====
+
+    const MIN_IMAGES = 3;
+    const MAX_IMAGES = 15;
+
+    const galleryInput = document.getElementById('gallery-input');
+    const galleryPreview = document.getElementById('gallery-preview');
+    const galleryCountMsg = document.getElementById('gallery-count-msg');
+    const listingForm = document.querySelector('.listing-form');
+
+    let selectedFiles = [];
+
+    galleryInput.addEventListener('change', function () {
+        selectedFiles = Array.from(this.files);
+        renderPreview();
+    });
+
+    function renderPreview() {
+        galleryPreview.innerHTML = '';
+
+        selectedFiles.forEach((file, index) => {
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'preview-item';
+                wrapper.innerHTML = `
+                    <img src="${e.target.result}" alt="Preview ${index + 1}">
+                    <button type="button" class="remove-img" data-index="${index}">×</button>
+                `;
+                galleryPreview.appendChild(wrapper);
+            };
+
+            reader.readAsDataURL(file);
+        });
+
+        updateCountMessage();
+    }
+
+    galleryPreview.addEventListener('click', function (e) {
+        if (e.target.classList.contains('remove-img')) {
+            const index = parseInt(e.target.dataset.index, 10);
+            selectedFiles.splice(index, 1);
+            syncInputFiles();
+            renderPreview();
+        }
+    });
+
+    function syncInputFiles() {
+        const dataTransfer = new DataTransfer();
+        selectedFiles.forEach(file => dataTransfer.items.add(file));
+        galleryInput.files = dataTransfer.files;
+    }
+
+    function updateCountMessage() {
+        const count = selectedFiles.length;
+        galleryCountMsg.textContent = `${count} photo${count !== 1 ? 's' : ''} selected (min ${MIN_IMAGES}, max ${MAX_IMAGES})`;
+        galleryCountMsg.style.color = (count < MIN_IMAGES || count > MAX_IMAGES) ? '#d9534f' : '#28a745';
+    }
+
+    listingForm.addEventListener('submit', function (e) {
+        if (selectedFiles.length < MIN_IMAGES) {
+            e.preventDefault();
+            alert(`Please upload at least ${MIN_IMAGES} photos.`);
+            return;
+        }
+
+        if (selectedFiles.length > MAX_IMAGES) {
+            e.preventDefault();
+            alert(`You can upload a maximum of ${MAX_IMAGES} photos.`);
+            return;
+        }
     });
 
 });

@@ -17,6 +17,7 @@ from .decorators import role_required
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 
+
 # Create your views here.
 
 # HOME
@@ -71,11 +72,11 @@ def home(request):
     if max_price:
         rooms = rooms.filter(price__lte=max_price)
 
-    # FURNISHED STATUS (radio - single value)
+    # FURNISHED STATUS 
     if furnished_status:
         rooms = rooms.filter(furnished_status=furnished_status)
 
-    # PARKING (checkboxes - car / bike, independent, OR logic if both checked)
+    # PARKING 
     if parking_car and parking_bike:
         rooms = rooms.filter(Q(parking=True) | Q(has_bike_parking=True))
     elif parking_car:
@@ -265,6 +266,27 @@ def landlord_dashboard(request):
         "has_verified_property": has_verified_property,
     })
 
+# My profile
+from .forms import ProfileForm
+
+@login_required
+def landlord_profile(request):
+    profile = request.user.profile
+
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
+
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Profile updated successfully.")
+            return redirect('landlord_profile')
+        else:
+            messages.error(request, "Please fix the errors below.")
+    else:
+        form = ProfileForm(instance=profile)
+
+    return render(request, 'landlord_profile.html', {'form': form})
+
 
 # My listings page
 @login_required
@@ -353,7 +375,7 @@ def edit_profile(request):
 
     if request.method == "POST":
         form = EditProfileForm(
-            request.POST, instance=profile, user=request.user)
+            request.POST, request.FILES, instance=profile, user=request.user)
         if form.is_valid():
             form.save()
             messages.success(request, "Profile updated successfully.")
@@ -564,7 +586,7 @@ def settings_view(request):
 
     return render(
         request,
-        "tenant_settings.html",
+        "settings.html",
         {
             "form": form,
             "preferences": preferences,

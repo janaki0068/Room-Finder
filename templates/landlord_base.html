@@ -28,38 +28,49 @@
 
     <!-- Brand -->
     <div class="sidebar-brand">
-      <div class="brand-icon">
-        <img src="{% static 'images/logo.png' %}"alt="Room Finder Logo"class="brand-logo">
-      </div>
-      <div>
-        <div class="brand-name">Room Finder</div>
-        <div class="brand-sub">Nepal</div>
-      </div>
+
+      <a href="{% url "landlord_dashboard" %}" class="sidebar-brand">
+        <div class="brand-icon">
+          <img src="{% static 'images/logo.png' %}"alt="Room Finder Logo"class="brand-logo">
+        </div>
+        <div>
+          <div class="brand-name">Room Finder</div>
+          <div class="brand-sub">Nepal</div>
+        </div>
+      </a>
+
     </div>
 
     <!-- User card -->
     <div class="sidebar-user">
-      <div class="user-row">
-        <div class="user-avatar">
-          {% if request.user.first_name %}
-            {{ request.user.first_name.0|upper }}{{ request.user.last_name.0|upper }}
-          {% else %}
-            {{ request.user.username.0|upper }}
-          {% endif %}
-        </div>
-        <div>
-          <div class="user-name">
-            {% if request.user.get_full_name %}
-              {{ request.user.get_full_name }}
-            {% else %}
-              {{ request.user.username }}
+          <a href="{% url 'landlord_profile' %}" class="user-row-link">
+            <div class="user-row">
+              <div class="user-avatar">
+                {% if request.user.profile.image %}
+                  <img src="{{ request.user.profile.image.url }}" alt="Profile picture">
+                {% elif request.user.first_name %}
+                  {{ request.user.first_name.0|upper }}{{ request.user.last_name.0|upper }}
+                {% else %}
+                  {{ request.user.username.0|upper }}
+                {% endif %}
+              </div>
+              <div>
+                <div class="user-name">
+                  {% if request.user.get_full_name %}
+                    {{ request.user.get_full_name }}
+                  {% else %}
+                    {{ request.user.username }}
+                  {% endif %}
+                </div>
+                <div class="user-email">{{ request.user.email }}</div>
+              </div>
+            </div>
+            {% if request.user.profile.bio %}
+              <div class="user-bio">{{ request.user.profile.bio|truncatechars:60 }}</div>
             {% endif %}
-          </div>
-          <div class="user-email">{{ request.user.email }}</div>
+          </a>
+          <a href="{% url 'edit_profile' %}" class="edit-profile-btn">Edit profile</a>
         </div>
-      </div>
-      <a href="{% url 'edit_profile' %}" class="edit-profile-btn">Edit profile</a>
-    </div>
 
     <!-- Navigation -->
     <nav class="sidebar-nav">
@@ -107,8 +118,9 @@
     </nav>
 
     <!-- Logout -->
-    <div class="sidebar-footer">
-      <a href="{% url 'logout' %}" class="logout-btn">
+<div class="sidebar-footer">
+      <a href="{% url 'logout' %}" class="logout-btn"
+         onclick="return confirm('Are you sure you want to log out?');">
         <i class="ti ti-logout"></i>
         Log out
       </a>
@@ -132,7 +144,7 @@
         <a href="{% url 'home' %}" class="icon-btn" title="Browse rooms">
           <i class="ti ti-search"></i>
         </a>
-        <a href="{% url 'edit_profile' %}" class="icon-btn" title="Profile">
+        <a href="{% url 'landlord_profile' %}" class="icon-btn" title="Profile">
           <i class="ti ti-user"></i>
         </a>
       </div>

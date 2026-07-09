@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import User
-from .models import Room, UserPreference, Profile
+from .models import *
 
 # Register
 class RegisterForm(forms.Form):
@@ -93,7 +93,7 @@ class EditProfileForm(forms.ModelForm):
 
     class Meta:
         model = Profile
-        fields = ['phone']  # add other Profile fields here if you want them editable too
+        fields = ['phone', 'image']
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user')
@@ -111,3 +111,11 @@ class EditProfileForm(forms.ModelForm):
             self.user.save()
             profile.save()
         return profile
+    
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['image', 'phone', 'bio']
+        widgets = {
+            'bio': forms.Textarea(attrs={'rows': 4}),
+        }
