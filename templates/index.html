@@ -16,24 +16,18 @@
     <div class="navbar">
 
         <div class="logo">
-            <img
-                src="{% static 'images/roomfinder.jpeg' %}"
-                alt="Room Finder Logo"
-                width="40"
-                height="40"
-            >
-            <span class="site-title">Room Finder</span>
+            <a  href="{% url "home" %}" class="logo-link">
+                <img src="{% static 'images/roomfinder.jpeg' %}" alt="Room Finder Logo" width="40" height="40">
+                <span class="site-title">Room Finder</span>
+            </a>
         </div>
 
-<div class="nav-buttons">
-    <a href="{% url 'login' %}" class="btn-login">
-        Login
-    </a>
+        <div class="nav-buttons">
 
-    <a href="{% url 'register' %}" class="btn-login">
-        Register
-    </a>
-</div>
+            <a href="{% url 'login' %}" class="btn-login">Login</a>
+            <a href="{% url 'register' %}" class="btn-login">Register</a>
+
+        </div>
 
     </div>
 </header>
@@ -56,62 +50,145 @@
 <!-- SEARCH + FILTERS -->
 <section class="search-section">
 
-    <form method="GET"
-          action="{% url 'home' %}"
-          class="search-form">
+    <form method="GET" action="{% url 'home' %}" class="search-form">
 
         <div class="search-bar">
-
             <span>&#128269;</span>
-
-            <input
-                type="text"
-                name="q"
-                placeholder="City, district, province or area"
-                value="{{ request.GET.q }}"
-            >
-
+            <input type="text" name="q" placeholder="City, district, province or area" value="{{ query|default:'' }}">
         </div>
 
         <select id="province-select" name="province" class="filter-select">
-        <option value="">Province</option>
-
-        {% for province in provinces %}
-        <option value="{{ province.id }}" {% if selected_province == province.id|stringformat:"s" %}selected{% endif %}>
-            {{ province.name }}
-        </option>
-        {% endfor %}
+            <option value="">Province</option>
+            {% for province in provinces %}
+            <option value="{{ province.id }}" {% if selected_province == province.id|stringformat:"s" %}selected{% endif %}>
+                {{ province.name }}
+            </option>
+            {% endfor %}
         </select>
-
 
         <select id="district-select" name="district" class="filter-select">
-        <option value="">District</option>
-        {% for district in districts %}
-        <option value="{{ district.id }}" {% if selected_district == district.id|stringformat:"s" %}selected{% endif %}>
-            {{ district.name }}
-        </option>
-        {% endfor %}
+            <option value="">District</option>
+            {# populated dynamically by JS based on province #}
         </select>
-
 
         <select name="sort" class="filter-select">
-        <option value="latest" {% if selected_sort == "latest" or not selected_sort %}selected{% endif %}>
-            Latest
-        </option>
-        <option value="low-high" {% if selected_sort == "low-high" %}selected{% endif %}>
-            Price Low → High
-        </option>
-        <option value="high-low" {% if selected_sort == "high-low" %}selected{% endif %}>
-            Price High → Low
-        </option>
+            <option value="latest" {% if selected_sort == "latest" or not selected_sort %}selected{% endif %}>Latest</option>
+            <option value="low-high" {% if selected_sort == "low-high" %}selected{% endif %}>Price Low → High</option>
+            <option value="high-low" {% if selected_sort == "high-low" %}selected{% endif %}>Price High → Low</option>
         </select>
-        
 
-        <button type="submit" class="search-btn">
-            Search
-        </button>
+        <button type="submit" class="search-btn">Search</button>
+
+        <button type="button" class="filter-toggle-btn" id="filter-toggle">More Filters</button>
 
     </form>
+
+    <!-- ADVANCED FILTERS (collapsible) -->
+    <div class="advanced-filters" id="advanced-filters" style="display:none;">
+
+        <form method="GET" action="{% url 'home' %}" class="advanced-filter-form">
+
+            <!-- keep existing q/province/district/sort values if user opens this -->
+            <input type="hidden" name="q" value="{{ query|default:'' }}">
+            <input type="hidden" name="province" value="{{ selected_province|default:'' }}">
+            <input type="hidden" name="district" value="{{ selected_district|default:'' }}">
+            <input type="hidden" name="sort" value="{{ selected_sort|default:'' }}">
+
+            <!-- PROPERTY TYPE -->
+            <div class="filter-group">
+                <p class="filter-heading">Property Type</p>
+                <div class="checkbox-list">
+                    {% for value, label in room_type_choices %}
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="room_type" value="{{ value }}"
+                            {% if value in selected_types %}checked{% endif %}>
+                        {{ label }}
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- PRICE RANGE -->
+            <div class="filter-group">
+                <p class="filter-heading">Price Range (NPR)</p>
+                <div class="price-range">
+                    <input type="number" name="min_price" placeholder="Min" value="{{ min_price|default:'' }}">
+                    <input type="number" name="max_price" placeholder="Max" value="{{ max_price|default:'' }}">
+                </div>
+            </div>
+
+            <!-- FURNISHED STATUS -->
+            <div class="filter-group">
+                <p class="filter-heading">Furnished Status</p>
+                <div class="checkbox-list">
+                    {% for value, label in furnished_choices %}
+                    <label class="checkbox-item">
+                        <input type="radio" name="furnished_status" value="{{ value }}"
+                            {% if selected_furnished == value %}checked{% endif %}>
+                        {{ label }}
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- PARKING -->
+            <div class="filter-group">
+                <p class="filter-heading">Parking</p>
+                <div class="checkbox-list">
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="parking_car" value="1" {% if parking_car %}checked{% endif %}>
+                        Car Parking
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="parking_bike" value="1" {% if parking_bike %}checked{% endif %}>
+                        Bike Parking
+                    </label>
+                </div>
+            </div>
+
+            <!-- WATER FACILITY -->
+            <div class="filter-group">
+                <p class="filter-heading">Water Facility</p>
+                <div class="checkbox-list">
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="water_247" value="1" {% if water_247 %}checked{% endif %}>
+                        24/7 Water
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="drinking_water" value="1" {% if drinking_water %}checked{% endif %}>
+                        Drinking Water
+                    </label>
+                </div>
+            </div>
+
+            <!-- OTHER FACILITIES -->
+            <div class="filter-group">
+                <p class="filter-heading">Other Facilities</p>
+                <div class="checkbox-list">
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="attached_bathroom" value="1" {% if attached_bathroom %}checked{% endif %}>
+                        Attached Bathroom
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="wifi" value="1" {% if wifi %}checked{% endif %}>
+                        WiFi
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="kitchen" value="1" {% if kitchen %}checked{% endif %}>
+                        Kitchen
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="pet_allowed" value="1" {% if pet_allowed %}checked{% endif %}>
+                        Pet Allowed
+                    </label>
+                </div>
+            </div>
+
+            <button type="submit" class="search-btn">Apply Filters</button>
+
+        </form>
+
+    </div>
 
 </section>
 
@@ -245,17 +322,19 @@
             {% endif %}
 
         </div>
-
+        
         <div class="card-footer">
+        <span class="price">NPR {{ room.price }}/mo</span>
 
-            <span class="price">
-                NPR {{ room.price }}/mo
-            </span>
-
-            <a href="#" class="view-details">
+        {% if user.is_authenticated %}
+            <a href="{% url 'room_detail' room.pk %}" class="view-details">
                 VIEW DETAILS
             </a>
-
+        {% else %}
+            <a href="{% url 'login' %}?next={% url 'room_detail' room.pk %}" class="view-details login-required">
+                LOGIN TO VIEW
+            </a>
+        {% endif %}
         </div>
 
     </div>
@@ -375,30 +454,39 @@ function setActive(el) {
      PROVINCE → DISTRICT AJAX LOADER
 =================================================== -->
 <script>
-document.getElementById('province-select').addEventListener('change', function() {
+document.addEventListener('DOMContentLoaded', function () {
 
-    const provinceId = this.value;
+    const provinceSelect = document.getElementById('province-select');
+    const districtSelect = document.getElementById('district-select');
+    const preselectedProvince = "{{ selected_province|default:'' }}";
+    const preselectedDistrict = "{{ selected_district|default:'' }}";
 
-    fetch(`/get-districts/${provinceId}/`)
-        .then(response => response.json())
-        .then(data => {
+    function loadDistricts(provinceId, selectedId) {
+        if (!provinceId) {
+            districtSelect.innerHTML = '<option value="">District</option>';
+            return;
+        }
+        fetch(`/get-districts/${provinceId}/`)
+            .then(response => response.json())
+            .then(data => {
+                districtSelect.innerHTML = '<option value="">District</option>';
+                data.districts.forEach(function (district) {
+                    const selected = (String(district.id) === selectedId) ? 'selected' : '';
+                    districtSelect.innerHTML +=
+                        `<option value="${district.id}" ${selected}>${district.name}</option>`;
+                });
+            })
+            .catch(error => console.error('Error loading districts:', error));
+    }
 
-            const districtSelect =
-                document.getElementById('district-select');
+    // Pre-populate districts on page load if a province was already selected (e.g. after search/filter)
+    if (preselectedProvince) {
+        loadDistricts(preselectedProvince, preselectedDistrict);
+    }
 
-            districtSelect.innerHTML =
-                '<option value="">District</option>';
-
-            data.districts.forEach(function(district) {
-
-                districtSelect.innerHTML +=
-                    `<option value="${district.id}">
-                        ${district.name}
-                    </option>`;
-
-            });
-
-        });
+    provinceSelect.addEventListener('change', function () {
+        loadDistricts(this.value, '');
+    });
 
 });
 </script>
@@ -419,6 +507,31 @@ document.addEventListener('DOMContentLoaded', function () {
         const resultsSection = document.getElementById('results');
         if (resultsSection) {
             resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
+});
+</script>
+
+<!-- ===================================================
+     ADVANCED FILTERS PANEL TOGGLE
+=================================================== -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const toggleBtn = document.getElementById('filter-toggle');
+    const panel = document.getElementById('advanced-filters');
+
+    if (toggleBtn && panel) {
+        toggleBtn.addEventListener('click', function () {
+            panel.style.display = (panel.style.display === 'none') ? 'block' : 'none';
+        });
+
+        // Keep panel open on page load if any advanced filter is active
+        const params = new URLSearchParams(window.location.search);
+        const advancedKeys = ['room_type', 'min_price', 'max_price', 'furnished_status',
+                               'parking_car', 'parking_bike', 'water_247', 'drinking_water',
+                               'attached_bathroom', 'wifi', 'kitchen', 'pet_allowed'];
+        if (advancedKeys.some(key => params.has(key))) {
+            panel.style.display = 'block';
         }
     }
 });

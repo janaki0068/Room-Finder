@@ -9,7 +9,16 @@ body{
     background:#fdf5f8;
     color:#333;
     padding-bottom:100px;
+    margin: 0;
+    padding-top: 90px;
 }
+
+.logo-link {
+       display: flex;
+       align-items: center;
+       text-decoration: none;
+       color: inherit;
+   }
 
 a{
     text-decoration:none;
@@ -24,8 +33,6 @@ button{
 /* ==========================
 COMMON WIDTH
 ========================== */
-
-header,
 .hero-text,
 .search-section,
 .province-tabs,
@@ -41,42 +48,43 @@ header,
 /* ==========================
 HEADER
 ========================== */
-
-header{
-    margin-top:25px;
+header {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 1400px;
+    z-index: 1000;
+    margin: 0;
 }
-
-.navbar{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    background:#F4C0D1;
-    border-radius:20px;
-    padding:14px 24px;
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #F4C0D1;
+    border-radius: 20px;
+    padding: 14px 24px;
+    width: 100%;
 }
-
 .logo{
     display:flex;
     align-items:center;
     gap:12px;
 }
-
 .logo img{
     border-radius:50%;
     object-fit:cover;
 }
-
 .site-title{
     font-size:1.4rem;
     font-weight:700;
     color:#4B1528;
 }
-
 .nav-buttons{
     display:flex;
     gap:12px;
 }
-
 .btn-login,
 .btn-signup{
     background:#D4537E;
@@ -85,7 +93,6 @@ header{
     border-radius:20px;
     font-weight:600;
 }
-
 .btn-login:hover,
 .btn-signup:hover{
     background:#993556;
@@ -94,41 +101,34 @@ header{
 /* ==========================
 HERO
 ========================== */
-
 .hero-text{
     text-align:center;
     margin-top:50px;
     margin-bottom:40px;
 }
-
 .hero-text strong{
     display:block;
     font-size:48px;
     margin-bottom:15px;
     color:#4B1528;
 }
-
 .hero-text small{
     font-size:18px;
     color:#999;
 }
-
 /* ==========================
 SEARCH SECTION
 ========================== */
-
 .search-section{
     margin-bottom:35px;
 }
-
 .search-form{
     display:grid;
-    grid-template-columns:2fr 1fr 1fr 1fr auto;
+    grid-template-columns:2fr 1fr 1fr 1fr auto auto;
     gap:15px;
     width:100%;
     align-items:center;
 }
-
 .search-bar{
     background:#FBEAF0;
     border-radius:16px;
@@ -138,12 +138,10 @@ SEARCH SECTION
     height:60px;
     border:1px solid #F4C0D1;
 }
-
 .search-bar span{
     font-size:22px;
     color:#D4537E;
 }
-
 .search-bar input{
     width:100%;
     border:none;
@@ -153,11 +151,9 @@ SEARCH SECTION
     font-size:16px;
     color:#333;
 }
-
 .search-bar input::placeholder{
     color:#ccc;
 }
-
 .filter-select{
     width:100%;
     height:60px;
@@ -169,7 +165,6 @@ SEARCH SECTION
     font-size:15px;
     color:#555;
 }
-
 .search-btn{
     height:60px;
     min-width:140px;
@@ -181,9 +176,142 @@ SEARCH SECTION
     font-size:15px;
     font-weight:600;
 }
-
 .search-btn:hover{
     background:#993556;
+}
+
+/* ==========================
+FILTER TOGGLE + PANEL
+========================== */
+.filter-heading{
+    font-size:15px;
+    font-weight:700;
+    color:#4B1528;
+    margin:0 0 12px 0;
+}
+
+.filter-toggle-btn{
+    height:60px;
+    padding:0 22px;
+    background:#FBEAF0;
+    color:#D4537E;
+    border:1px solid #F4C0D1;
+    border-radius:16px;
+    font-size:14px;
+    font-weight:600;
+    cursor:pointer;
+    transition:.3s;
+}
+.filter-toggle-btn:hover{
+    background:#ED93B1;
+    color:#4B1528;
+}
+
+.advanced-filters{
+    width:90%;
+    max-width:1400px;
+    margin:15px auto 0;
+    background:white;
+    border-radius:18px;
+    padding:30px;
+    border:1px solid #F4C0D1;
+}
+
+.advanced-filter-form{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:28px;
+}
+
+.filter-group{
+    display:flex;
+    flex-direction:column;
+}
+
+.checkbox-list{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    margin:0;
+    padding:0;
+}
+
+.checkbox-item{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:14px;
+    font-weight:500;
+    color:#555;
+    cursor:pointer;
+    margin:0 !important;
+    padding:0 !important;
+    text-indent:0 !important;
+}
+
+.checkbox-item *{
+    margin:0;
+    padding:0;
+}
+
+.checkbox-item input[type="checkbox"],
+.checkbox-item input[type="radio"]{
+    width:18px;
+    height:18px;
+    min-width:18px;
+    accent-color:#D4537E;
+    flex-shrink:0;
+}
+
+.filter-group input[type="checkbox"],
+.filter-group input[type="radio"]{
+    width:18px;
+    height:18px;
+    accent-color:#D4537E;
+}
+
+.price-range{
+    display:flex;
+    gap:12px;
+}
+.price-range input{
+    width:100%;
+    height:50px;
+    padding:0 16px;
+    border:1px solid #F4C0D1;
+    border-radius:14px;
+    background:#FBEAF0;
+    font-size:14px;
+    outline:none;
+}
+.price-range input:focus{
+    border-color:#D4537E;
+    background:white;
+}
+
+.advanced-filter-form .search-btn{
+    grid-column:1/-1;
+    justify-self:end;
+    height:55px;
+    padding:0 30px;
+    background:#D4537E;
+    color:white;
+    border-radius:16px;
+    font-weight:600;
+    cursor:pointer;
+    transition:.3s;
+}
+.advanced-filter-form .search-btn:hover{
+    background:#993556;
+}
+
+@media(max-width:992px){
+    .advanced-filter-form{ grid-template-columns:repeat(2,1fr); }
+}
+@media(max-width:768px){
+    .advanced-filter-form{ grid-template-columns:1fr; }
+    .filter-toggle-btn{ width:100%; height:50px; }
+    .advanced-filter-form .search-btn{ width:100%; justify-self:stretch; }
 }
 
 @media (max-width:992px){
@@ -212,37 +340,31 @@ SEARCH SECTION
 /* ==========================
 BROWSE TYPE
 ========================== */
-
 .browse-type{
     background:#ED93B1;
     padding:25px;
     border-radius:18px;
     margin-bottom:35px;
 }
-
 .browse-header{
     display:flex;
     justify-content:space-between;
     align-items:center;
     margin-bottom:20px;
 }
-
 .browse-header strong{
     font-size:34px;
     color:#4B1528;
 }
-
 .browse-header a{
     color:#72243E;
     font-weight:600;
 }
-
 .type-grid{
     display:grid;
     grid-template-columns:repeat(4,1fr);
     gap:20px;
 }
-
 .type-card{
     background:#FBEAF0;
     border-radius:14px;
@@ -251,31 +373,25 @@ BROWSE TYPE
     transition:.3s;
     border:1px solid #F4C0D1;
 }
-
 .type-card:hover{
     transform:translateY(-5px);
     background:#fff;
 }
-
 .type-icon{
     margin-bottom:15px;
 }
-
 .type-icon iconify-icon{
     font-size:42px;
     color:#D4537E;
 }
-
 .type-card span{
     font-weight:600;
     color:#72243E;
 }
-
 .hidden-types{
     display:none;
     margin-top:20px;
 }
-
 .hidden-types.show{
     display:grid;
 }
@@ -283,14 +399,12 @@ BROWSE TYPE
 /* ==========================
 LISTINGS GRID
 ========================== */
-
 .listings-grid{
     display:grid;
     grid-template-columns:repeat(2,1fr);
     gap:25px;
     margin-bottom:35px;
 }
-
 .listing-card{
     background:white;
     border-radius:18px;
@@ -300,19 +414,16 @@ LISTINGS GRID
     word-break:break-word;
     overflow-wrap:break-word;
 }
-
 .listing-card:hover{
     transform:translateY(-5px);
     box-shadow:0 10px 25px rgba(212,83,126,.1);
 }
-
 .card-top{
     display:flex;
     justify-content:space-between;
     align-items:center;
     padding:15px 20px;
 }
-
 .verified-badge{
     background:#ED93B1;
     color:#4B1528;
@@ -321,7 +432,6 @@ LISTINGS GRID
     font-size:13px;
     font-weight:600;
 }
-
 .heart{
     color:#ED93B1;
     font-size:22px;
@@ -331,11 +441,9 @@ LISTINGS GRID
     padding:0;
     transition:.3s;
 }
-
 .heart:hover{
     color:#D4537E;
 }
-
 .card-icon{
     height:180px;
     background:#FBEAF0;
@@ -343,18 +451,15 @@ LISTINGS GRID
     justify-content:center;
     align-items:center;
 }
-
 .card-icon iconify-icon{
     font-size:80px;
     color:#ED93B1;
 }
-
 .listing-card h3{
     padding:20px 20px 10px;
     font-size:28px;
     color:#4B1528;
 }
-
 .location{
     padding:0 20px;
     color:#999;
@@ -363,21 +468,18 @@ LISTINGS GRID
     align-items:center;
     font-size:14px;
 }
-
 .desc{
     padding:15px 20px;
     color:#777;
     word-break:break-word;
     overflow-wrap:break-word;
 }
-
 .room-features{
     padding:0 20px 15px;
     display:flex;
     flex-wrap:wrap;
     gap:8px;
 }
-
 .room-features span{
     background:#FBEAF0;
     color:#993556;
@@ -387,7 +489,6 @@ LISTINGS GRID
     font-weight:600;
     border:1px solid #F4C0D1;
 }
-
 .card-footer{
     padding:20px;
     display:flex;
@@ -395,13 +496,11 @@ LISTINGS GRID
     align-items:center;
     border-top:1px solid #FBEAF0;
 }
-
 .price{
     font-size:24px;
     font-weight:700;
     color:#D4537E;
 }
-
 .view-details{
     background:#D4537E;
     color:white;
@@ -411,7 +510,6 @@ LISTINGS GRID
     font-weight:600;
     transition:.3s;
 }
-
 .view-details:hover{
     background:#993556;
 }
@@ -419,7 +517,6 @@ LISTINGS GRID
 /* ==========================
 INLINE ADVERTISEMENT
 ========================== */
-
 .listing-ad{
     grid-column:1/-1;
     background:#FBEAF0;
@@ -428,18 +525,15 @@ INLINE ADVERTISEMENT
     text-align:center;
     border:1px solid #F4C0D1;
 }
-
 .listing-ad h3{
     margin:12px 0;
     font-size:28px;
     color:#4B1528;
 }
-
 .listing-ad p{
     color:#777;
     margin-bottom:20px;
 }
-
 .listing-ad button{
     background:#D4537E;
     color:white;
@@ -448,7 +542,6 @@ INLINE ADVERTISEMENT
     font-weight:600;
     font-family:'Segoe UI',sans-serif;
 }
-
 .listing-ad button:hover{
     background:#993556;
 }
@@ -456,7 +549,6 @@ INLINE ADVERTISEMENT
 /* ==========================
 BOTTOM AD BANNER
 ========================== */
-
 .ad-banner{
     background:#FBEAF0;
     border-radius:18px;
@@ -467,7 +559,6 @@ BOTTOM AD BANNER
     margin-bottom:40px;
     border:1px solid #F4C0D1;
 }
-
 .ad-label{
     display:inline-block;
     background:#ED93B1;
@@ -477,13 +568,11 @@ BOTTOM AD BANNER
     font-size:12px;
     font-weight:600;
 }
-
 .ad-text p{
     margin-top:12px;
     font-size:18px;
     color:#4B1528;
 }
-
 .ad-banner button{
     background:#D4537E;
     color:white;
@@ -492,7 +581,6 @@ BOTTOM AD BANNER
     font-weight:600;
     font-family:'Segoe UI',sans-serif;
 }
-
 .ad-banner button:hover{
     background:#993556;
 }
@@ -500,7 +588,6 @@ BOTTOM AD BANNER
 /* ==========================
 BOTTOM NAV
 ========================== */
-
 .bottom-nav{
     position:fixed;
     bottom:0;
@@ -514,7 +601,6 @@ BOTTOM NAV
     align-items:center;
     z-index:1000;
 }
-
 .bottom-nav-item{
     display:flex;
     flex-direction:column;
@@ -524,32 +610,27 @@ BOTTOM NAV
     font-size:11px;
     font-weight:600;
 }
-
 .bottom-nav-item img{
     opacity:.3;
     transition:.3s;
 }
-
 .bottom-nav-item.active{
     color:#D4537E;
 }
-
 .bottom-nav-item.active img{
     opacity:1;
 }
-
 .bottom-nav-item:hover{
     color:#D4537E;
 }
-
 .bottom-nav-item:hover img{
     opacity:.75;
 }
 
+
 /* ==========================
 TABLET
 ========================== */
-
 @media(max-width:992px){
     .search-form{
         grid-template-columns:1fr 1fr;
@@ -568,7 +649,6 @@ TABLET
 /* ==========================
 MOBILE
 ========================== */
-
 @media(max-width:768px){
     .navbar{
         flex-direction:column;
@@ -627,4 +707,17 @@ MOBILE
 .no-rooms p{
     color:#777;
     font-size:15px;
+}
+
+/* login to view( VIEW DETAILS) */
+.login-required {   
+    background: #D4537E;
+    color: #4B1528;
+}
+.login-required::before {
+    content: "🔒 ";
+}
+.login-required:hover {
+    background: #ED93B1;
+    color: white;
 }

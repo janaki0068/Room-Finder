@@ -257,11 +257,11 @@
 
         </section>
 
-        <!-- ==========================
-             FACILITIES
-        ========================== -->
+<!-- ==========================
+     FACILITIES
+========================== -->
 
-        <section class="form-card">
+<section class="form-card">
 
     <h2>Facilities</h2>
 
@@ -298,11 +298,6 @@
         </label>
 
         <label>
-            {{ form.furnished }}
-            Furnished
-        </label>
-
-        <label>
             {{ form.attached_bathroom }}
             Attached Bathroom
         </label>
@@ -327,6 +322,16 @@
             Laundry Facility
         </label>
 
+        <label>
+            {{ form.has_kitchen }}
+            Kitchen
+        </label>
+
+    </div>
+
+    <div class="form-group furnished-group">
+        <label>Furnished Status *</label>
+        {{ form.furnished_status }}
     </div>
 
 </section>

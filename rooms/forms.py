@@ -61,7 +61,7 @@ class RoomForm(forms.ModelForm):
             # Facilities
             'wifi',
             'attached_bathroom',
-            'furnished',
+            'furnished_status',
             'parking',
             'has_bike_parking',
             'has_drinking_water',
@@ -71,6 +71,7 @@ class RoomForm(forms.ModelForm):
             'has_cctv',
             'pet_allowed',
             'has_laundry',
+            'has_kitchen',
         ]
 
 class UserPreferenceForm(forms.ModelForm):

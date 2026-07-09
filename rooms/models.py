@@ -75,6 +75,12 @@ class Room(models.Model):
         ('rented', 'Rented'),
     ]
 
+    FURNISHED_CHOICES = [
+        ('furnished', 'Furnished'),
+        ('unfurnished', 'Unfurnished'),
+        ('semi', 'Semi-Furnished'),
+    ]
+
     # ownership
     owner = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="rooms")
@@ -116,10 +122,10 @@ class Room(models.Model):
     # facilities
     wifi = models.BooleanField(default=False)
     attached_bathroom = models.BooleanField(default=False)
-    furnished = models.BooleanField(default=False)
-    parking = models.BooleanField(default=False)  # kept your existing field
-    has_bike_parking = models.BooleanField(
-        default=False)  # added separate bike parking
+    furnished_status = models.CharField(
+        max_length=15, choices=FURNISHED_CHOICES, default='unfurnished')
+    parking = models.BooleanField(default=False)
+    has_bike_parking = models.BooleanField(default=False)
     has_drinking_water = models.BooleanField(default=False)
     has_water_24_7 = models.BooleanField(default=False)
     has_balcony = models.BooleanField(default=False)
@@ -127,6 +133,7 @@ class Room(models.Model):
     has_cctv = models.BooleanField(default=False)
     pet_allowed = models.BooleanField(default=False)
     has_laundry = models.BooleanField(default=False)
+    has_kitchen = models.BooleanField(default=False)
 
     # stats
     views = models.PositiveIntegerField(default=0)
@@ -153,6 +160,7 @@ class Room(models.Model):
         self.views += 1
         self.save(update_fields=['views'])
 
+        
 
 class RoomImage(models.Model):
     room = models.ForeignKey(
@@ -244,7 +252,7 @@ class Message(models.Model):
 # SETTINGS
 class UserPreference(models.Model):
     user = models.OneToOneField(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='preferences')
+    settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='preferences')
     notify_booking = models.BooleanField(default=True)
     notify_messages = models.BooleanField(default=True)
     notify_listing_status = models.BooleanField(default=True)

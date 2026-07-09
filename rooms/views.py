@@ -30,48 +30,116 @@ def home(request):
     province_id = request.GET.get('province')
     district_id = request.GET.get('district')
     sort = request.GET.get('sort')
-    room_type = request.GET.get('room_type')
+    room_types = request.GET.getlist('room_type')       # multi-select
+    min_price = request.GET.get('min_price')
+    max_price = request.GET.get('max_price')
+    furnished_status = request.GET.get('furnished_status')
+    parking_car = request.GET.get('parking_car')
+    parking_bike = request.GET.get('parking_bike')
+    attached_bathroom = request.GET.get('attached_bathroom')
+    wifi = request.GET.get('wifi')
+    water_247 = request.GET.get('water_247')
+    drinking_water = request.GET.get('drinking_water')
+    kitchen = request.GET.get('kitchen')
+    pet_allowed = request.GET.get('pet_allowed')
 
-    # SEARCH FILTER
+    # TEXT SEARCH (city / area / address / district / province / title / description)
     if query:
         rooms = rooms.filter(
             Q(title__icontains=query) |
             Q(city__icontains=query) |
-            Q(description__icontains=query)
-        )
+            Q(description__icontains=query) |
+            Q(area__icontains=query) |
+            Q(address__icontains=query) |
+            Q(district__name__icontains=query) |
+            Q(province__name__icontains=query)
+        ).distinct()
 
-    # PROVINCE FILTER
-    if province_id and province_id != "all":
+    # PROVINCE
+    if province_id:
         rooms = rooms.filter(province__id=province_id)
 
-    # DISTRICT FILTER
+    # DISTRICT
     if district_id:
         rooms = rooms.filter(district__id=district_id)
 
-    if room_type:
-        rooms = rooms.filter(room_type=room_type)
+    # PROPERTY TYPE (multi-select)
+    if room_types:
+        rooms = rooms.filter(room_type__in=room_types)
 
-    # SORT FILTER
+    # PRICE RANGE
+    if min_price:
+        rooms = rooms.filter(price__gte=min_price)
+    if max_price:
+        rooms = rooms.filter(price__lte=max_price)
+
+    # FURNISHED STATUS (radio - single value)
+    if furnished_status:
+        rooms = rooms.filter(furnished_status=furnished_status)
+
+    # PARKING (checkboxes - car / bike, independent, OR logic if both checked)
+    if parking_car and parking_bike:
+        rooms = rooms.filter(Q(parking=True) | Q(has_bike_parking=True))
+    elif parking_car:
+        rooms = rooms.filter(parking=True)
+    elif parking_bike:
+        rooms = rooms.filter(has_bike_parking=True)
+
+    # ATTACHED BATHROOM
+    if attached_bathroom:
+        rooms = rooms.filter(attached_bathroom=True)
+
+    # WIFI
+    if wifi:
+        rooms = rooms.filter(wifi=True)
+
+    # WATER FACILITY (checkboxes - 24/7 / drinking, independent, OR logic if both checked)
+    if water_247 and drinking_water:
+        rooms = rooms.filter(Q(has_water_24_7=True) | Q(has_drinking_water=True))
+    elif water_247:
+        rooms = rooms.filter(has_water_24_7=True)
+    elif drinking_water:
+        rooms = rooms.filter(has_drinking_water=True)
+
+    # KITCHEN
+    if kitchen:
+        rooms = rooms.filter(has_kitchen=True)
+
+    # PET ALLOWED
+    if pet_allowed:
+        rooms = rooms.filter(pet_allowed=True)
+
+    # SORT
     if sort == 'low-high':
         rooms = rooms.order_by('price')
     elif sort == 'high-low':
         rooms = rooms.order_by('-price')
     else:
-        rooms = rooms.order_by('-created_at')  # default = latest
+        rooms = rooms.order_by('-created_at')
 
-    provinces = Province.objects.all()
-    districts = District.objects.all()
-
-    return render(request, "index.html", {
+    context = {
         "rooms": rooms,
-        "provinces": provinces,
-        "districts": districts,
+        "provinces": Province.objects.all(),
+        "room_type_choices": Room.ROOM_TYPES,
+        "furnished_choices": Room.FURNISHED_CHOICES,
         "selected_province": province_id,
         "selected_district": district_id,
         "query": query,
         "selected_sort": sort,
-        "selected_type": room_type,
-    })
+        "selected_types": room_types,
+        "min_price": min_price,
+        "max_price": max_price,
+        "selected_furnished": furnished_status,
+        "parking_car": parking_car,
+        "parking_bike": parking_bike,
+        "attached_bathroom": attached_bathroom,
+        "wifi": wifi,
+        "water_247": water_247,
+        "drinking_water": drinking_water,
+        "kitchen": kitchen,
+        "pet_allowed": pet_allowed,
+    }
+    return render(request, "index.html", context)
 
 
 # LOGIN
@@ -193,9 +261,8 @@ def get_districts(request, province_id):
         'districts': list(districts)
     })
 
+
 # LANDLORD DASHBOARD
-
-
 @login_required
 def landlord_dashboard(request):
 
@@ -228,8 +295,7 @@ def my_listings(request):
 
 
 # Room detail
-
-
+@login_required
 def room_detail(request, room_id):
     room = get_object_or_404(Room, id=room_id, owner=request.user)
 
@@ -238,8 +304,6 @@ def room_detail(request, room_id):
     })
 
 # Edit listings
-
-
 @login_required
 def edit_listing(request, room_id):
 
@@ -268,8 +332,6 @@ def edit_listing(request, room_id):
     })
 
 # Delete listings
-
-
 @login_required
 def delete_listing(request, room_id):
 
@@ -285,8 +347,6 @@ def delete_listing(request, room_id):
     return redirect("my_listings")
 
 # My saved rooms
-
-
 @login_required
 def saved_rooms(request):
     rooms = (
@@ -305,8 +365,6 @@ def saved_rooms(request):
 
 
 # My edit profile
-
-
 @login_required
 def edit_profile(request):
     profile = request.user.profile
@@ -372,8 +430,6 @@ def upload_listing(request):
 
 
 # My messages
-
-
 @login_required
 def messages_view(request):
 
@@ -421,8 +477,6 @@ def messages_view(request):
     })
 
 # Chatbox
-
-
 @login_required
 def chat_room(request, user_id, room_id):
 
@@ -495,8 +549,6 @@ def chat_room(request, user_id, room_id):
     })
 
 # My settings
-
-
 @login_required
 def settings_view(request):
 
@@ -539,8 +591,6 @@ def settings_view(request):
 
 
 # TENANT DASHBOARD
-
-
 @role_required('tenant')
 def tenant_dashboard(request):
     saved_rooms = SavedRoom.objects.filter(

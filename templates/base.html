@@ -16,15 +16,18 @@
   <body>
     {% block site_header %}
     <header>
-      <div class="logo">
+
+<a href="{% url 'home' %}" class="logo-link">
+    <div class="logo">
         <img
-          src="{% static 'images/logo.png' %}"
-          alt="Room Finder Logo"
-          width="40"
-          height="40"
+            src="{% static 'images/logo.png' %}"
+            alt="Room Finder Logo"
+            width="40"
+            height="40"
         />
         <span>Room Finder</span>
-      </div>
+    </div>
+</a>
 
       {% if user.is_authenticated %}
       <form method="POST" action="{% url 'logout' %}">

@@ -308,6 +308,22 @@
 }
 
 /* ===================================
+   FURNISHED STATUS
+=================================== */
+
+.furnished-group{
+    margin-top:25px;
+    max-width:320px;
+}
+
+.furnished-group label{
+    margin-bottom:10px;
+    font-size:14px;
+    font-weight:600;
+    color:#555;
+}
+
+/* ===================================
    DOCUMENTS
 =================================== */
 
