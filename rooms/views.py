@@ -593,7 +593,7 @@ def settings_view(request):
 
     return render(
         request,
-        "tenant_settings.html",
+        "settings.html",
         {
             "form": form,
             "preferences": preferences,
