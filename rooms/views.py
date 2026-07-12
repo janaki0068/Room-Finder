@@ -1,3 +1,4 @@
+from .forms import ProfileForm
 from .forms import UserPreferenceForm
 from django.db.models import Q
 from .forms import EditProfileForm
@@ -74,11 +75,11 @@ def home(request):
     if max_price:
         rooms = rooms.filter(price__lte=max_price)
 
-    # FURNISHED STATUS 
+    # FURNISHED STATUS
     if furnished_status:
         rooms = rooms.filter(furnished_status=furnished_status)
 
-    # PARKING 
+    # PARKING
     if parking_car and parking_bike:
         rooms = rooms.filter(Q(parking=True) | Q(has_bike_parking=True))
     elif parking_car:
@@ -285,8 +286,9 @@ def landlord_dashboard(request):
         "has_verified_property": has_verified_property,
     })
 
+
 # My profile
-from .forms import ProfileForm
+
 
 @login_required
 def landlord_profile(request):
@@ -781,17 +783,83 @@ def tenant_settings(request):
 
 @login_required
 def tenant_messages(request):
-    received = Message.objects.filter(
-        receiver=request.user
-    ).order_by('-sent_at')
+    all_messages = Message.objects.filter(
+        Q(sender=request.user) |
+        Q(receiver=request.user)
+    ).select_related(
+        "sender",
+        "receiver",
+        "room"
+    ).order_by("-sent_at")
 
-    sent = Message.objects.filter(
-        sender=request.user
-    ).order_by('-sent_at')
+    conversations = []
+    seen = set()
+
+    for msg in all_messages:
+        other_user = msg.receiver if msg.sender == request.user else msg.sender
+        key = (other_user.id, msg.room.id if msg.room else None)
+
+        if key not in seen:
+            seen.add(key)
+            unread = Message.objects.filter(
+                room=msg.room,
+                sender=other_user,
+                receiver=request.user,
+                is_read=False
+            ).count()
+            conversations.append({
+                'user': other_user,
+                'room': msg.room,
+                'last_message': msg,
+                'unread': unread
+            })
 
     return render(request, 'tenant_messages.html', {
-        'received': received,
-        'sent': sent,
+        'conversations': conversations
+    })
+
+
+@login_required
+def start_conversation(request):
+
+    query = request.GET.get("q", "")
+
+    landlords = User.objects.filter(
+        profile__role="landlord"
+    )
+
+    if query:
+        landlords = landlords.filter(
+            Q(username__icontains=query) |
+            Q(first_name__icontains=query) |
+            Q(last_name__icontains=query)
+        )
+
+    return render(request, "start_convo.html", {
+        "landlords": landlords,
+        "query": query,
+    })
+
+
+@login_required
+def compose_message(request, user_id):
+
+    receiver = get_object_or_404(User, id=user_id)
+
+    if request.method == "POST":
+
+        body = request.POST.get("body")
+
+        Message.objects.create(
+            sender=request.user,
+            receiver=receiver,
+            body=body
+        )
+
+        return redirect("tenant_messages")
+
+    return render(request, "compose_message.html", {
+        "receiver": receiver,
     })
 
 

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>
+
+Message
+
+{{ receiver.get_full_name|default:receiver.username }}
+
+</h2>
+
+<form method="POST">
+
+    {% csrf_token %}
+
+    <textarea
+        name="body"
+        rows="6"
+        placeholder="Type your message..."
+        required></textarea>
+
+    <br><br>
+
+    <button type="submit">
+
+        Send Message
+
+    </button>
+
+</form>
+
+{% endblock %}

@@ -39,34 +39,39 @@
       <h2>Messages</h2>
     </div>
 
-    <!-- RECEIVED -->
-    <div class="my-listings-section">
-      <div class="section-header">
-        <h3 style="color: var(--color-5)">Inbox</h3>
-      </div>
-
-      {% if received %} {% for message in received %}
-      <div class="message-item {% if not message.is_read %}unread{% endif %}">
-        <div class="message-meta">
-          <span class="message-sender">
-            From: {{
-            message.sender.get_full_name|default:message.sender.username }}
-          </span>
-          {% if message.room %}
-          <span class="message-room">Re: {{ message.room.title }}</span>
-          {% endif %}
-          <span class="message-time"
-            >{{ message.sent_at|date:"M d, Y - H:i" }}</span
-          >
-        </div>
-        <p class="message-body">{{ message.body }}</p>
-        {% if not message.is_read %}
-        <span class="unread-badge">New</span>
+    {% if conversations %}
+      {% for convo in conversations %}
+        {% if convo.room %}
+        <a href="{% url 'chat_room' convo.user.id convo.room.id %}"
+           class="conversation-item {% if convo.unread %}unread{% endif %}">
+          <div class="convo-info">
+            <span class="convo-room">{{ convo.room.title }}</span>
+            <span class="convo-other">
+              {{ convo.user.get_full_name|default:convo.user.username }}
+            </span>
+            <span class="convo-preview">
+              {{ convo.last_message.body|truncatechars:60 }}
+            </span>
+          </div>
+          <div class="convo-meta">
+            <span class="convo-time">
+              {{ convo.last_message.sent_at|date:"M d" }}
+            </span>
+            {% if convo.unread %}
+              <span class="unread-badge">{{ convo.unread }}</span>
+            {% endif %}
+          </div>
+        </a>
         {% endif %}
-      </div>
-      {% endfor %} {% else %}
+      {% endfor %}
+    {% else %}
       <div class="placeholder-box">
         <p>No messages received yet.</p>
+
+        <a href="{% url 'start_conversation' %}" class="hero-btn">
+        <i class="fa-solid fa-plus"></i>
+        New Conversation
+    </a>
       </div>
       {% endif %}
     </div>
