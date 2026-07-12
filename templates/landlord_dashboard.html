@@ -48,57 +48,45 @@
 <!-- STATS -->
 <section class="stats-grid">
 
-    <div class="stat-card">
-
+    <a href="{% url 'my_listings' %}" class="stat-card">
         <div class="stat-icon pink">
             <i class="ti ti-building"></i>
         </div>
-
         <div>
             <h2>{{ listing_count|default:"0" }}</h2>
             <p>Total Listings</p>
         </div>
+    </a>
 
-    </div>
-
-    <div class="stat-card">
-
+    <a href="{% url 'my_listings' %}?status=active" class="stat-card">
         <div class="stat-icon green">
             <i class="ti ti-check"></i>
         </div>
-
         <div>
-            <h2>{{ approved_count|default:"0" }}</h2>
-            <p>Approved</p>
+            <h2>{{ active_count|default:"0" }}</h2>
+            <p>Active</p>
         </div>
+    </a>
 
-    </div>
-
-    <div class="stat-card">
-
+    <a href="{% url 'my_listings' %}?status=pending" class="stat-card">
         <div class="stat-icon yellow">
             <i class="ti ti-clock"></i>
         </div>
-
         <div>
             <h2>{{ pending_count|default:"0" }}</h2>
             <p>Pending Review</p>
         </div>
+    </a>
 
-    </div>
-
-    <div class="stat-card">
-
+    <a href="{% url 'my_listings' %}?status=rejected" class="stat-card">
         <div class="stat-icon purple">
-            <i class="ti ti-eye"></i>
+            <i class="ti ti-x"></i>
         </div>
-
         <div>
-            <h2>{{ total_views|default:"0" }}</h2>
-            <p>Total Views</p>
+            <h2>{{ rejected_count|default:"0" }}</h2>
+            <p>Rejected</p>
         </div>
-
-    </div>
+    </a>
 
 </section>
 
@@ -237,11 +225,9 @@
                     </td>
 
                     <td>
-
-        <span class="status {{ listing.status}}">
-    {{ listing.get_status_display }}
-</span>
-
+                        <span class="status {{ listing.status}}">
+                            {{ listing.get_status_display }}
+                        </span>
                     </td>
 
                     <td>
@@ -249,11 +235,9 @@
                     </td>
 
                     <td>
-
-                        <a href="#" class="table-btn">
+                        <a href="{% url 'room_detail' listing.id %}" class="table-btn">
                             View
                         </a>
-
                     </td>
 
                 </tr>

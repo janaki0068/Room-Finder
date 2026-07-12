@@ -310,11 +310,20 @@ def landlord_profile(request):
 # My listings page
 @login_required
 def my_listings(request):
-    listings = Room.objects.filter(owner=request.user).order_by("-created_at")
+    listings = Room.objects.filter(owner=request.user)
 
-    return render(request, "my_listings.html", {
-        "listings": listings
-    })
+    status = request.GET.get('status')
+    if status:
+        listings = listings.filter(status=status)
+
+    context = {
+        'listings': listings,
+        'listing_count': Room.objects.filter(owner=request.user).count(),
+        'active_count': Room.objects.filter(owner=request.user, status='active').count(),
+        'pending_count': Room.objects.filter(owner=request.user, status='pending').count(),
+        'rejected_count': Room.objects.filter(owner=request.user, status='rejected').count(),
+    }
+    return render(request, 'my_listings.html', context)
 
 
 # Room detail
@@ -326,9 +335,9 @@ def room_detail(request, room_id):
         'room': room
     })
 
+
+
 # Edit listings
-
-
 @login_required
 def edit_listing(request, room_id):
 
@@ -807,7 +816,7 @@ def notifications(request):
     })
 
 
-def room_detail(request, room_id):
+def troom_detail(request, room_id):
     room = get_object_or_404(Room, id=room_id, status='approved')
     images = room.images.all()
 
