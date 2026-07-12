@@ -24,8 +24,9 @@ urlpatterns = [
     path("messages/", views.messages_view, name="messages"),
     path("messages/<int:user_id>/<int:room_id>/",views.chat_room, name="chat_room"),
     path("settings/", views.settings_view, name="settings"),
-    path('settings/password/', auth_views.PasswordChangeView.as_view(), name='password_change'),
-    
+    path('settings/password/', auth_views.PasswordChangeView.as_view(),
+         name='password_change'),
+
 
     # TENANT -->
     path("tenant-dashboard/", views.tenant_dashboard, name="tenant_dashboard"),
@@ -38,4 +39,7 @@ urlpatterns = [
     path('tsettings/', views.tenant_settings, name='tenant_settings'),
     path('tmessages/', views.tenant_messages, name='tenant_messages'),
     path('troom/<int:room_id>/', views.troom_detail, name='troom_detail'),
+    path('room/<int:room_id>/', views.room_detail, name='room_detail'),
+    path('start-conversation/', views.start_conversation, name='start_conversation'),
+    path('messages/compose/<int:user_id>/', views.compose_message, name='compose_message'),
 ]

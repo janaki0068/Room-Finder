@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="dashboard-content">
+
+    <h2>Start New Conversation</h2>
+
+    <form method="GET">
+
+        <input
+            type="text"
+            name="q"
+            value="{{ query }}"
+            placeholder="Search landlord...">
+
+        <button type="submit">
+            Search
+        </button>
+
+    </form>
+
+    <br>
+
+    {% for landlord in landlords %}
+
+        <div class="listing-card">
+
+            <h4>
+                {{ landlord.get_full_name|default:landlord.username }}
+            </h4>
+
+            <p>{{ landlord.email }}</p>
+
+            <a
+                href="{% url 'compose_message' landlord.id %}"
+                class="hero-btn">
+
+                Message
+
+            </a>
+
+        </div>
+
+    {% empty %}
+
+        <p>No landlords found.</p>
+
+    {% endfor %}
+
+</div>
+
+{% endblock %}
