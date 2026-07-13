@@ -19,11 +19,11 @@ from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 
 
+
+
 # Create your views here.
 
 # HOME
-
-
 def home(request):
     rooms = Room.objects.filter(status='active')
 
@@ -165,6 +165,11 @@ def login_view(request):
         except User.DoesNotExist:
             messages.error(request, 'Invalid email or password.')
             return render(request, 'login.html')
+        
+        if not user_obj.is_active and user_obj.check_password(password):
+            messages.error(request, 'Please verify your email before logging in.')
+            request.session['otp_user_id'] = user_obj.id
+            return redirect('verify_otp')
 
         user = authenticate(request, username=username, password=password)
 
@@ -186,6 +191,10 @@ def login_view(request):
 
 
 # REGISTER
+from django.core.mail import send_mail
+from django.conf import settings
+from .models import EmailOTP
+
 def register_view(request):
     if request.user.is_authenticated:
         if request.user.is_staff:
@@ -199,35 +208,105 @@ def register_view(request):
         form = RegisterForm(request.POST)
 
         if form.is_valid():
-
             email = form.cleaned_data['email']
 
-            # check duplicate email
-            if User.objects.filter(email=email).exists():
-                messages.error(request, 'Email already exists.')
-                return render(request, 'register.html', {'form': form})
+            # check duplicate email — but allow retry if the old one was never verified
+            existing = User.objects.filter(email=email).first()
+            if existing:
+                if existing.profile.is_verified:
+                    messages.error(request, 'Email already exists.')
+                    return render(request, 'register.html', {'form': form})
+                existing.delete()
 
             user = User.objects.create_user(
-                username=form.cleaned_data['email'],
-                email=form.cleaned_data['email'],
+                username=email,
+                email=email,
                 first_name=form.cleaned_data['first_name'],
                 last_name=form.cleaned_data['last_name'],
                 password=form.cleaned_data['password']
             )
+            user.is_active = False
+            user.save()
 
             user.profile.phone = form.cleaned_data['phone_number']
             user.profile.role = form.cleaned_data['role']
+            user.profile.is_verified = False
             user.profile.save()
 
-            messages.success(request, 'User registered successfully.')
-            return redirect('login')
+            send_otp_email(user)
+            request.session['otp_user_id'] = user.id
+
+            messages.success(request, 'We sent a 6-digit OTP to your email.')
+            return redirect('verify_otp')
 
         else:
             messages.error(request, "Please correct the errors below.")
-            return render(request, 'register.html', {'form': form, 'role': role})
+            return render(request, 'register.html', {'form': form})
 
     form = RegisterForm()
     return render(request, 'register.html', {'form': form})
+
+def send_otp_email(user):
+    otp_obj = EmailOTP.objects.create(user=user, otp=EmailOTP.generate_otp())
+    send_mail(
+        subject="Room Finder - Email Verification OTP",
+        message=(f"Hi {user.first_name},\n\nYour OTP is: {otp_obj.otp}\n"
+                 f"It expires in 5 minutes.\n\nIf you didn't request this, ignore this email."),
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        recipient_list=[user.email],
+        fail_silently=False,
+    )
+    return otp_obj
+
+
+def verify_otp_view(request):
+    user_id = request.session.get('otp_user_id')
+    if not user_id:
+        messages.error(request, "Session expired. Please register or login again.")
+        return redirect('register')
+
+    user = User.objects.filter(id=user_id).first()
+    if not user:
+        messages.error(request, "User not found. Please register again.")
+        return redirect('register')
+
+    if request.method == 'POST':
+        entered = request.POST.get('otp', '').strip()
+        otp_obj = EmailOTP.objects.filter(user=user, is_used=False).order_by('-created_at').first()
+
+        if not otp_obj:
+            messages.error(request, "No OTP found. Please request a new one.")
+        elif otp_obj.is_expired():
+            messages.error(request, "OTP expired. Please request a new one.")
+        elif otp_obj.otp != entered:
+            messages.error(request, "Invalid OTP. Please try again.")
+        else:
+            otp_obj.is_used = True
+            otp_obj.save()
+            user.is_active = True
+            user.save()
+            user.profile.is_verified = True
+            user.profile.save()
+            del request.session['otp_user_id']
+            messages.success(request, "Email verified successfully! You can now log in.")
+            return redirect('login')
+
+        return redirect('verify_otp')
+
+    return render(request, 'verify_otp.html', {'email': user.email})
+
+
+def resend_otp_view(request):
+    user_id = request.session.get('otp_user_id')
+    user = User.objects.filter(id=user_id).first() if user_id else None
+    if not user:
+        messages.error(request, "Session expired. Please register again.")
+        return redirect('register')
+
+    EmailOTP.objects.filter(user=user, is_used=False).update(is_used=True)
+    send_otp_email(user)
+    messages.success(request, "A new OTP has been sent to your email.")
+    return redirect('verify_otp')
 
 
 def logout_view(request):
