@@ -278,3 +278,15 @@ class UserPreference(models.Model):
 
     def __str__(self):
         return f"Preferences for {self.user}"
+
+
+class Advertisement(models.Model):
+    title = models.CharField(max_length=200)
+    description = models.TextField(blank=True)
+    image = models.ImageField(upload_to='ads/', blank=True, null=True)
+    link = models.URLField(blank=True)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title

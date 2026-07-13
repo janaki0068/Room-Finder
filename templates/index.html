@@ -255,153 +255,76 @@
 <!-- LISTINGS -->
 <section class="listings-grid" id="results">
 
-    {% for room in rooms %}
+    {% for item_type, item in interleaved %}
 
+    {% if item_type == 'room' %}
     <div class="listing-card">
-
         <div class="card-top">
-            
-            {% if room.status == "verified" %}
-            <span class="verified-badge">
-                Verified
-            </span>
-
+            {% if item.status == "approved" %}
+            <span class="verified-badge">Verified</span>
             {% endif %}
-            <span class="heart">
-                &#10084;
-            </span>
-
+            <span class="heart">&#10084;</span>
         </div>
 
         <div class="card-icon">
-
-        {% if room.room_type == "flat" %}
-            <iconify-icon icon="mingcute:building-2-line"></iconify-icon>
-
-        {% elif room.room_type == "single" %}
-            <iconify-icon icon="mingcute:door-line"></iconify-icon>
-
-        {% elif room.room_type == "apartment" %}
-            <iconify-icon icon="mingcute:building-3-line"></iconify-icon>
-
-        {% else %}
-            <iconify-icon icon="mingcute:home-2-line"></iconify-icon>
-        {% endif %}
-
+            {% if item.room_type == "flat" %}
+                <iconify-icon icon="mingcute:building-2-line"></iconify-icon>
+            {% elif item.room_type == "single" %}
+                <iconify-icon icon="mingcute:door-line"></iconify-icon>
+            {% elif item.room_type == "apartment" %}
+                <iconify-icon icon="mingcute:building-3-line"></iconify-icon>
+            {% else %}
+                <iconify-icon icon="mingcute:home-2-line"></iconify-icon>
+            {% endif %}
         </div>
 
-        <h3>
-            {{ room.title }}
-        </h3>
-
+        <h3>{{ item.title }}</h3>
         <p class="location">
             <iconify-icon icon="mdi:location"></iconify-icon>
-            {{ room.city }}, {{ room.province.name }}
+            {{ item.city }}, {{ item.province.name }}
         </p>
-
-        <p class="desc">
-            {{ room.description|truncatechars:80 }}
-        </p>
+        <p class="desc">{{ item.description|truncatechars:80 }}</p>
 
         <div class="room-features">
-
-            {% if room.furnished %}
-            <span>✓ Furnished</span>
-            {% endif %}
-
-            {% if room.wifi %}
-            <span>✓ WiFi</span>
-            {% endif %}
-
-            {% if room.attached_bathroom %}
-            <span>✓ Attached Bath</span>
-            {% endif %}
-
-            {% if room.parking %}
-            <span>✓ Parking</span>
-            {% endif %}
-
+            {% if item.furnished %}<span>✓ Furnished</span>{% endif %}
+            {% if item.wifi %}<span>✓ WiFi</span>{% endif %}
+            {% if item.attached_bathroom %}<span>✓ Attached Bath</span>{% endif %}
+            {% if item.parking %}<span>✓ Parking</span>{% endif %}
         </div>
-        
+
         <div class="card-footer">
-        <span class="price">NPR {{ room.price }}/mo</span>
-
-        {% if user.is_authenticated %}
-            <a href="{% url 'room_detail' room.pk %}" class="view-details">
-                VIEW DETAILS
-            </a>
-        {% else %}
-            <a href="{% url 'login' %}?next={% url 'room_detail' room.pk %}" class="view-details login-required">
-                LOGIN TO VIEW
-            </a>
-        {% endif %}
+            <span class="price">NPR {{ item.price }}/mo</span>
+            <a href="{% url 'room_detail' item.id %}" class="view-details">VIEW DETAILS</a>
         </div>
-
     </div>
 
-
-    <!-- INLINE ADVERTISEMENT -->
-    {% if forloop.counter|divisibleby:6 %}
-
+    {% elif item_type == 'ad' %}
     <div class="listing-ad">
-
-        <span class="ad-label">
-            Advertisement
-        </span>
-
-        <h3>
-            Prabhu Bank Home Loan
-        </h3>
-
-        <p>
-            Interest from 8.5% — Apply online today.
-        </p>
-
-        <button type="button">
-            Learn More
-        </button>
-
-    </div>
-
+    {% if item.image %}
+        <img src="{{ item.image.url }}" alt="{{ item.title }}" class="ad-image">
     {% endif %}
 
-    {% empty %}
+    <div class="listing-ad-content">
+        <span class="ad-label">Sponsored</span>
 
-        <div class="no-rooms">
-            <div class="no-rooms-icon">
-                <iconify-icon icon="mdi:home-search-outline"></iconify-icon>
-            </div>
-            <h3>No rooms available</h3>
-            <p>Try adjusting your filters or check back later for new listings.</p>
-        </div>
+        <h3>{{ item.title }}</h3>
 
-    {% endfor %}
+        <p>{{ item.description }}</p>
 
-</section>
-
-
-<!-- LARGE BANNER AD -->
-<section class="ad-banner">
-
-    <div class="ad-text">
-
-        <span class="ad-label">
-            Advertisement
-        </span>
-
-        <p>
-            <strong>
-                Prabhu Bank Home Loan
-            </strong>
-            <br>
-            Interest from 8.5% — apply online today
-        </p>
-
+        {% if item.link %}
+            <a href="{{ item.link }}" target="_blank" class="ad-btn">
+                Learn More
+            </a>
+        {% endif %}
     </div>
+</div>
+    {% endif %}
 
-    <button type="button">
-        LEARN MORE
-    </button>
+{% empty %}
+<div style="padding:20px;">
+    <h3>No rooms available.</h3>
+</div>
+{% endfor %}
 
 </section>
 

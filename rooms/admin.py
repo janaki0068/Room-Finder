@@ -5,6 +5,7 @@ from .models import *
 admin.site.register(Province)
 admin.site.register(District)
 admin.site.register(SavedRoom)
+admin.site.register(Advertisement)
 
 class VerificationDocumentInline(admin.StackedInline):
     model = VerificationDocument

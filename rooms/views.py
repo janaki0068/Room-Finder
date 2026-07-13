@@ -1,22 +1,14 @@
-from .forms import ProfileForm
-from .forms import UserPreferenceForm
-from django.db.models import Q
-from .forms import EditProfileForm
-from django.shortcuts import render, get_object_or_404
-from .models import Province, Room
-from .forms import RoomForm
-from django.shortcuts import render, redirect
-from django.contrib.auth.models import User
-from django.contrib import messages
-from .forms import RegisterForm, RoomForm
-from .models import *
-from django.db.models import Q, Sum
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse
-from django.contrib.auth import authenticate, login, logout
+from django.db.models import Q, Sum
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
-from .decorators import role_required
-from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.models import User
+from .decorators import role_required
+from .models import *
+from .forms import ProfileForm, UserPreferenceForm, EditProfileForm, RegisterForm, RoomForm
 
 
 
@@ -25,7 +17,8 @@ from django.contrib.auth.forms import PasswordChangeForm
 
 # HOME
 def home(request):
-    rooms = Room.objects.filter(status='active')
+    rooms = Room.objects.filter(status='approved')
+    ads = list(Advertisement.objects.filter(is_active=True))
 
     # GET FILTER VALUES
     query = request.GET.get('q')
@@ -120,25 +113,50 @@ def home(request):
     else:
         rooms = rooms.order_by('-created_at')
 
+    rooms = list(rooms)
+    interleaved = []
+    ad_index = 0
+
+    for i, room in enumerate(rooms):
+        interleaved.append(("room", room))
+
+        if (i + 1) % 1 == 0 and ads:
+            interleaved.append(("ad", ads[ad_index % len(ads)]))
+            ad_index += 1
+
+
     context = {
+        "interleaved": interleaved,
         "rooms": rooms,
+        "ads": ads,
+
         "provinces": Province.objects.all(),
+
         "room_type_choices": Room.ROOM_TYPES,
         "furnished_choices": Room.FURNISHED_CHOICES,
+
         "selected_province": province_id,
         "selected_district": district_id,
+
         "query": query,
         "selected_sort": sort,
+
         "selected_types": room_types,
+
         "min_price": min_price,
         "max_price": max_price,
+
         "selected_furnished": furnished_status,
+
         "parking_car": parking_car,
         "parking_bike": parking_bike,
+
         "attached_bathroom": attached_bathroom,
         "wifi": wifi,
+
         "water_247": water_247,
         "drinking_water": drinking_water,
+
         "kitchen": kitchen,
         "pet_allowed": pet_allowed,
     }
@@ -911,43 +929,19 @@ def tenant_messages(request):
 def start_conversation(request):
 
     query = request.GET.get("q", "")
-
-    landlords = User.objects.filter(
-        profile__role="landlord"
-    )
+    rooms = []
 
     if query:
-        landlords = landlords.filter(
-            Q(username__icontains=query) |
-            Q(first_name__icontains=query) |
-            Q(last_name__icontains=query)
-        )
+        rooms = Room.objects.filter(
+            Q(title__icontains=query) |
+            Q(city__icontains=query) |
+            Q(owner__first_name__icontains=query) |
+            Q(owner__last_name__icontains=query)
+        ).select_related('owner','province','district')
 
     return render(request, "start_convo.html", {
-        "landlords": landlords,
-        "query": query,
-    })
-
-
-@login_required
-def compose_message(request, user_id):
-
-    receiver = get_object_or_404(User, id=user_id)
-
-    if request.method == "POST":
-
-        body = request.POST.get("body")
-
-        Message.objects.create(
-            sender=request.user,
-            receiver=receiver,
-            body=body
-        )
-
-        return redirect("tenant_messages")
-
-    return render(request, "compose_message.html", {
-        "receiver": receiver,
+        'rooms': rooms,
+        'query': query,
     })
 
 
