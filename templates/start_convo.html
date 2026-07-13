@@ -1,54 +1,88 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/tenant_dashboard.css' %}">
+<link rel="stylesheet" href="{% static 'css/search.css' %}">
+{% endblock css %}
+
 {% block content %}
 
-<div class="dashboard-content">
+<div class="dashboard-main">
 
-    <h2>Start New Conversation</h2>
+  <aside class="sidebar">
+    <div class="profile-card">
+      {% if request.user.profile.image %}
+        <img src="{{ request.user.profile.image.url }}" class="profile-photo" />
+      {% else %}
+        <img src="{% static 'images/default-avatar.png' %}" class="profile-photo" />
+      {% endif %}
+      <h3>{{ request.user.get_full_name|default:request.user.username }}</h3>
+      <p>{{ request.user.email }}</p>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="{% url 'tenant_edit_profile' %}">Edit Profile</a>
+      <a href="{% url 'tenant_messages' %}" class="active">Messages</a>
+      <a href="{% url 'notifications' %}">Notifications</a>
+      <a href="{% url 'tenant_settings' %}">Settings</a>
+      <a href="{% url 'logout' %}">Logout</a>
+    </nav>
+  </aside>
 
-    <form method="GET">
+  <section class="dashboard-content">
 
-        <input
-            type="text"
-            name="q"
-            value="{{ query }}"
-            placeholder="Search landlord...">
+    <div class="section-header" style="margin-bottom:24px;">
+      <a href="{% url 'tenant_messages' %}" class="back-btn">
+        <i class="fa-solid fa-arrow-left"></i>
+      </a>
+      <h2>Start a Conversation</h2>
+    </div>
 
-        <button type="submit">
-            Search
-        </button>
+    <p style="color:var(--color-13);margin-bottom:20px;font-size:20px;font-weight:500;">
+      Search for a room or landlord to start a conversation.
+    </p>
 
+    <!-- SEARCH -->
+    <form method="GET" style="margin-bottom:24px;">
+      <div class="search-bar-row">
+        <input type="text" name="q" value="{{ query }}"
+          placeholder="Search by room title, city, or landlord name..."
+          class="search-input" autofocus>
+        <button type="submit" class="search-submit-btn">Search</button>
+      </div>
     </form>
 
-    <br>
-
-    {% for landlord in landlords %}
-
-        <div class="listing-card">
-
-            <h4>
-                {{ landlord.get_full_name|default:landlord.username }}
-            </h4>
-
-            <p>{{ landlord.email }}</p>
-
-            <a
-                href="{% url 'compose_message' landlord.id %}"
-                class="hero-btn">
-
-                Message
-
-            </a>
-
+    <!-- RESULTS -->
+    {% if query %}
+      {% if rooms %}
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          {% for room in rooms %}
+          <a href="{% url 'chat_room' room.owner.id room.id %}"
+             class="conversation-item">
+            <div class="convo-info">
+              <span class="convo-room">{{ room.title }}</span>
+              <span class="convo-other">
+                Landlord: {{ room.owner.get_full_name|default:room.owner.username }}
+              </span>
+              <span class="convo-preview">
+                {{ room.city }}, {{ room.district.name }} · NPR {{ room.price }}/month
+              </span>
+            </div>
+            <div class="convo-meta">
+              <i class="fa-solid fa-message" style="color:var(--color-5);font-size:18px;"></i>
+              <small style="color:var(--color-5);font-weight:600;">Chat</small>
+            </div>
+          </a>
+          {% endfor %}
         </div>
+      {% else %}
+        <div class="placeholder-box">
+          <p>No rooms found for "<strong>{{ query }}</strong>". Try a different search.</p>
+        </div>
+      {% endif %}
+    {% endif %}
 
-    {% empty %}
-
-        <p>No landlords found.</p>
-
-    {% endfor %}
-
+  </section>
 </div>
 
-{% endblock %}
+{% endblock content %}
