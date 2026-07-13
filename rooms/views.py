@@ -160,11 +160,6 @@ def home(request):
         "kitchen": kitchen,
         "pet_allowed": pet_allowed,
     }
-
-    print("Rooms:", len(rooms))
-    print("Ads:", len(ads))
-    print("Interleaved:", len(interleaved))
-    print(interleaved)
     return render(request, "index.html", context)
 
 
