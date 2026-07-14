@@ -385,8 +385,6 @@ def landlord_dashboard(request):
 
 
 # My profile
-
-
 @login_required
 def landlord_profile(request):
     profile = request.user.profile
@@ -435,7 +433,6 @@ def room_detail(request, room_id):
     })
 
 
-
 # Edit listings
 @login_required
 def edit_listing(request, room_id):
@@ -464,9 +461,8 @@ def edit_listing(request, room_id):
         "room": room
     })
 
+
 # Delete listings
-
-
 @login_required
 def delete_listing(request, room_id):
 
@@ -614,8 +610,6 @@ def messages_view(request):
     })
 
 # Chatbox
-
-
 @login_required
 def chat_room(request, user_id, room_id):
 
@@ -687,9 +681,8 @@ def chat_room(request, user_id, room_id):
         "other_user": other_user,
     })
 
+
 # My settings
-
-
 @login_required
 def settings_view(request):
 

@@ -22,9 +22,14 @@
       <span class="stat-label">Pending Listings</span>
     </a>
 
-    <a href="{% url 'approved_listings' %}" class="stat-card">
-      <span class="stat-number">{{ approved_count }}</span>
-      <span class="stat-label">Approved Listings</span>
+    <a href="{% url 'active_listings' %}" class="stat-card">
+      <span class="stat-number">{{ active_count }}</span>
+      <span class="stat-label">Active Listings</span>
+    </a>
+
+    <a href="{% url 'rented_listings' %}" class="stat-card">
+      <span class="stat-number">{{ rented_count }}</span>
+      <span class="stat-label">Rented Listings</span>
     </a>
 
     <a href="{% url 'rejected_listings' %}" class="stat-card">

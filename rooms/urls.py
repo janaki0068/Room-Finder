@@ -13,6 +13,7 @@ urlpatterns = [
     path('search/', views.search_rooms, name='search_rooms'),
     path('get-districts/<int:province_id>/',views.get_districts, name='get_districts'),
 
+
     # LANDLORD -->
     path("landlord-dashboard/", views.landlord_dashboard,name="landlord_dashboard"),
     path('profile/', views.landlord_profile, name='landlord_profile'),
@@ -26,8 +27,7 @@ urlpatterns = [
     path("messages/", views.messages_view, name="messages"),
     path("messages/<int:user_id>/<int:room_id>/",views.chat_room, name="chat_room"),
     path("settings/", views.settings_view, name="settings"),
-    path('settings/password/', auth_views.PasswordChangeView.as_view(),
-         name='password_change'),
+    path('settings/password/', auth_views.PasswordChangeView.as_view(),name='password_change'),
 
 
     # TENANT -->

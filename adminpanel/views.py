@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.admin.views.decorators import staff_member_required
 from rooms.models import Room
 from django.contrib.auth.models import User
+from django.contrib.auth import logout
 
 # Create your views here.
 
@@ -10,7 +11,8 @@ from django.contrib.auth.models import User
 def admin_dashboard(request):
     context = {
         "pending_count": Room.objects.filter(status="pending").count(),
-        "approved_count": Room.objects.filter(status="approved").count(),
+        "active_count": Room.objects.filter(status="active").count(),
+        "rented_count": Room.objects.filter(status="rented").count(),
         "rejected_count": Room.objects.filter(status="rejected").count(),
         "total_users": User.objects.count(),
     }
@@ -24,9 +26,15 @@ def pending_listings(request):
 
 
 @staff_member_required
-def approved_listings(request):
-    listings = Room.objects.filter(status="approved")
-    return render(request, "adminpanel/approved_listings.html", {"listings": listings})
+def active_listings(request):
+    listings = Room.objects.filter(status="active")
+    return render(request, "adminpanel/active_listings.html", {"listings": listings})
+
+
+@staff_member_required
+def rented_listings(request):
+    listings = Room.objects.filter(status="rented")
+    return render(request, "adminpanel/rented_listings.html", {"listings": listings})
 
 
 @staff_member_required
@@ -38,7 +46,8 @@ def rejected_listings(request):
 @staff_member_required
 def approve_listing(request, room_id):
     room = get_object_or_404(Room, id=room_id)
-    room.status = "approved"
+    room.status = "active"
+    room.is_verified = True
     room.rejection_reason = ""
     room.save()
     return redirect("pending_listings")
@@ -50,6 +59,7 @@ def reject_listing(request, room_id):
     if request.method == "POST":
         reason = request.POST.get('reason', '')
         room.status = "rejected"
+        room.is_verified = False
         room.rejection_reason = reason
         room.save()
         return redirect("pending_listings")
@@ -57,12 +67,11 @@ def reject_listing(request, room_id):
     return render(request, "adminpanel/reject_listing.html", {"room": room})
 
 
-
 @staff_member_required
 def user_management(request):
     role_filter = request.GET.get('role', 'all')
 
-    users = User.objects.exclude(is_staff=True).select_related('profile') 
+    users = User.objects.exclude(is_staff=True).select_related('profile')
 
     if role_filter == 'tenant':
         users = users.filter(profile__role='tenant')
@@ -72,7 +81,7 @@ def user_management(request):
     return render(request, "adminpanel/user_management.html", {
         "users": users,
         "role_filter": role_filter,
-        })
+    })
 
 
 @staff_member_required
@@ -82,3 +91,7 @@ def delete_user(request, user_id):
         user.delete()
     return redirect("user_management")
 
+
+def custom_logout(request):
+    logout(request)
+    return redirect('login')
