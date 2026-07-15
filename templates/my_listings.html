@@ -59,9 +59,10 @@ My Listings
           <td>
             <span class="status {{ room.status }}">
               {{ room.get_status_display }} 
-              {% if room.status == 'approved' %}
+              {% if room.status == 'active' %}
             {% elif room.status == 'pending' %}
             {% elif room.status == 'rejected' %}
+            {% elif room.status == 'rented' %}
             {% endif %}
             </span>
           </td>

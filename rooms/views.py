@@ -17,7 +17,7 @@ from .forms import ProfileForm, UserPreferenceForm, EditProfileForm, RegisterFor
 
 
 def home(request):
-    rooms = Room.objects.filter(status='approved')
+    rooms = Room.objects.filter(status='active')
     ads = list(Advertisement.objects.filter(is_active=True))
 
     # GET FILTER VALUES
@@ -120,10 +120,9 @@ def home(request):
     for i, room in enumerate(rooms):
         interleaved.append(("room", room))
 
-        if (i + 1) % 1 == 0 and ads:
+        if (i + 1) % 3 == 0 and ads:
             interleaved.append(("ad", ads[ad_index % len(ads)]))
             ad_index += 1
-
 
     context = {
         "interleaved": interleaved,
@@ -289,7 +288,7 @@ def landlord_dashboard(request):
 
     user_listings = Room.objects.filter(owner=request.user)
     listing_count = user_listings.count()
-    approved_count = user_listings.filter(status='approved').count()
+    active_count = user_listings.filter(status='active').count()
     pending_count = user_listings.filter(status='pending').count()
     total_views = user_listings.aggregate(total=Sum('views'))['total'] or 0
     recent_listings = user_listings[:5]
@@ -297,7 +296,7 @@ def landlord_dashboard(request):
 
     return render(request, "landlord_dashboard.html", {
         "listing_count": listing_count,
-        "approved_count": approved_count,
+        "active_count": active_count,
         "pending_count": pending_count,
         "total_views": total_views,
         "recent_listings": recent_listings,
@@ -354,7 +353,6 @@ def room_detail(request, room_id):
     return render(request, 'room_detail.html', {
         'room': room
     })
-
 
 
 # Edit listings
@@ -659,13 +657,24 @@ def tenant_dashboard(request):
         user=request.user).select_related('room')
     saved_count = saved_rooms.count()
 
-    browse_rooms = Room.objects.filter(
-        status='approved').order_by('-created_at')[:12]
+    rooms = list(Room.objects.filter(
+        status='active').order_by('-created_at')[:12])
+    ads = list(Advertisement.objects.filter(is_active=True))
+    interleaved = []
+    ad_index = 0
+
+    for i, room in enumerate(rooms):
+        interleaved.append(("room", room))
+
+        if (i + 1) % 3 == 0 and ads:
+            interleaved.append(("ad", ads[ad_index % len(ads)]))
+            ad_index += 1
 
     return render(request, 'tenant_dashboard.html', {
         'saved_rooms': saved_rooms,
         'saved_count': saved_count,
-        'browse_rooms': browse_rooms,
+        'browse_rooms': rooms,
+        'interleaved': interleaved,
     })
 
 
@@ -684,18 +693,10 @@ def unsave_room(request, room_id):
 
 @login_required(login_url='login')
 def tsearch_rooms(request):
-    rooms = Room.objects.filter(status='approved')
+    ads = list(Advertisement.objects.filter(is_active=True))
+    rooms = Room.objects.filter(status="active").exclude(owner=request.user)
 
-    query = request.GET.get('q', '')
-    if query:
-        rooms = rooms.filter(
-            Q(title__icontains=query) |
-            Q(city__icontains=query) |
-            Q(description__icontains=query) |
-            Q(district__name__icontains=query) |
-            Q(province__name__icontains=query)
-        )
-
+    query = request.GET.get("q", "")
     room_type = request.GET.get('room_type', '')
     province_id = request.GET.get('province', '')
     district_id = request.GET.get('district', '')
@@ -705,6 +706,15 @@ def tsearch_rooms(request):
     furnished = request.GET.get('furnished', '')
     parking = request.GET.get('parking', '')
     attached_bathroom = request.GET.get('attached_bathroom', '')
+
+    if query:
+        rooms = rooms.filter(
+            Q(title__icontains=query) |
+            Q(city__icontains=query) |
+            Q(description__icontains=query) |
+            Q(district__name__icontains=query) |
+            Q(province__name__icontains=query)
+        )
 
     if room_type:
         rooms = rooms.filter(room_type=room_type)
@@ -719,11 +729,21 @@ def tsearch_rooms(request):
     if wifi:
         rooms = rooms.filter(wifi=True)
     if furnished:
-        rooms = rooms.filter(furnished=True)
+        rooms = rooms.filter(furnished_status='furnished')
     if parking:
         rooms = rooms.filter(parking=True)
     if attached_bathroom:
         rooms = rooms.filter(attached_bathroom=True)
+
+    rooms = list(rooms)
+
+    interleaved = []
+    ad_index = 0
+    for i, room in enumerate(rooms):
+        interleaved.append(("room", room))
+        if (i + 1) % 3 == 0 and ads:
+            interleaved.append(("ad", ads[ad_index % len(ads)]))
+            ad_index += 1
 
     provinces = Province.objects.all()
     districts = District.objects.filter(
@@ -742,7 +762,8 @@ def tsearch_rooms(request):
         'wifi': wifi,
         'furnished': furnished,
         'parking': parking,
-        'attached_bathroom': attached_bathroom
+        'attached_bathroom': attached_bathroom,
+        'interleaved': interleaved
     })
 
 
@@ -824,12 +845,11 @@ def tenant_messages(request):
 
     for msg in all_messages:
         other_user = msg.receiver if msg.sender == request.user else msg.sender
-        key = (other_user.id, msg.room.id if msg.room else None)
+        key = other_user.id
 
         if key not in seen:
             seen.add(key)
             unread = Message.objects.filter(
-                room=msg.room,
                 sender=other_user,
                 receiver=request.user,
                 is_read=False
@@ -849,20 +869,67 @@ def tenant_messages(request):
 @login_required
 def start_conversation(request):
 
-    query = request.GET.get("q", "")
-    rooms = []
+    query = request.GET.get("q", "").strip()
+    rooms = Room.objects.none()
 
     if query:
         rooms = Room.objects.filter(
             Q(title__icontains=query) |
             Q(city__icontains=query) |
+            Q(owner__username__icontains=query) |
             Q(owner__first_name__icontains=query) |
             Q(owner__last_name__icontains=query)
-        ).select_related('owner','province','district')
+        ).filter(
+            status='active'
+        ).exclude(
+            owner=request.user
+        ).select_related(
+            "owner", "province", "district"
+        ).distinct()
 
     return render(request, "start_convo.html", {
         'rooms': rooms,
         'query': query,
+    })
+
+
+@login_required
+def chat_room(request, user_id, room_id):
+
+    other_user = get_object_or_404(User, id=user_id)
+    room = get_object_or_404(Room, id=room_id)
+
+    messages = Message.objects.filter(
+        room=room
+    ).filter(
+        Q(sender=request.user, receiver=other_user) |
+        Q(sender=other_user, receiver=request.user)
+    ).order_by("sent_at")
+
+    Message.objects.filter(
+        room=room,
+        sender=other_user,
+        receiver=request.user,
+        is_read=False
+    ).update(is_read=True)
+
+    if request.method == "POST":
+        body = request.POST.get("message", "").strip()
+
+        if body:
+            Message.objects.create(
+                sender=request.user,
+                receiver=other_user,
+                room=room,
+                body=body,
+            )
+
+        return redirect("chat_room", user_id=user_id, room_id=room_id)
+
+    return render(request, "chat_room.html", {
+        "room": room,
+        "other_user": other_user,
+        "messages": messages,
     })
 
 
@@ -879,7 +946,7 @@ def notifications(request):
 
 
 def troom_detail(request, room_id):
-    room = get_object_or_404(Room, id=room_id, status='approved')
+    room = get_object_or_404(Room, id=room_id, status='active')
     images = room.images.all()
 
     is_saved = False

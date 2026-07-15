@@ -3,6 +3,10 @@
 
 {% block css %}
 <link rel="stylesheet" href="{% static 'css/tenant_dashboard.css' %}" />
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+/>
 {% endblock css %} 
 
 {% block content %}
@@ -35,48 +39,44 @@
   </aside>
 
   <section class="dashboard-content">
-    <div class="section-header" style="margin-bottom: 24px">
+    <div class="section-header" style="margin-bottom: 24px;">
       <h2>Messages</h2>
+      <a href="{% url 'start_conversation' %}" class="search-submit-btn" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+        <i class="fa-solid fa-pen-to-square"></i>
+        <span>New Message</span>
+      </a>
     </div>
 
-    {% if conversations %} {% for convo in conversations %} {% if convo.room %}
-    <a
-      href="{% url 'chat_room' convo.user.id convo.room.id %}"
-      class="conversation-item {% if convo.unread %}unread{% endif %}"
-    >
-      <div class="convo-info">
-        <span class="convo-room">{{ convo.room.title }}</span>
-        <span class="convo-other">
-          {{ convo.user.get_full_name|default:convo.user.username }}
-        </span>
-        <span class="convo-preview">
-          {{ convo.last_message.body|truncatechars:60 }}
-        </span>
-      </div>
-      <div class="convo-meta">
-        <span class="convo-time">
-          {{ convo.last_message.sent_at|date:"M d" }}
-        </span>
-        {% if convo.unread %}
-        <span class="unread-badge">{{ convo.unread }}</span>
-        {% endif %}
-      </div>
-    </a>
-    {% endif %} {% endfor %} {% else %}
+    {% if conversations %}
+      {% for convo in conversations %}
+      
+        <a href="{% url 'chat_room' convo.user.id convo.room.id %}"
+        class="conversation-item {% if convo.unread %}unread{% endif %}"
+      />
+        <div class="convo-info">
+          <span class="convo-other">
+            {{ convo.user.get_full_name|default:convo.user.username }}
+          </span>
+          <span class="convo-preview">
+            {{ convo.last_message.body|truncatechars:60 }}
+          </span>
+        </div>
+        <div class="convo-meta">
+          <span class="convo-time">
+            {{ convo.last_message.sent_at|date:"M d" }}
+          </span>
+          {% if convo.unread %}
+          <span class="unread-badge">{{ convo.unread }}</span>
+          {% endif %}
+        </div>
+      </a>
+      {% endfor %}
+    {% else %}
     <div class="placeholder-box">
       <p>
         No messages yet. When you contact a landlord about a room, your
         conversation will appear here.
       </p>
-      <a
-        href="{% url 'start_conversation' %}"
-        class="search-submit-btn"
-        style="text-decoration: none"
-      >
-        <i class="fa-solid fa-pen-to-square"></i> New Message
-      </a>
-  </div>
-
     </div>
     {% endif %}
   </section>
