@@ -27,10 +27,10 @@
     <nav class="sidebar-nav">
       <a href="{% url 'admin_dashboard' %}" class="{% if request.resolver_match.url_name == 'admin_dashboard' %}active{% endif %}">Dashboard</a>
       <a href="{% url 'pending_listings' %}" class="{% if request.resolver_match.url_name == 'pending_listings' %}active{% endif %}">Pending Listings</a>
-      <a href="{% url 'approved_listings' %}" class="{% if request.resolver_match.url_name == 'approved_listings' %}active{% endif %}">Approved Listings</a>
+      <a href="{% url 'active_listings' %}" class="{% if request.resolver_match.url_name == 'active_listings' %}active{% endif %}">Active Listings</a>
+      <a href="{% url 'rented_listings' %}" class="{% if request.resolver_match.url_name == 'rented_listings' %}active{% endif %}">Rented Listings</a>
       <a href="{% url 'rejected_listings' %}" class="{% if request.resolver_match.url_name == 'rejected_listings' %}active{% endif %}">Rejected Listings</a>
       <a href="{% url 'user_management' %}" class="{% if request.resolver_match.url_name == 'user_management' %}active{% endif %}">User Management</a>
-    
     </nav>
 
     <a href="{% url 'logout' %}" class="sidebar-logout">Logout</a>

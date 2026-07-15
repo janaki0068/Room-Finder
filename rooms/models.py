@@ -3,6 +3,9 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.dispatch import receiver
 from django.core.exceptions import ValidationError
+from django.utils import timezone
+from datetime import timedelta
+import random
 from django.conf import settings
 
 
@@ -15,10 +18,10 @@ class Province(models.Model):
     def __str__(self):
         return self.name
 
+
 # DISTRICTS
 class District(models.Model):
-    province = models.ForeignKey(
-        Province, on_delete=models.CASCADE, related_name="districts")
+    province = models.ForeignKey(Province, on_delete=models.CASCADE, related_name="districts")
     name = models.CharField(max_length=100)
 
     class Meta:
@@ -36,13 +39,12 @@ class Profile(models.Model):
         ('admin', 'Admin'),
     ]
 
-    user = models.OneToOneField(
-        User, on_delete=models.CASCADE, related_name='profile')
-    role = models.CharField(
-        max_length=10, choices=ROLE_CHOICES, default='tenant')
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='tenant')
     phone = models.CharField(max_length=15, blank=True)
     bio = models.TextField(blank=True)
     image = models.ImageField(upload_to='profiles/', blank=True, null=True)
+    is_verified = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -53,6 +55,21 @@ class Profile(models.Model):
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
+
+
+# EMAIL VERIFICATION
+class EmailOTP(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='otps')
+    otp = models.CharField(max_length=6)
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_used = models.BooleanField(default=False)
+
+    def is_expired(self):
+        return timezone.now() > self.created_at + timedelta(minutes=5)
+
+    @staticmethod
+    def generate_otp():
+        return str(random.randint(100000, 999999))
 
 
 # ROOMS

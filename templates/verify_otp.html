@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/verify_otp.css' %}">
+{% endblock css %}
+{% block content %}
+
+<div class="register-container">
+  <div class="right-side">
+    <h2>Verify Your Email</h2>
+    <p>Enter the 6-digit code sent to <strong>{{ email }}</strong>. It expires in 5 minutes.</p>
+
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+
+    <form method="POST">
+      {% csrf_token %}
+      <div class="register-form-group full-width">
+        <label for="otp">OTP Code</label>
+        <input type="text" id="otp" name="otp" maxlength="6" required
+               placeholder="Enter 6-digit OTP" autocomplete="one-time-code" />
+      </div>
+      <div class="register-form-footer">
+        <button type="submit" class="register-btn">Verify Account</button>
+      </div>
+    </form>
+
+    <form method="POST" action="{% url 'resend_otp' %}">
+      {% csrf_token %}
+      <button type="submit" class="register-btn" style="background:transparent;color:#333;text-decoration:underline;">
+        Resend OTP
+      </button>
+    </form>
+  </div>
+</div>
+
+{% endblock content %}

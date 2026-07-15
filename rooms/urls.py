@@ -6,10 +6,13 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('login/', views.login_view, name="login"),
     path('register/', views.register_view, name='register'),
+    path('verify-otp/', views.verify_otp_view, name='verify_otp'),
+    path('resend-otp/', views.resend_otp_view, name='resend_otp'),
+
     path('logout/', views.logout_view, name='logout'),
     path('search/', views.search_rooms, name='search_rooms'),
-    path('get-districts/<int:province_id>/',
-         views.get_districts, name='get_districts'),
+    path('get-districts/<int:province_id>/',views.get_districts, name='get_districts'),
+
 
     # LANDLORD -->
     path("landlord-dashboard/", views.landlord_dashboard,name="landlord_dashboard"),
@@ -24,8 +27,7 @@ urlpatterns = [
     path("messages/", views.messages_view, name="messages"),
     path("messages/<int:user_id>/<int:room_id>/",views.chat_room, name="chat_room"),
     path("settings/", views.settings_view, name="settings"),
-    path('settings/password/', auth_views.PasswordChangeView.as_view(),
-         name='password_change'),
+    path('settings/password/', auth_views.PasswordChangeView.as_view(),name='password_change'),
 
 
     # TENANT -->

@@ -1,0 +1,179 @@
+/* ==========================
+VERIFY OTP PAGE
+========================== */
+
+.register-container {
+    width: 100%;
+    min-height: calc(100vh - 120px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+}
+
+.right-side {
+    width: 100%;
+    max-width: 500px;
+    background: #ffffff;
+    border: 1px solid #F4C0D1;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 10px 30px rgba(212, 83, 126, 0.08);
+}
+
+.right-side h2 {
+    color: #4B1528;
+    font-size: 32px;
+    margin-bottom: 12px;
+    text-align: center;
+}
+
+.right-side p {
+    color: #666;
+    text-align: center;
+    margin-bottom: 30px;
+    line-height: 1.6;
+}
+
+.right-side p strong {
+    color: #D4537E;
+}
+
+/* ==========================
+FORM
+========================== */
+
+.register-form-group {
+    margin-bottom: 20px;
+}
+
+.register-form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #4B1528;
+}
+
+.register-form-group input {
+    width: 100%;
+    height: 58px;
+    border: 1px solid #F4C0D1;
+    border-radius: 14px;
+    background: #FBEAF0;
+    padding: 0 18px;
+    font-size: 16px;
+    outline: none;
+    transition: 0.3s;
+    text-align: center;
+    letter-spacing: 6px;
+    font-weight: 600;
+}
+
+.register-form-group input:focus {
+    border-color: #D4537E;
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(212, 83, 126, 0.12);
+}
+
+.register-form-group input::placeholder {
+    color: #aaa;
+    letter-spacing: normal;
+}
+
+/* ==========================
+BUTTONS
+========================== */
+
+.register-form-footer {
+    margin-top: 25px;
+}
+
+.register-btn {
+    width: 100%;
+    height: 56px;
+    border: none;
+    border-radius: 14px;
+    background: #D4537E;
+    color: white;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.register-btn:hover {
+    background: #993556;
+    transform: translateY(-2px);
+}
+
+/* Resend OTP Button */
+form + form {
+    margin-top: 15px;
+}
+
+form + form .register-btn {
+    background: transparent !important;
+    color: #D4537E !important;
+    border: 1px solid #F4C0D1;
+    text-decoration: none !important;
+}
+
+form + form .register-btn:hover {
+    background: #FBEAF0 !important;
+    color: #993556 !important;
+}
+
+/* ==========================
+ALERTS
+========================== */
+
+.alert {
+    padding: 14px 16px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.alert-success {
+    background: #e8f8ee;
+    color: #1f7a45;
+    border: 1px solid #b7e7c9;
+}
+
+.alert-error,
+.alert-danger {
+    background: #ffe8ec;
+    color: #c62828;
+    border: 1px solid #ffc3ce;
+}
+
+.alert-warning {
+    background: #fff4db;
+    color: #946200;
+    border: 1px solid #ffe4a6;
+}
+
+.alert-info {
+    background: #eef6ff;
+    color: #1557a0;
+    border: 1px solid #c8e0ff;
+}
+
+/* ==========================
+MOBILE
+========================== */
+
+@media (max-width: 768px) {
+    .right-side {
+        padding: 30px 20px;
+    }
+
+    .right-side h2 {
+        font-size: 26px;
+    }
+
+    .register-form-group input {
+        letter-spacing: 4px;
+    }
+}

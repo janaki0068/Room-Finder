@@ -1,13 +1,24 @@
 from django import forms
 from django.contrib.auth.forms import User
 from .models import *
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError as DjangoValidationError
+from django.core.validators import RegexValidator
 
 # Register
 class RegisterForm(forms.Form):
     first_name = forms.CharField(max_length=50)
     last_name = forms.CharField(max_length=50)
     email = forms.EmailField()
-    phone_number = forms.CharField(max_length=10)
+    phone_number = forms.CharField(
+        max_length=10,
+        validators=[
+            RegexValidator(
+                regex=r'^9\d{9}$',
+                message="Enter a valid 10-digit phone number (e.g. 98XXXXXXXX)."
+            )
+        ]
+    )
     role = forms.ChoiceField(
         choices=[
             ('landlord', 'Landlord'),
@@ -17,13 +28,21 @@ class RegisterForm(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput)
     confirm_password = forms.CharField(widget=forms.PasswordInput)
 
+    def clean_password(self):
+        password = self.cleaned_data.get('password')
+        try:
+            validate_password(password)
+        except DjangoValidationError as e:
+            raise forms.ValidationError(e.messages)
+        return password
+
     def clean(self):
         cleaned_data = super().clean()
         password = cleaned_data.get('password')
         confirm_password = cleaned_data.get('confirm_password')
 
-        if password != confirm_password:
-            raise forms.ValidationError("Passwords do not match.")
+        if password and confirm_password and password != confirm_password:
+            self.add_error('confirm_password', "Passwords do not match.")
 
         return cleaned_data
     
