@@ -88,6 +88,10 @@
 
         <form method="GET" action="{% url 'home' %}" class="advanced-filter-form">
 
+            <!-- marker: lets JS tell "advanced form was submitted" apart from quick
+                 browse-by-type clicks, which also send room_type but shouldn't open this panel -->
+            <input type="hidden" name="advanced" value="1">
+
             <!-- keep existing q/province/district/sort values if user opens this -->
             <input type="hidden" name="q" value="{{ query|default:'' }}">
             <input type="hidden" name="province" value="{{ selected_province|default:'' }}">
@@ -300,16 +304,13 @@
 
     {% elif item_type == 'ad' %}
     <div class="listing-ad">
-    {% if item.image %}
-        <img src="{{ item.image.url }}" alt="{{ item.title }}" class="ad-image">
-    {% endif %}
-
-    <div class="listing-ad-content">
-        <span class="ad-label">Sponsored</span>
-
-        <h3>{{ item.title }}</h3>
-
-        <p>{{ item.description }}</p>
+        <div class="listing-ad-content">
+            <span class="ad-label">Advertisement</span>
+            <div class="ad-text">
+                <strong>{{ item.title }}</strong>
+                <span>{{ item.description }}</span>
+            </div>
+        </div>
 
         {% if item.link %}
             <a href="{{ item.link }}" target="_blank" class="ad-btn">
@@ -317,13 +318,19 @@
             </a>
         {% endif %}
     </div>
-</div>
+
+    {% elif item_type == 'heading' %}
+    <h2 class="more-listings-heading">{{ item }}</h2>
     {% endif %}
 
 {% empty %}
-<div style="padding:20px;">
-    <h3>No rooms available.</h3>
-</div>
+    <div class="no-rooms">
+        <div class="no-rooms-icon">
+            <iconify-icon icon="mdi:home-search-outline"></iconify-icon>
+        </div>
+        <h3>No rooms available.</h3>
+        <p>Try adjusting your search or filters to find more results.</p>
+    </div>
 {% endfor %}
 
 </section>
@@ -342,17 +349,17 @@
         <small>Search</small>
     </a>
 
-    <a href="#" class="bottom-nav-item">
+    <a href="{% url 'saved_rooms' %}" class="bottom-nav-item">
         <img src="{% static 'images/saved.png' %}" alt="Saved" width="40" height="40">
         <small>Saved</small>
     </a>
 
-    <a href="#" class="bottom-nav-item">
+    <a href="{% url 'home' %}#results" class="bottom-nav-item">
         <img src="{% static 'images/lists.png' %}" alt="Lists" width="40" height="40">
         <small>List</small>
     </a>
 
-    <a href="#" class="bottom-nav-item">
+    <a href="{% url 'tenant_dashboard' %}" class="bottom-nav-item">
         <img src="{% static 'images/profile.png' %}" alt="Profile" width="40" height="40">
         <small>Profile</small>
     </a>
@@ -448,12 +455,11 @@ document.addEventListener('DOMContentLoaded', function () {
             panel.style.display = (panel.style.display === 'none') ? 'block' : 'none';
         });
 
-        // Keep panel open on page load if any advanced filter is active
+        // Keep panel open on page load ONLY if the advanced form itself was submitted
+        // (marked by the hidden "advanced" field), not just because room_type happens
+        // to be present — that param is also used by the quick "Browse by Type" cards.
         const params = new URLSearchParams(window.location.search);
-        const advancedKeys = ['room_type', 'min_price', 'max_price', 'furnished_status',
-                               'parking_car', 'parking_bike', 'water_247', 'drinking_water',
-                               'attached_bathroom', 'wifi', 'kitchen', 'pet_allowed'];
-        if (advancedKeys.some(key => params.has(key))) {
+        if (params.has('advanced')) {
             panel.style.display = 'block';
         }
     }
@@ -498,4 +504,3 @@ document.addEventListener('DOMContentLoaded', function () {
 
 </body>
 </html>
-

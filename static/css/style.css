@@ -517,72 +517,96 @@ LISTINGS GRID
 /* ==========================
 INLINE ADVERTISEMENT
 ========================== */
+/* ==========================
+INLINE ADVERTISEMENT — slim full-width banner
+========================== */
 .listing-ad{
     grid-column:1/-1;
     background:#FBEAF0;
-    border-radius:18px;
-    padding:30px;
-    text-align:center;
     border:1px solid #F4C0D1;
-}
-.listing-ad h3{
-    margin:12px 0;
-    font-size:28px;
-    color:#4B1528;
-}
-.listing-ad p{
-    color:#777;
-    margin-bottom:20px;
-}
-.listing-ad button{
-    background:#D4537E;
-    color:white;
-    padding:12px 24px;
-    border-radius:10px;
-    font-weight:600;
-    font-family:'Segoe UI',sans-serif;
-}
-.listing-ad button:hover{
-    background:#993556;
-}
-
-/* ==========================
-BOTTOM AD BANNER
-========================== */
-.ad-banner{
-    background:#FBEAF0;
     border-radius:18px;
-    padding:30px;
+    padding:20px 28px;
     display:flex;
     justify-content:space-between;
     align-items:center;
-    margin-bottom:40px;
-    border:1px solid #F4C0D1;
+    gap:20px;
+    flex-wrap:wrap;
+}
+.listing-ad-content{
+    display:flex;
+    align-items:center;
+    gap:20px;
+    flex-wrap:wrap;
 }
 .ad-label{
-    display:inline-block;
-    background:#ED93B1;
+    background:#F4C0D1;
     color:#4B1528;
-    padding:6px 12px;
-    border-radius:20px;
     font-size:12px;
-    font-weight:600;
+    font-weight:700;
+    padding:6px 14px;
+    border-radius:20px;
+    white-space:nowrap;
 }
-.ad-text p{
-    margin-top:12px;
-    font-size:18px;
+.ad-text{
+    display:flex;
+    flex-direction:column;
+    gap:2px;
+}
+.ad-text strong{
+    font-size:16px;
     color:#4B1528;
 }
-.ad-banner button{
-    background:#D4537E;
-    color:white;
-    padding:14px 28px;
-    border-radius:10px;
-    font-weight:600;
-    font-family:'Segoe UI',sans-serif;
+.ad-text span{
+    font-size:14px;
+    color:#777;
 }
-.ad-banner button:hover{
-    background:#993556;
+.ad-btn{
+    display:inline-block;
+    padding:12px 22px;
+    border-radius:10px;
+    background:#F4C0D1;
+    color:#4B1528;
+    font-weight:700;
+    font-size:13px;
+    letter-spacing:.5px;
+    text-transform:uppercase;
+    text-decoration:none;
+    white-space:nowrap;
+    transition:.3s;
+}
+.ad-btn:hover{
+    background:#ED93B1;
+}
+
+/* image support kept optional, in case an ad has one */
+.ad-image{
+    width:70px;
+    height:70px;
+    object-fit:cover;
+    border-radius:10px;
+    flex-shrink:0;
+}
+
+/* ==========================
+"MORE LISTINGS" SECTION HEADING
+========================== */
+.more-listings-heading{
+    grid-column:1/-1;
+    font-size:20px;
+    font-weight:700;
+    color:#4B1528;
+    margin:6px 0 -6px;
+}
+
+@media(max-width:768px){
+    .listing-ad{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+    .ad-btn{
+        width:100%;
+        text-align:center;
+    }
 }
 
 /* ==========================
