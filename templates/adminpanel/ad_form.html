@@ -1,0 +1,113 @@
+{% extends "adminpanel/admin_base.html" %} 
+{% load static %} 
+
+{% block admin_content %}
+
+<div class="admin-container">
+  <div class="admin-header">
+    <h1>{% if editing %}Edit Ad{% else %}New Ad{% endif %}</h1>
+  </div>
+
+  <div class="ad-form-box">
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="ad-form-grid">
+        <div class="full-width">
+          <label for="{{ form.title.id_for_label }}"
+            >{{ form.title.label }}</label
+          >
+          {{ form.title }} {% if form.title.errors %}
+          <p style="color: var(--color-10); font-size: 13px">
+            {{ form.title.errors|join:", " }}
+          </p>
+          {% endif %}
+        </div>
+
+        <div class="full-width">
+          <label for="{{ form.description.id_for_label }}"
+            >{{ form.description.label }}</label
+          >
+          {{ form.description }} {% if form.description.errors %}
+          <p style="color: var(--color-10); font-size: 13px">
+            {{ form.description.errors|join:", " }}
+          </p>
+          {% endif %}
+        </div>
+
+        <div class="full-width">
+          {% if editing and ad.image %}
+          <img
+            src="{{ ad.image.url }}"
+            alt="{{ ad.title }}"
+            class="ad-image-preview"
+          />
+          {% endif %}
+          <label for="{{ form.image.id_for_label }}"
+            >{{ form.image.label }}</label
+          >
+          {{ form.image }} {% if form.image.errors %}
+          <p style="color: var(--color-10); font-size: 13px">
+            {{ form.image.errors|join:", " }}
+          </p>
+          {% endif %}
+        </div>
+
+        <div>
+          <label for="{{ form.placement.id_for_label }}"
+            >{{ form.placement.label }}</label
+          >
+          {{ form.placement }}
+        </div>
+
+        <div>
+          <label for="{{ form.redirect_url.id_for_label }}"
+            >{{ form.redirect_url.label }}</label
+          >
+          {{ form.redirect_url }}
+        </div>
+
+        <div>
+          <label for="{{ form.start_date.id_for_label }}"
+            >{{ form.start_date.label }}</label
+          >
+          {{ form.start_date }} {% if form.start_date.errors %}
+          <p style="color: var(--color-10); font-size: 13px">
+            {{ form.start_date.errors|join:", " }}
+          </p>
+          {% endif %}
+        </div>
+
+        <div>
+          <label for="{{ form.end_date.id_for_label }}"
+            >{{ form.end_date.label }}</label
+          >
+          {{ form.end_date }} {% if form.end_date.errors %}
+          <p style="color: var(--color-10); font-size: 13px">
+            {{ form.end_date.errors|join:", " }}
+          </p>
+          {% endif %}
+        </div>
+
+        <div class="full-width">
+          <label style="display: inline-flex; align-items: center; gap: 8px">
+            {{ form.is_active }} {{ form.is_active.label }}
+          </label>
+        </div>
+
+        {% if form.non_field_errors %}
+        <p class="full-width" style="color: var(--color-10); font-size: 14px">
+          {{ form.non_field_errors|join:", " }}
+        </p>
+        {% endif %}
+
+        <div class="ad-form-actions">
+          <button type="submit" class="btn-approve">
+            {% if editing %}Save Changes{% else %}Create Ad{% endif %}
+          </button>
+          <a href="{% url 'ad_list' %}" class="btn-cancel">Cancel</a>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock admin_content %}

@@ -71,6 +71,9 @@
     margin-bottom: 14px;
 }
 
+.sidebar {
+    margin-top: 24px;
+}
 
 .sidebar-nav {
     background: var(--color-9);

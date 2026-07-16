@@ -41,6 +41,11 @@
       <span class="stat-number">{{ total_users }}</span>
       <span class="stat-label">Total Users</span>
     </a>
+
+    <a href="{% url 'ad_list' %}" class="stat-card">
+      <span class="stat-number">{{ active_ads_count }}</span>
+      <span class="stat-label">Active Ads</span>
+    </a>
   </div>
 </div>
 {% endblock admin_content %}

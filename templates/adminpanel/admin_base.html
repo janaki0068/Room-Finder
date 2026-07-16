@@ -31,11 +31,22 @@
       <a href="{% url 'rented_listings' %}" class="{% if request.resolver_match.url_name == 'rented_listings' %}active{% endif %}">Rented Listings</a>
       <a href="{% url 'rejected_listings' %}" class="{% if request.resolver_match.url_name == 'rejected_listings' %}active{% endif %}">Rejected Listings</a>
       <a href="{% url 'user_management' %}" class="{% if request.resolver_match.url_name == 'user_management' %}active{% endif %}">User Management</a>
+      <a href="{% url 'ad_list' %}" class="{% if request.resolver_match.url_name == 'ad_list' or request.resolver_match.url_name == 'ad_create' or request.resolver_match.url_name == 'ad_edit' %}active{% endif %}">Ad Management</a>
     </nav>
 
     <a href="{% url 'logout' %}" class="sidebar-logout">Logout</a>
   </aside>
 
-  <main class="admin-main">{% block admin_content %}{% endblock %}</main>
+  <main class="admin-main">
+    {% if messages %}
+      <div class="admin-messages">
+        {% for message in messages %}
+          <div class="admin-message admin-message-{{ message.tags }}">
+            {{ message }}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+    {% block admin_content %}{% endblock %}</main>
 </div>
 {% endblock %}

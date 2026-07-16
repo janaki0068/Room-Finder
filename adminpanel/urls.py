@@ -16,4 +16,10 @@ urlpatterns = [
     path('users/delete/<int:user_id>/', views.delete_user, name='delete_user'),
 
     path('logout/', views.custom_logout, name='logout'),
+
+    path('ads/', views.ad_list, name='ad_list'),
+    path('ads/new/', views.ad_create, name='ad_create'),
+    path('ads/<int:ad_id>/edit/', views.ad_edit, name='ad_edit'),
+    path('ads/<int:ad_id>/toggle/', views.ad_toggle, name='ad_toggle'),
+    path('ads/<int:ad_id>/delete/', views.ad_delete, name='ad_delete'),
 ]
