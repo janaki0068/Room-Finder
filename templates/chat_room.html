@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/tenant_dashboard.css' %}" />
+{% endblock css %}
+
+{% block content %}
+
+<div class="chat-container">
+
+    <a href="{% url 'tenant_messages' %}" class="back-btn">
+        ← Back
+    </a>
+
+    <div class="chat-header">
+        <p>
+            Chat with
+            <strong>{{ other_user.get_full_name|default:other_user.username }}</strong>
+        </p>
+    </div>
+
+    <div class="chat-box">
+        {% for message in messages %}
+            <div class="{% if message.sender == request.user %}my-message{% else %}their-message{% endif %}">
+                <strong>{{ message.sender.get_full_name|default:message.sender.username }}</strong>
+                <p>{{ message.body }}</p>
+                <small>{{ message.sent_at }}</small>
+            </div>
+        {% empty %}
+            <p>No messages yet.</p>
+        {% endfor %}
+    </div>
+
+    <form method="POST" class="message-form">
+        {% csrf_token %}
+        <textarea
+            name="message"
+            rows="2"
+            placeholder="Type your message..."
+            class="message-input"
+            required
+        ></textarea>
+        <button type="submit" class="send-btn">Send</button>
+    </form>
+
+</div>
+
+{% endblock %}

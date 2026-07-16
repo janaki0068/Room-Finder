@@ -133,7 +133,7 @@
 
     <div class="listings-grid">
       {% for room in rooms %}
-      <a href="{% url 'room_detail' room.id %}" class="listing-card-link">
+      <a href="{% url 'troom_detail' room.id %}" class="listing-card-link">
         <div class="listing-card">
           <div class="listing-img-wrap">
             {% with room.images.first as cover %}
