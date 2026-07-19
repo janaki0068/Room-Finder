@@ -10,6 +10,7 @@ urlpatterns = [
     path('rejected/', views.rejected_listings, name='rejected_listings'),
 
     path('approve/<int:room_id>/', views.approve_listing, name='approve_listing'),
+    path('listing/<int:room_id>/', views.listing_detail, name='listing_detail'),
     path('reject/<int:room_id>/', views.reject_listing, name='reject_listing'),
 
     path('users/', views.user_management, name='user_management'),

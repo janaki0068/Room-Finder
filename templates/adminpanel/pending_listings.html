@@ -38,6 +38,8 @@
             <a href="{% url 'reject_listing' room.id %}" class="btn-reject"
               >Reject</a
             >
+            <a href="{% url 'listing_detail' room.id %}" class="btn-view"
+              >View Details</a>
           </td>
         </tr>
         {% empty %}

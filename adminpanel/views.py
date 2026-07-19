@@ -30,6 +30,12 @@ def pending_listings(request):
 
 
 @staff_member_required
+def listing_detail(request, room_id):
+    room = get_object_or_404(Room, id=room_id)
+    images = room.images.all()
+    return render(request, "adminpanel/listing_detail.html", {"room": room, "images": images})
+
+@staff_member_required
 def active_listings(request):
     listings = Room.objects.filter(status="active")
     return render(request, "adminpanel/active_listings.html", {"listings": listings})
