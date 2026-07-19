@@ -59,6 +59,33 @@
     margin-bottom: 12px;
 }
 
+.photo-gallery {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    scroll-snap-type: x mandatory;
+}
+
+.photo-gallery img {
+    flex: 0 0 auto;
+    width: 220px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+    scroll-snap-align: start;
+}
+
+/* optional: nicer scrollbar */
+.photo-gallery::-webkit-scrollbar {
+    height: 6px;
+}
+
+.photo-gallery::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 3px;
+}
+
 
 /* ── Status Badges ─────────────────────────── */
 

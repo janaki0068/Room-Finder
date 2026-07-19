@@ -125,3 +125,7 @@ MEDIA_ROOT = BASE_DIR / "media"
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 DEFAULT_FROM_EMAIL = 'noreply@roomfinder.com'
+
+LOGIN_URL = 'login'                # tells @login_required where to send unauthenticated users
+LOGIN_REDIRECT_URL = 'home'        # optional — where to land after a successful login
+LOGOUT_REDIRECT_URL = 'home'       # optional — where to land after logout

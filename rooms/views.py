@@ -17,7 +17,7 @@ from .forms import ProfileForm, UserPreferenceForm, EditProfileForm, RegisterFor
 
 # HOME
 def home(request):
-    rooms = Room.objects.filter(status='active')
+    rooms = Room.objects.filter(status='active').prefetch_related('images')
     ads = list(Advertisement.objects.filter(is_active=True))
 
     # GET FILTER VALUES
@@ -68,11 +68,11 @@ def home(request):
     if max_price:
         rooms = rooms.filter(price__lte=max_price)
 
-    # FURNISHED STATUS
+    # FURNISHED STATUS (radio - single value)
     if furnished_status:
         rooms = rooms.filter(furnished_status=furnished_status)
 
-    # PARKING
+    # PARKING (checkboxes - car / bike, independent, OR logic if both checked)
     if parking_car and parking_bike:
         rooms = rooms.filter(Q(parking=True) | Q(has_bike_parking=True))
     elif parking_car:
@@ -90,8 +90,7 @@ def home(request):
 
     # WATER FACILITY (checkboxes - 24/7 / drinking, independent, OR logic if both checked)
     if water_247 and drinking_water:
-        rooms = rooms.filter(Q(has_water_24_7=True) |
-                             Q(has_drinking_water=True))
+        rooms = rooms.filter(Q(has_water_24_7=True) | Q(has_drinking_water=True))
     elif water_247:
         rooms = rooms.filter(has_water_24_7=True)
     elif drinking_water:
@@ -111,18 +110,27 @@ def home(request):
     elif sort == 'high-low':
         rooms = rooms.order_by('-price')
     else:
-        rooms = rooms.order_by('-created_at')
+        rooms = rooms.order_by('-created_at')  # default = latest
 
+    # BUILD INTERLEAVED LIST (rooms + ads) — used by the template
     rooms = list(rooms)
     interleaved = []
     ad_index = 0
 
+    ad_inserted = False
+
     for i, room in enumerate(rooms):
         interleaved.append(("room", room))
-
-        if (i + 1) % 3 == 0 and ads:
+        # drop in an ad after every 2 rooms (i.e. after every full row, since the
+        # grid is 2 columns) — .listing-ad spans the full width (grid-column: 1/-1)
+        if ads and (i + 1) % 3 == 0:
             interleaved.append(("ad", ads[ad_index % len(ads)]))
             ad_index += 1
+            # add a "More listings" section divider right after the first ad only,
+            # matching the design mock
+            if not ad_inserted:
+                interleaved.append(("heading", "More listings"))
+                ad_inserted = True
 
     context = {
         "interleaved": interleaved,
@@ -130,6 +138,7 @@ def home(request):
         "ads": ads,
 
         "provinces": Province.objects.all(),
+        "districts": District.objects.all(),
 
         "room_type_choices": Room.ROOM_TYPES,
         "furnished_choices": Room.FURNISHED_CHOICES,
@@ -532,6 +541,9 @@ def upload_listing(request):
             room.is_verified = False
 
             room.save()
+
+            for index, img in enumerate(request.FILES.getlist("images")):
+                RoomImage.objects.create(room=room, image=img, order=index)
 
             VerificationDocument.objects.create(
                 room=room,

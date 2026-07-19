@@ -53,6 +53,7 @@ def rejected_listings(request):
     return render(request, "adminpanel/rejected_listings.html", {"listings": listings})
 
 
+
 @staff_member_required
 def approve_listing(request, room_id):
     room = get_object_or_404(Room, id=room_id)
