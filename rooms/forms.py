@@ -106,35 +106,47 @@ class UserPreferenceForm(forms.ModelForm):
         ]
 
 class EditProfileForm(forms.ModelForm):
-    first_name = forms.CharField(max_length=150, required=True)
+    first_name = forms.CharField(max_length=150)
     last_name = forms.CharField(max_length=150, required=False)
-    email = forms.EmailField(required=True)
+    email = forms.EmailField()
 
     class Meta:
         model = Profile
-        fields = ['phone', 'image']
+        fields = ['image', 'phone']  # keep whatever fields you already have
+        widgets = {
+            'image': forms.FileInput(attrs={
+                'id': 'id_image',
+                'class': 'hidden-file-input',
+            }),
+        }
 
-    def __init__(self, *args, **kwargs):
-        self.user = kwargs.pop('user')
+    def __init__(self, *args, user=None, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['first_name'].initial = self.user.first_name
-        self.fields['last_name'].initial = self.user.last_name
-        self.fields['email'].initial = self.user.email
+        self.user = user
+        if user:
+            self.fields['first_name'].initial = user.first_name
+            self.fields['last_name'].initial = user.last_name
+            self.fields['email'].initial = user.email
 
     def save(self, commit=True):
         profile = super().save(commit=False)
-        self.user.first_name = self.cleaned_data['first_name']
-        self.user.last_name = self.cleaned_data['last_name']
-        self.user.email = self.cleaned_data['email']
+        if self.user:
+            self.user.first_name = self.cleaned_data['first_name']
+            self.user.last_name = self.cleaned_data['last_name']
+            self.user.email = self.cleaned_data['email']
+            if commit:
+                self.user.save()
         if commit:
-            self.user.save()
             profile.save()
         return profile
     
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['image', 'phone', 'bio']
+        fields = ['image', 'phone', 'bio']  # keep your existing fields
         widgets = {
-            'bio': forms.Textarea(attrs={'rows': 4}),
+            'image': forms.FileInput(attrs={
+                'id': 'id_image',
+                'class': 'hidden-file-input',
+            }),
         }

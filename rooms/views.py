@@ -17,7 +17,7 @@ from .forms import ProfileForm, UserPreferenceForm, EditProfileForm, RegisterFor
 
 # HOME
 def home(request):
-    rooms = Room.objects.filter(status='active')
+    rooms = Room.objects.filter(status='active').prefetch_related('images')
     ads = list(Advertisement.objects.filter(is_active=True))
 
     # GET FILTER VALUES

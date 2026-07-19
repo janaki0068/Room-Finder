@@ -31,6 +31,19 @@
         {% endif %}
     </div>
 
+<!-- PROPERTY PHOTOS -->
+{% if room.images.all %}
+<div class="detail-card">
+    <h3>Property Photos</h3>
+    <div class="photo-gallery">
+        {% for img in room.images.all %}
+        <img src="{{ img.image.url }}" alt="{{ room.title }} photo {{ forloop.counter }}">
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+
     <div class="header-actions">
         <a href="{% url 'edit_listing' room.id %}" class="btn-edit"> Edit Listing </a>
         

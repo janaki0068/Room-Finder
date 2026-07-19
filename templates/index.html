@@ -264,11 +264,17 @@
     {% if item_type == 'room' %}
     <div class="listing-card">
         <div class="card-top">
-            {% if item.status == "approved" %}
+            {% if item.status == "active" %}
             <span class="verified-badge">Verified</span>
             {% endif %}
             <span class="heart">&#10084;</span>
         </div>
+
+        {% if item.images.all %}
+            <div class="card-image">
+                <img src="{{ item.images.first.image.url }}" alt="{{ item.title }}">
+            </div>
+        {% else %}
 
         <div class="card-icon">
             {% if item.room_type == "flat" %}
@@ -281,6 +287,7 @@
                 <iconify-icon icon="mingcute:home-2-line"></iconify-icon>
             {% endif %}
         </div>
+        {% endif %}
 
         <h3>{{ item.title }}</h3>
         <p class="location">
