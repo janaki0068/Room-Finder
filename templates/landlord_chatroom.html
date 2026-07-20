@@ -1,0 +1,79 @@
+{% extends "landlord_base.html" %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/landlord_chatroom.css' %}">
+
+<div class="page-top">
+    <a href="{% url 'landlord_dashboard' %}" class="back-btn">&larr; Back to Dashboard</a>
+</div>
+
+<div class="messages-container">
+
+    <!-- ── Conversation List ─────────────────────── -->
+    <div class="conversation-panel">
+
+        {% if conversations %}
+            {% for convo in conversations %}
+                <a href="{% url 'landlord_chatroom' convo.user.id convo.room.id %}"
+                   class="conversation-card">
+                    <div class="conversation-info">
+                        <h4>{{ convo.user.get_full_name|default:convo.user.username }}</h4>
+                        <p>{{ convo.last_message.body|truncatechars:40 }}</p>
+                        <small>{{ convo.last_message.sent_at|date:"M d, g:i A" }}</small>
+                    </div>
+                </a>
+            {% endfor %}
+        {% else %}
+            <p>No conversations yet.</p>
+        {% endif %}
+    </div>
+
+    <!-- ── Chat Panel ─────────────────────────────── -->
+    <div class="chat-panel">
+        {% if other_user %}
+            <div class="chat-header">
+                <h3>{{ other_user.get_full_name|default:other_user.username }}</h3>
+                <small>{{ room.name|default:"Conversation" }}</small>
+            </div>
+
+    <div class="chat-body">
+        {% if chat_messages %}
+            {% for msg in chat_messages %}
+                <div class="message {% if msg.sender == request.user %}outgoing{% else %}incoming{% endif %}">
+                    <div class="bubble-row">
+                        <div class="bubble">{{ msg.body }}</div>
+
+                        {% if msg.sender == request.user %}
+                            <form method="post"
+                                action="{% url 'delete_message' msg.id %}"
+                                class="delete-form"
+                                onsubmit="return confirm('Delete this message?');">
+                                {% csrf_token %}
+                                <button type="submit" class="delete-btn" aria-label="Delete message">×</button>
+                            </form>
+                        {% endif %}
+                    </div>
+                    <small>{{ msg.sent_at|date:"g:i A" }}</small>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No messages yet. Say hello!</p>
+        {% endif %}
+    </div>
+
+            <form method="post" class="message-form">
+                {% csrf_token %}
+                <textarea name="body" rows="1" placeholder="Type a message..." required></textarea>
+                <button type="submit">Send</button>
+            </form>
+        {% else %}
+            <div class="empty-chat">
+                <h3>No conversation selected</h3>
+                <p>Choose a conversation from the left to start chatting.</p>
+            </div>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}

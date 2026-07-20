@@ -622,12 +622,11 @@ def messages_view(request):
 
 # Chatbox
 @login_required
-def chat_room(request, user_id, room_id):
+def landlord_chatroom(request, user_id, room_id):
 
     other_user = get_object_or_404(User, id=user_id)
     room = get_object_or_404(Room, id=room_id)
 
-    # Handle sending a new message
     if request.method == "POST":
         body = request.POST.get("body")
 
@@ -639,58 +638,63 @@ def chat_room(request, user_id, room_id):
                 body=body
             )
 
-        return redirect("chat_room", user_id=user_id, room_id=room_id)
+        return redirect("landlord_chatroom", user_id=user_id, room_id=room_id)
 
-    # Get current conversation
-    messages = Message.objects.filter(
+    chat_messages = Message.objects.filter(
         room=room
     ).filter(
         Q(sender=request.user, receiver=other_user) |
         Q(sender=other_user, receiver=request.user)
     ).order_by("sent_at")
 
-    # Mark received messages as read
-    messages.filter(
+    chat_messages.filter(
         receiver=request.user,
         is_read=False
     ).update(is_read=True)
 
-    # conversation lists
     all_messages = Message.objects.filter(
         Q(sender=request.user) | Q(receiver=request.user)
     ).select_related(
-        "sender",
-        "receiver",
-        "room"
+        "sender", "receiver", "room"
     ).order_by("-sent_at")
 
     conversations = []
     seen = set()
 
     for msg in all_messages:
-
         other = msg.receiver if msg.sender == request.user else msg.sender
-
-        key = (
-            other.id,
-            msg.room.id if msg.room else None
-        )
+        key = (other.id, msg.room.id if msg.room else None)
 
         if key not in seen:
             seen.add(key)
-
             conversations.append({
                 "user": other,
                 "room": msg.room,
                 "last_message": msg,
             })
 
-    return render(request, "messages.html", {
+    return render(request, "landlord_chatroom.html", {
         "conversations": conversations,
-        "messages": messages,
+        "chat_messages": chat_messages,
         "room": room,
         "other_user": other_user,
     })
+
+@login_required
+def delete_message(request, message_id):
+    message = get_object_or_404(Message, id=message_id, sender=request.user)
+
+    room_id = message.room.id
+    other_user_id = (
+        message.receiver.id
+        if message.sender == request.user
+        else message.sender.id
+    )
+
+    if request.method == "POST":
+        message.delete()
+
+    return redirect("landlord_chatroom", user_id=other_user_id, room_id=room_id)
 
 
 # My settings

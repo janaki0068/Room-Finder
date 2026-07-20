@@ -25,7 +25,8 @@ urlpatterns = [
     path("saved-rooms/", views.saved_rooms, name="saved_rooms"),
     path("edit-profile/", views.edit_profile, name="edit_profile"),
     path("messages/", views.messages_view, name="messages"),
-    path("messages/<int:user_id>/<int:room_id>/",views.chat_room, name="chat_room"),
+    path("messages/<int:user_id>/<int:room_id>/",views.landlord_chatroom, name="landlord_chatroom"),
+    path("messages/delete/<int:message_id>/", views.delete_message, name="delete_message"),
     path("settings/", views.settings_view, name="settings"),
     path('settings/password/', auth_views.PasswordChangeView.as_view(),name='password_change'),
 
