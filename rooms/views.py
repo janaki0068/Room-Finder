@@ -417,12 +417,25 @@ def landlord_profile(request):
 def my_listings(request):
     listings = Room.objects.filter(owner=request.user)
 
+    query = request.GET.get('q', '').strip()
+    if query:
+        listings = listings.filter(
+            Q(title__icontains=query) |
+            Q(city__icontains=query) |
+            Q(area__icontains=query) |
+            Q(address__icontains=query) |
+            Q(district__name__icontains=query) |
+            Q(province__name__icontains=query)
+        ).distinct()
+
     status = request.GET.get('status')
     if status:
         listings = listings.filter(status=status)
 
     context = {
         'listings': listings,
+        'query': query,
+        'selected_status': status,
         'listing_count': Room.objects.filter(owner=request.user).count(),
         'active_count': Room.objects.filter(owner=request.user, status='active').count(),
         'pending_count': Room.objects.filter(owner=request.user, status='pending').count(),

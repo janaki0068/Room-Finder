@@ -39,6 +39,11 @@
     background: var(--pink-50);
     border-bottom: 0.5px solid var(--pink-100);
     padding: 18px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
 }
 
 .card-header h3 {
@@ -48,6 +53,49 @@
     margin: 0;
 }
 
+/* ── Search Form ───────────────────────────── */
+
+.listing-search-form {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.listing-search-input {
+    padding: 8px 14px;
+    border-radius: 8px;
+    border: 0.5px solid var(--pink-200);
+    background: #ffffff;
+    font-size: 13px;
+    color: #444444;
+    min-width: 220px;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.listing-search-input::placeholder {
+    color: #b5b5b5;
+}
+
+.listing-search-input:focus {
+    outline: none;
+    border-color: var(--pink-400);
+    box-shadow: 0 0 0 3px var(--pink-50);
+}
+
+.listing-search-form .table-btn {
+    margin-right: 0;
+}
+
+@media (max-width: 560px) {
+    .listing-search-form {
+        width: 100%;
+    }
+
+    .listing-search-input {
+        flex: 1;
+        min-width: 0;
+    }
+}
 
 /* ── Table Wrapper ─────────────────────────── */
 
