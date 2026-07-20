@@ -23,6 +23,19 @@ My Listings
 <section class="dashboard-card">
   <div class="card-header">
     <h3>My Properties</h3>
+    <form method="GET" class="listing-search-form">
+      <input
+        type="text"
+        name="q"
+        value="{{ query }}"
+        placeholder="Search by title, city, area..."
+        class="listing-search-input"
+      />
+      <button type="submit" class="table-btn">Search</button>
+      {% if query %}
+      <a href="{% url 'my_listings' %}" class="table-btn">Clear</a>
+      {% endif %}
+    </form>
   </div>
 
   {% if listings %}

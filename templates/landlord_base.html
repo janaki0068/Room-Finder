@@ -132,18 +132,26 @@
   <!-- ===== MAIN AREA ===== -->
   <div class="main-area">
 
+
+
     <!-- Topbar -->
     <header class="topbar">
       <div class="topbar-left">
         <span class="page-title">{% block page_title %}Dashboard{% endblock %}</span>
       </div>
       <div class="topbar-right">
+        
         <a href="{% url 'messages' %}" class="icon-btn notif-btn" title="Notifications">
           <i class="ti ti-bell"></i>
+          {% if unread_count %}
+            <span class="notif-badge">{{ unread_count }}</span>
+          {% endif %}
         </a>
-        <a href="{% url 'home' %}" class="icon-btn" title="Browse rooms">
+
+        <a href="{% url 'my_listings' %}" class="icon-btn" title="Browse rooms">
           <i class="ti ti-search"></i>
         </a>
+
         <a href="{% url 'landlord_profile' %}" class="icon-btn" title="Profile">
           <i class="ti ti-user"></i>
         </a>
