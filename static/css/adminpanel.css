@@ -472,10 +472,6 @@ body {
     width: fit-content;
 }
 
-.back-btn:hover { 
-    text-decoration: underline; 
-}
-
 .gallery { 
     display: flex; 
     flex-direction: column; 

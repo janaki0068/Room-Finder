@@ -34,6 +34,8 @@
                     <td>{{ room.rejection_reason|default:"-"}}</td>
                     <td class="action-cell">
                         <a href="{% url 'approve_listing' room.id %}" class="btn-approve">Re-approve</a>
+                        <a href="{% url 'listing_detail' room.id %}" class="btn-view"
+              >View Details</a>
                     </td>
                 </tr>
                 {% empty %}

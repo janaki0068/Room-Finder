@@ -34,6 +34,8 @@
             <a href="{% url 'reject_listing' room.id %}" class="btn-reject" onclick="return confirm('Are you sure you want to remove this listing?')">
               Remove
             </a>
+            <a href="{% url 'listing_detail' room.id %}" class="btn-view"
+              >View Details</a>
           </td>
         </tr>
         {% empty %}
