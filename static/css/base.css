@@ -125,3 +125,97 @@ body {
     text-decoration: none;
     padding: 6px 14px;
 }
+
+/* Notification Bell */
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
+
+.notif-bell-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.notif-bell-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  color: var(--color-5);
+  position: relative;
+  padding: 6px;
+}
+
+.notif-badge {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  background: var(--color-5);
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 700;
+  min-width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 3px;
+}
+
+.notif-popup {
+  position: absolute;
+  top: 130%;
+  right: 0;
+  width: 260px;
+  background: #fff;
+  border: 1px solid var(--color-8);
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  padding: 14px;
+  display: none;
+  z-index: 100;
+}
+
+.notif-popup.open {
+  display: block;
+}
+
+.notif-item {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.notif-icon {
+  color: var(--color-5);
+  font-size: 1rem;
+  margin-top: 2px;
+}
+
+.notif-content p {
+  margin: 0 0 6px 0;
+  font-size: 0.88rem;
+  color: #2b2b2b;
+}
+
+.notif-content a {
+  font-size: 0.85rem;
+  color: var(--color-11);
+  text-decoration: none;
+  font-weight: 600;
+}
+.notif-content a:hover {
+  text-decoration: underline;
+}
+
+.notif-empty {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #6b6b6b;
+  text-align: center;
+  padding: 10px 0;
+}

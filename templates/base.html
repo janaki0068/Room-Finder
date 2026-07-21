@@ -16,26 +16,64 @@
   <body>
     {% block site_header %}
     <header>
-
-<a href="{% url 'home' %}" class="logo-link">
-    <div class="logo">
-        <img
+      <a href="{% url 'home' %}" class="logo-link">
+        <div class="logo">
+          <img
             src="{% static 'images/logo.png' %}"
             alt="Room Finder Logo"
             width="40"
             height="40"
-        />
-        <span>Room Finder</span>
-    </div>
-</a>
+          />
+          <span>Room Finder</span>
+        </div>
+      </a>
 
       {% if user.is_authenticated %}
-      <form method="POST" action="{% url 'logout' %}">
-        {% csrf_token %}
-        <button type="submit" class="logout-btn">
-          <i class="fa-solid fa-arrow-right-from-bracket"></i>
-        </button>
-      </form>
+      <div class="nav-actions">
+        <div class="notif-bell-wrapper">
+          <button type="button" class="notif-bell-btn" id="notifBellBtn">
+            <i class="fa-solid fa-bell"></i>
+            {% if unread_count > 0 %}
+            <span class="notif-badge">{{ unread_count }}</span>
+            {% endif %}
+          </button>
+
+          <div class="notif-popup" id="notifPopup">
+            {% if unread_count > 0 %}
+            <div class="notif-item">
+              <span class="notif-icon"
+                ><i class="fa-solid fa-envelope"></i
+              ></span>
+              <div class="notif-content">
+                <p>
+                  You have
+                  <strong
+                    >{{ unread_count }} unread message{{ unread_count|pluralize
+                    }}</strong
+                  >.
+                </p>
+                {% if user.profile.role == 'landlord' %}
+                <a href="{% url 'messages' %}">View Messages →</a>
+                {% else %}
+                <a href="{% url 'tenant_messages' %}">View Messages →</a>
+                {% endif %}
+              </div>
+            </div>
+            {% else %}
+            <p class="notif-empty">
+              You're all caught up, no new notifications.
+            </p>
+            {% endif %}
+          </div>
+        </div>
+
+        <form method="POST" action="{% url 'logout' %}">
+          {% csrf_token %}
+          <button type="submit" class="logout-btn">
+            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+          </button>
+        </form>
+      </div>
       {% else %}
       <div class="nav-buttons">
         <a href="{% url 'login' %}" class="btn-login">Login</a>
@@ -46,8 +84,7 @@
     {% endblock site_header %}
     <main>{% block content %}{% endblock content %}</main>
 
-    {% block site_bottom_nav %}
-    {% if user.is_authenticated %}
+    {% block site_bottom_nav %} {% if user.is_authenticated %}
     <nav class="bottom-nav">
       <a
         href="{% url 'tenant_dashboard' %}"
@@ -75,7 +112,8 @@
         <span><i class="fa-solid fa-user"></i></span><small>Profile</small>
       </a>
     </nav>
-    {% endif %}
-    {% endblock site_bottom_nav %}
+    {% endif %} {% endblock site_bottom_nav %}
+
+    <script src="{% static 'js/notification_bell.js' %}"></script>
   </body>
 </html>
