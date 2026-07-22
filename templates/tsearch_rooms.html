@@ -23,12 +23,22 @@
 
   <aside class="sidebar">
     <nav class="sidebar-nav">
-      <a href="{% url 'tenant_edit_profile' %}">Edit Profile</a>
-      <a href="{% url 'tenant_messages' %}">Messages</a>
-      <a href="{% url 'notifications' %}">Notifications</a>
-      <a href="{% url 'tenant_settings' %}">Settings</a>
-      <a href="{% url 'logout' %}" class="nav-logout-btn">Logout</a>
-    </nav>
+  <a href="{% url 'tenant_edit_profile' %}" class="{% if request.resolver_match.url_name == 'tenant_edit_profile' %}active{% endif %}">
+    <i class="fa-solid fa-user-pen"></i> Edit Profile
+  </a>
+  <a href="{% url 'tenant_messages' %}" class="{% if request.resolver_match.url_name == 'tenant_messages' or request.resolver_match.url_name == 'chat_room' or request.resolver_match.url_name == 'start_conversation' %}active{% endif %}">
+    <i class="fa-solid fa-message"></i> Messages
+  </a>
+  <a href="{% url 'notifications' %}" class="{% if request.resolver_match.url_name == 'notifications' %}active{% endif %}">
+    <i class="fa-solid fa-bell"></i> Notifications
+  </a>
+  <a href="{% url 'tenant_settings' %}" class="{% if request.resolver_match.url_name == 'tenant_settings' %}active{% endif %}">
+    <i class="fa-solid fa-gear"></i> Settings
+  </a>
+  <a href="{% url 'logout' %}" class="nav-logout-btn">
+    <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
+  </a>
+</nav>
   </aside>
 
   <section class="dashboard-content">
@@ -151,7 +161,7 @@
             <p class="listing-price">NPR {{ room.price }} / month</p>
             <div class="listing-facilities">
               {% if room.wifi %}<span class="facility-tag">WiFi</span>{% endif %}
-              {% if room.furnished %}<span class="facility-tag">Furnished</span>{% endif %}
+              {% if room.furnished_status == 'furnished' %}<div class="facility-chip"><i class="fa-solid fa-couch"></i> Furnished</div>{% endif %}
               {% if room.parking %}<span class="facility-tag">Parking</span>{% endif %}
               {% if room.attached_bathroom %}<span class="facility-tag">Attached Bath</span>{% endif %}
             </div>

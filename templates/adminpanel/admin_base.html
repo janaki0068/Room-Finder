@@ -25,16 +25,32 @@
     </div>
 
     <nav class="sidebar-nav">
-      <a href="{% url 'admin_dashboard' %}" class="{% if request.resolver_match.url_name == 'admin_dashboard' %}active{% endif %}">Dashboard</a>
-      <a href="{% url 'pending_listings' %}" class="{% if request.resolver_match.url_name == 'pending_listings' %}active{% endif %}">Pending Listings</a>
-      <a href="{% url 'active_listings' %}" class="{% if request.resolver_match.url_name == 'active_listings' %}active{% endif %}">Active Listings</a>
-      <a href="{% url 'rented_listings' %}" class="{% if request.resolver_match.url_name == 'rented_listings' %}active{% endif %}">Rented Listings</a>
-      <a href="{% url 'rejected_listings' %}" class="{% if request.resolver_match.url_name == 'rejected_listings' %}active{% endif %}">Rejected Listings</a>
-      <a href="{% url 'user_management' %}" class="{% if request.resolver_match.url_name == 'user_management' %}active{% endif %}">User Management</a>
-      <a href="{% url 'ad_list' %}" class="{% if request.resolver_match.url_name == 'ad_list' or request.resolver_match.url_name == 'ad_create' or request.resolver_match.url_name == 'ad_edit' %}active{% endif %}">Ad Management</a>
+      <a href="{% url 'admin_dashboard' %}" class="{% if request.resolver_match.url_name == 'admin_dashboard' %}active{% endif %}">
+        <i class="fa-solid fa-gauge"></i> Dashboard
+      </a>
+      <a href="{% url 'pending_listings' %}" class="{% if request.resolver_match.url_name == 'pending_listings' %}active{% endif %}">
+        <i class="fa-solid fa-hourglass-half"></i> Pending Listings
+      </a>
+      <a href="{% url 'active_listings' %}" class="{% if request.resolver_match.url_name == 'active_listings' %}active{% endif %}">
+        <i class="fa-solid fa-house-circle-check"></i> Active Listings
+      </a>
+      <a href="{% url 'rented_listings' %}" class="{% if request.resolver_match.url_name == 'rented_listings' %}active{% endif %}">
+        <i class="fa-solid fa-key"></i> Rented Listings
+      </a>
+      <a href="{% url 'rejected_listings' %}" class="{% if request.resolver_match.url_name == 'rejected_listings' %}active{% endif %}">
+        <i class="fa-solid fa-house-circle-xmark"></i> Rejected Listings
+      </a>
+      <a href="{% url 'user_management' %}" class="{% if request.resolver_match.url_name == 'user_management' %}active{% endif %}">
+        <i class="fa-solid fa-users"></i> User Management
+      </a>
+      <a href="{% url 'ad_list' %}" class="{% if request.resolver_match.url_name == 'ad_list' or request.resolver_match.url_name == 'ad_create' or request.resolver_match.url_name == 'ad_edit' %}active{% endif %}">
+        <i class="fa-solid fa-rectangle-ad"></i> Ad Management
+      </a>
     </nav>
 
-    <a href="{% url 'logout' %}" class="sidebar-logout">Logout</a>
+    <a href="{% url 'logout' %}" class="sidebar-logout">
+      <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
+    </a>
   </aside>
 
   <main class="admin-main">

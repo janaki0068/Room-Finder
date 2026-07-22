@@ -774,4 +774,204 @@ body {
 
 .detail-main {
     min-width: 0; /* flex children default to min-width:auto, which blocks wrapping */
+/* ENHANCEMENTS */
+
+.sidebar-nav a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-radius: 8px;
+    margin: 2px 12px;
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+.sidebar-nav a i {
+    width: 18px;
+    text-align: center;
+    font-size: 15px;
+}
+
+.sidebar-nav a:hover {
+    transform: translateX(3px);
+}
+
+.sidebar-nav a.active {
+    transform: translateX(3px);
+}
+
+.sidebar-logo img {
+    transition: transform 0.3s ease;
+}
+
+.sidebar-logo:hover img {
+    transform: rotate(-4deg) scale(1.04);
+}
+
+.sidebar-logout {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.sidebar-logout:hover {
+    background-color: var(--color-2);
+    color: var(--color-logo);
+}
+
+.admin-messages {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.admin-message {
+    padding: 12px 18px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    border-left: 4px solid transparent;
+    animation: fadeSlideDown 0.3s ease both;
+}
+
+.admin-message-success {
+    background: #e6f7ec;
+    color: #256029;
+    border-left-color: #256029;
+}
+
+.admin-message-error {
+    background: #fdeaea;
+    color: #842029;
+    border-left-color: #842029;
+}
+
+.admin-message-warning {
+    background: var(--color-1);
+    color: var(--color-11);
+    border-left-color: var(--color-5);
+}
+
+.admin-message-info {
+    background: var(--color-12);
+    color: var(--color-11);
+    border-left-color: var(--color-10);
+}
+
+.admin-table tbody tr {
+    transition: background-color 0.15s ease;
+}
+
+.admin-table tbody tr:hover {
+    background-color: var(--color-1);
+}
+
+.action-cell a,
+.action-cell form button {
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.action-cell a:hover,
+.action-cell form button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+}
+
+.stat-card {
+    animation: fadeSlideUp 0.4s ease both;
+}
+
+.gallery,
+.detail-body {
+    animation: fadeSlideUp 0.35s ease both;
+}
+
+.main-image {
+    overflow: hidden;
+    border-radius: 12px;
+}
+
+.main-image img {
+    transition: transform 0.35s ease;
+}
+
+.main-image:hover img {
+    transform: scale(1.04);
+}
+
+.thumbnail {
+    transition: transform 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
+}
+
+.thumbnail:hover {
+    transform: translateY(-2px);
+}
+
+.action-card {
+    transition: box-shadow 0.25s ease;
+}
+
+.action-card:hover {
+    box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+}
+
+@keyframes fadeSlideUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeSlideDown {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sidebar-nav a,
+    .sidebar-logo img,
+    .stat-card,
+    .gallery,
+    .detail-body,
+    .main-image img,
+    .thumbnail,
+    .admin-message,
+    .action-cell a,
+    .action-cell form button {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+.stat-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.stat-card-icon {
+    font-size: 22px;
+    color: var(--color-5);
+    margin-bottom: 4px;
+}
+
+.stats-grid .stat-card:nth-child(1) { animation-delay: 0s; }
+.stats-grid .stat-card:nth-child(2) { animation-delay: 0.05s; }
+.stats-grid .stat-card:nth-child(3) { animation-delay: 0.1s; }
+.stats-grid .stat-card:nth-child(4) { animation-delay: 0.15s; }
+.stats-grid .stat-card:nth-child(5) { animation-delay: 0.2s; }
+.stats-grid .stat-card:nth-child(6) { animation-delay: 0.25s; }
+
+/* AD LIST */
+.ad-thumb {
+    width: 80px;
+    height: 45px;
+    object-fit: cover;
+    border-radius: 4px;
+    transition: transform 0.2s ease;
+}
+
+.ad-thumb:hover {
+    transform: scale(1.15);
 }

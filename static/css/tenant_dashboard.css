@@ -547,7 +547,24 @@
 }
 
 
+.badge.pending {
+    background-color: var(--color-4);
+}
+.badge.rejected {
+    background-color: #d9534f;
+}
+
 /* Messages */
+
+.form-message {
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 16px;
+}
+.form-message-success { background: #e6f7ec; color: #256029; }
+.form-message-error { background: #fdeaea; color: #842029; }
 
 .conversation-item {
     position: relative;
@@ -740,4 +757,144 @@
 
 .send-btn:hover {
     background-color: var(--color-10);
+}
+
+/* ENHANCEMENTS */
+
+/* Profile card */
+.profile-card {
+    background: linear-gradient(160deg, var(--color-9), var(--color-1));
+    transition: box-shadow 0.25s ease;
+    animation: fadeSlideUp 0.4s ease both;
+}
+
+.profile-card:hover {
+    box-shadow: 0 6px 18px rgba(0,0,0,0.09);
+}
+
+.profile-photo {
+    border: 3px solid white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* Sidebar nav: icons + active state + hover motion */
+.sidebar-nav a {
+    border-radius: 8px;
+    margin: 2px 8px;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.15s ease;
+}
+
+.sidebar-nav a i {
+    width: 18px;
+    text-align: center;
+    color: var(--color-5);
+    transition: color 0.2s ease;
+}
+
+.sidebar-nav a:hover {
+    background: var(--color-2);
+    transform: translateX(3px);
+}
+
+.sidebar-nav a.active {
+    background: var(--color-5);
+    color: white;
+}
+
+.sidebar-nav a.active i {
+    color: white;
+}
+
+.nav-logout-btn:hover {
+    background: var(--color-8);
+    transform: translateX(3px);
+}
+
+/* Stat cards: icon badge + hover lift + entrance */
+.stat-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    border-left: 4px solid var(--color-5);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    animation: fadeSlideUp 0.4s ease both;
+}
+
+.stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+.stat-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: var(--color-9);
+    color: var(--color-5);
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+/* Listing cards: image zoom */
+.listing-img-wrap {
+    overflow: hidden;
+}
+
+.listing-img-wrap img {
+    transition: transform 0.35s ease;
+}
+
+.listing-card:hover .listing-img-wrap img {
+    transform: scale(1.06);
+}
+
+.listing-card {
+    animation: fadeSlideUp 0.35s ease both;
+}
+
+.listing-stats i {
+    color: var(--color-5);
+    margin-right: 3px;
+}
+
+.empty-state-text {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.empty-state-text i {
+    color: var(--color-8);
+    font-size: 16px;
+}
+
+.my-listings-section {
+    transition: border-color 0.25s ease;
+}
+
+
+
+@keyframes fadeSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .profile-card,
+    .stat-card,
+    .listing-card,
+    .sidebar-nav a,
+    .listing-img-wrap img {
+        animation: none !important;
+        transition: none !important;
+    }
 }

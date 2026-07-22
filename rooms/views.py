@@ -558,8 +558,10 @@ def upload_listing(request):
 
             room.save()
 
-            for index, img in enumerate(request.FILES.getlist("images")):
-                RoomImage.objects.create(room=room, image=img, order=index)
+            gallery_images = request.FILES.getlist("images")
+
+            for index, imgage_file in enumerate(gallery_images):
+                RoomImage.objects.create(room=room, image=imgage_file, order=index)
 
             VerificationDocument.objects.create(
                 room=room,
@@ -575,6 +577,8 @@ def upload_listing(request):
             )
 
             return redirect("my_listings")
+        else:
+            messages.error(request, "Please correct the errors below.")
 
     else:
         form = RoomForm()
@@ -949,6 +953,9 @@ def tenant_messages(request):
     seen = set()
 
     for msg in all_messages:
+        if msg.room_id is None:
+            continue
+        
         other_user = msg.receiver if msg.sender == request.user else msg.sender
         key = other_user.id
 

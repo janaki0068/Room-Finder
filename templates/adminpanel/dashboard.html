@@ -18,31 +18,37 @@
 
   <div class="stats-grid">
     <a href="{% url 'pending_listings' %}" class="stat-card">
+      <i class="fa-solid fa-hourglass-half stat-card-icon"></i>
       <span class="stat-number">{{ pending_count }}</span>
       <span class="stat-label">Pending Listings</span>
     </a>
 
     <a href="{% url 'active_listings' %}" class="stat-card">
+      <i class="fa-solid fa-house-circle-check stat-card-icon"></i>
       <span class="stat-number">{{ active_count }}</span>
       <span class="stat-label">Active Listings</span>
     </a>
 
     <a href="{% url 'rented_listings' %}" class="stat-card">
+      <i class="fa-solid fa-key stat-card-icon"></i>
       <span class="stat-number">{{ rented_count }}</span>
       <span class="stat-label">Rented Listings</span>
     </a>
 
     <a href="{% url 'rejected_listings' %}" class="stat-card">
+      <i class="fa-solid fa-house-circle-xmark stat-card-icon"></i>
       <span class="stat-number">{{ rejected_count }}</span>
       <span class="stat-label">Rejected Listings</span>
     </a>
 
     <a href="{% url 'user_management' %}" class="stat-card">
+      <i class="fa-solid fa-users stat-card-icon"></i>
       <span class="stat-number">{{ total_users }}</span>
       <span class="stat-label">Total Users</span>
     </a>
 
     <a href="{% url 'ad_list' %}" class="stat-card">
+      <i class="fa-solid fa-rectangle-ad stat-card-icon"></i>
       <span class="stat-number">{{ active_ads_count }}</span>
       <span class="stat-label">Active Ads</span>
     </a>

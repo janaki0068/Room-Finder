@@ -35,7 +35,7 @@
       <tbody>
         {% for ad in ads %}
         <tr>
-          <td><img src="{{ ad.image.url }}" alt="{{ ad.title }}" style="width:80px; height:45px; object-fit:cover; border-radius:4px;"></td>
+          <td><img src="{{ ad.image.url }}" alt="{{ ad.title }}" class="ad-thumb"></td>
           <td>{{ ad.title }}</td>
           <td>{{ ad.get_placement_display }}</td>
           <td>{{ ad.start_date|date:"M d, Y" }} &rarr; {{ ad.end_date|date:"M d, Y" }}</td>
