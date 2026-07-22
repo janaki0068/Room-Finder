@@ -232,3 +232,75 @@ form {
         grid-template-columns: 1fr;
     }
 }
+
+/* ENHANCEMENTS */
+
+.logo img {
+    transition: transform 0.4s ease;
+}
+
+.logo img:hover {
+    transform: scale(1.03) rotate(-1deg);
+}
+
+.left-side, .right-side {
+    animation: fadeIn 0.5s ease both;
+}
+
+.right-side {
+    animation-delay: 0.1s;
+}
+
+form input,
+form select {
+    transition: box-shadow 0.2s ease, transform 0.15s ease;
+}
+
+form input:focus,
+form select:focus {
+    transform: translateY(-1px);
+}
+
+.alert {
+    animation: fadeSlideDown 0.3s ease both;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeSlideDown {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .logo img,
+    .left-side,
+    .right-side,
+    form input,
+    form select,
+    .alert {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+
+.register-form-group {
+    animation: fadeSlideUp 0.35s ease both;
+}
+
+.register-form-grid > *:nth-child(1) { animation-delay: 0.05s; }
+.register-form-grid > *:nth-child(2) { animation-delay: 0.1s; }
+.register-form-grid > *:nth-child(3) { animation-delay: 0.15s; }
+.register-form-grid > *:nth-child(4) { animation-delay: 0.2s; }
+.register-form-grid > *:nth-child(5) { animation-delay: 0.25s; }
+.register-form-grid > *:nth-child(6) { animation-delay: 0.3s; }
+.register-form-grid > *:nth-child(7) { animation-delay: 0.35s; }
+
+@keyframes fadeSlideUp {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+}

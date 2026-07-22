@@ -25,11 +25,21 @@
     </div>
 
     <nav class="sidebar-nav">
-      <a href="{% url 'tenant_edit_profile' %}">Edit Profile</a>
-      <a href="{% url 'tenant_messages' %}">Messages</a>
-      <a href="{% url 'notifications' %}">Notifications</a>
-      <a href="{% url 'tenant_settings' %}">Settings</a>
-      <a href="{% url 'logout' %}" class="nav-logout-btn">Logout</a>
+      <a href="{% url 'tenant_edit_profile' %}" class="{% if request.resolver_match.url_name == 'tenant_edit_profile' %}active{% endif %}">
+        <i class="fa-solid fa-user-pen"></i> Edit Profile
+      </a>
+      <a href="{% url 'tenant_messages' %}" class="{% if request.resolver_match.url_name == 'tenant_messages' %}active{% endif %}">
+        <i class="fa-solid fa-message"></i> Messages
+      </a>
+      <a href="{% url 'notifications' %}" class="{% if request.resolver_match.url_name == 'notifications' %}active{% endif %}">
+        <i class="fa-solid fa-bell"></i> Notifications
+      </a>
+      <a href="{% url 'tenant_settings' %}" class="{% if request.resolver_match.url_name == 'tenant_settings' %}active{% endif %}">
+        <i class="fa-solid fa-gear"></i> Settings
+      </a>
+      <a href="{% url 'logout' %}" class="nav-logout-btn">
+        <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
+      </a>
     </nav>
   </aside>
 
@@ -38,13 +48,19 @@
     <!-- STATS ROW -->
     <div class="stats-row">
       <div class="stat-card">
-        <h4>Saved Rooms</h4>
-        <p class="stat-number">{{ saved_count|default:0 }}</p>
+        <div class="stat-icon"><i class="fa-solid fa-heart"></i></div>
+        <div>
+          <h4>Saved Rooms</h4>
+          <p class="stat-number">{{ saved_count|default:0 }}</p>
+        </div>
       </div>
 
       <div class="stat-card">
-        <h4>Available Listings</h4>
-        <p class="stat-number">{{ browse_rooms|length|default:0 }}</p>
+        <div class="stat-icon"><i class="fa-solid fa-house"></i></div>
+        <div>
+          <h4>Available Listings</h4>
+          <p class="stat-number">{{ browse_rooms|length|default:0 }}</p>
+        </div>
       </div>
     </div>
 
@@ -75,13 +91,14 @@
           <p class="listing-meta">{{ saved.room.get_room_type_display }} | {{ saved.room.city }}</p>
           <p class="listing-price">NPR {{ saved.room.price }} / month</p>
           <div class="listing-stats">
-            <span>👁 {{ saved.room.views }} views</span>
+            <span><i class="fa-solid fa-eye"></i> {{ saved.room.views }} views</span>
           </div>
         </div>
       </div>
     </a>
     {% empty %}
-    <p>
+    <p class="empty-state-text">
+      <i class="fa-regular fa-heart"></i>
       You haven't saved any rooms yet. To find your next place, go to
       <a href="{% url 'tsearch_rooms' %}">Browse Listings.</a>
     </p>

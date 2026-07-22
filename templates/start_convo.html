@@ -1,87 +1,123 @@
-{% extends "base.html" %}
-{% load static %}
-
-{% block css %}
-<link rel="stylesheet" href="{% static 'css/tenant_dashboard.css' %}">
-<link rel="stylesheet" href="{% static 'css/search.css' %}">
-{% endblock css %}
-
-{% block content %}
+{% extends "base.html" %} {% load static %} {% block css %}
+<link rel="stylesheet" href="{% static 'css/tenant_dashboard.css' %}" />
+<link rel="stylesheet" href="{% static 'css/search.css' %}" />
+{% endblock css %} {% block content %}
 
 <div class="dashboard-main">
-
   <aside class="sidebar">
     <div class="profile-card">
       {% if request.user.profile.image %}
-        <img src="{{ request.user.profile.image.url }}" class="profile-photo" />
+      <img src="{{ request.user.profile.image.url }}" class="profile-photo" />
       {% else %}
-        <img src="{% static 'images/default-avatar.png' %}" class="profile-photo" />
+      <img
+        src="{% static 'images/default-avatar.png' %}"
+        class="profile-photo"
+      />
       {% endif %}
       <h3>{{ request.user.get_full_name|default:request.user.username }}</h3>
       <p>{{ request.user.email }}</p>
     </div>
     <nav class="sidebar-nav">
-      <a href="{% url 'tenant_edit_profile' %}">Edit Profile</a>
-      <a href="{% url 'tenant_messages' %}" class="active">Messages</a>
-      <a href="{% url 'notifications' %}">Notifications</a>
-      <a href="{% url 'tenant_settings' %}">Settings</a>
-      <a href="{% url 'logout' %}">Logout</a>
+      <a
+        href="{% url 'tenant_edit_profile' %}"
+        class="{% if request.resolver_match.url_name == 'tenant_edit_profile' %}active{% endif %}"
+      >
+        <i class="fa-solid fa-user-pen"></i> Edit Profile
+      </a>
+      <a
+        href="{% url 'tenant_messages' %}"
+        class="{% if request.resolver_match.url_name == 'tenant_messages' or request.resolver_match.url_name == 'chat_room' or request.resolver_match.url_name == 'start_conversation' %}active{% endif %}"
+      >
+        <i class="fa-solid fa-message"></i> Messages
+      </a>
+      <a
+        href="{% url 'notifications' %}"
+        class="{% if request.resolver_match.url_name == 'notifications' %}active{% endif %}"
+      >
+        <i class="fa-solid fa-bell"></i> Notifications
+      </a>
+      <a
+        href="{% url 'tenant_settings' %}"
+        class="{% if request.resolver_match.url_name == 'tenant_settings' %}active{% endif %}"
+      >
+        <i class="fa-solid fa-gear"></i> Settings
+      </a>
+      <a href="{% url 'logout' %}" class="nav-logout-btn">
+        <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
+      </a>
     </nav>
   </aside>
 
   <section class="dashboard-content">
-
-    <div class="section-header" style="margin-bottom:24px;">
+    <div class="section-header" style="margin-bottom: 24px">
       <a href="{% url 'tenant_messages' %}" class="back-btn">
         <i class="fa-solid fa-arrow-left"></i>
       </a>
       <h2>Start a Conversation</h2>
     </div>
 
-    <p style="color:var(--color-13);margin-bottom:20px;font-size:20px;font-weight:500;">
+    <p
+      style="
+        color: var(--color-13);
+        margin-bottom: 20px;
+        font-size: 20px;
+        font-weight: 500;
+      "
+    >
       Search for a room or landlord to start a conversation.
     </p>
 
     <!-- SEARCH -->
-    <form method="GET" style="margin-bottom:24px;">
+    <form method="GET" style="margin-bottom: 24px">
       <div class="search-bar-row">
-        <input type="text" name="q" value="{{ query }}"
+        <input
+          type="text"
+          name="q"
+          value="{{ query }}"
           placeholder="Search by room title, city, or landlord name..."
-          class="search-input" autofocus>
+          class="search-input"
+          autofocus
+        />
         <button type="submit" class="search-submit-btn">Search</button>
       </div>
     </form>
 
     <!-- RESULTS -->
-    {% if query %}
-      {% if rooms %}
-        <div style="display:flex;flex-direction:column;gap:12px;">
-          {% for room in rooms %}
-          <a href="{% url 'chat_room' room.owner.id room.id %}"
-             class="conversation-item">
-            <div class="convo-info">
-              <span class="convo-room">{{ room.title }}</span>
-              <span class="convo-other">
-                Landlord: {{ room.owner.get_full_name|default:room.owner.username }}
-              </span>
-              <span class="convo-preview">
-                {{ room.city }}, {{ room.district.name }} · NPR {{ room.price }}/month
-              </span>
-            </div>
-            <div class="convo-meta">
-              <i class="fa-solid fa-message" style="color:var(--color-5);font-size:18px;"></i>
-              <small style="color:var(--color-5);font-weight:600;">Chat</small>
-            </div>
-          </a>
-          {% endfor %}
+    {% if query %} {% if rooms %}
+    <div style="display: flex; flex-direction: column; gap: 12px">
+      {% for room in rooms %}
+      <a
+        href="{% url 'chat_room' room.owner.id room.id %}"
+        class="conversation-item"
+      >
+        <div class="convo-info">
+          <span class="convo-room">{{ room.title }}</span>
+          <span class="convo-other">
+            Landlord: {{ room.owner.get_full_name|default:room.owner.username }}
+          </span>
+          <span class="convo-preview">
+            {{ room.city }}, {{ room.district.name }} · NPR {{ room.price
+            }}/month
+          </span>
         </div>
-      {% else %}
-        <div class="placeholder-box">
-          <p>No rooms found for "<strong>{{ query }}</strong>". Try a different search.</p>
+        <div class="convo-meta">
+          <i
+            class="fa-solid fa-message"
+            style="color: var(--color-5); font-size: 18px"
+          ></i>
+          <small style="color: var(--color-5); font-weight: 600">Chat</small>
         </div>
-      {% endif %}
-    {% endif %}
-
+      </a>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="placeholder-box">
+      <p>
+        No rooms found for "<strong>{{ query }}</strong>". Try a different
+        search.
+      </p>
+    </div>
+    {% endif %} {% endif %}
   </section>
 </div>
 

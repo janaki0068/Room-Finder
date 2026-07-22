@@ -1,15 +1,10 @@
-{% extends "base.html" %} 
-{% load static %} 
-
-{% block css %}
+{% extends "base.html" %} {% load static %} {% block css %}
 <link
   rel="stylesheet"
   type="text/css"
   href="{% static 'css/tenant_dashboard.css' %}"
 />
-{% endblock css %} 
-
-{% block content %}
+{% endblock css %} {% block content %}
 <a href="{% url 'tenant_dashboard' %}" class="back-btn"
   ><i class="fa-solid fa-arrow-left"></i
 ></a>
@@ -29,22 +24,42 @@
       <p>{{ request.user.profile.phone }}</p>
     </div>
     <nav class="sidebar-nav">
-      <a href="{% url "tenant_edit_profile" %}">Edit Profile</a>
-      <a href="{% url 'tenant_messages' %}">Messages</a>
-      <a href="{% url 'notifications' %}">Notifications</a>
-      <a href="{% url 'tenant_settings' %}">Settings</a>
-      <a href="{% url "logout" %}">Logout</a>
+      <a
+        href="{% url 'tenant_edit_profile' %}"
+        class="{% if request.resolver_match.url_name == 'tenant_edit_profile' %}active{% endif %}"
+      >
+        <i class="fa-solid fa-user-pen"></i> Edit Profile
+      </a>
+      <a
+        href="{% url 'tenant_messages' %}"
+        class="{% if request.resolver_match.url_name == 'tenant_messages' or request.resolver_match.url_name == 'chat_room' or request.resolver_match.url_name == 'start_conversation' %}active{% endif %}"
+      >
+        <i class="fa-solid fa-message"></i> Messages
+      </a>
+      <a
+        href="{% url 'notifications' %}"
+        class="{% if request.resolver_match.url_name == 'notifications' %}active{% endif %}"
+      >
+        <i class="fa-solid fa-bell"></i> Notifications
+      </a>
+      <a
+        href="{% url 'tenant_settings' %}"
+        class="{% if request.resolver_match.url_name == 'tenant_settings' %}active{% endif %}"
+      >
+        <i class="fa-solid fa-gear"></i> Settings
+      </a>
+      <a href="{% url 'logout' %}" class="nav-logout-btn">
+        <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
+      </a>
     </nav>
   </aside>
   <section class="dashboard-content">
     <div class="section-header">
       <h2>Edit Profile</h2>
     </div>
-    {% if messages %}
-      {% for message in messages %}
-        <p style="color:green;margin-bottom:16px;">{{ message }}</p>
-      {% endfor %}
-    {% endif %}
+    {% if messages %} {% for message in messages %}
+    <p class="form-message form-message-{{ message.tags }}">{{ message }}</p>
+    {% endfor %} {% endif %}
 
     <div class="edit-profile-form">
       <form method="POST" enctype="multipart/form-data">
@@ -52,32 +67,44 @@
 
         <div class="form-field">
           <label>Profile Photo</label>
-          <input type="file" name="image" accept="image/*">
+          <input type="file" name="image" accept="image/*" />
           {% if profile.image %}
-            <img src="{{ profile.image.url }}" alt="Current photo" class="current-photo">
+          <img
+            src="{{ profile.image.url }}"
+            alt="Current photo"
+            class="current-photo"
+          />
           {% endif %}
         </div>
 
         <div class="form-row">
           <div class="form-field">
             <label>First Name</label>
-            <input type="text" name="first_name" value="{{ request.user.first_name }}">
+            <input
+              type="text"
+              name="first_name"
+              value="{{ request.user.first_name }}"
+            />
           </div>
           <div class="form-field">
             <label>Last Name</label>
-            <input type="text" name="last_name" value="{{ request.user.last_name }}">
+            <input
+              type="text"
+              name="last_name"
+              value="{{ request.user.last_name }}"
+            />
           </div>
         </div>
 
         <div class="form-field">
           <label>Email</label>
-          <input type="email" value="{{ request.user.email }}" disabled>
+          <input type="email" value="{{ request.user.email }}" disabled />
           <small>Email cannot be changed</small>
         </div>
 
         <div class="form-field">
           <label>Phone Number</label>
-          <input type="text" name="phone" value="{{ profile.phone }}">
+          <input type="text" name="phone" value="{{ profile.phone }}" />
         </div>
 
         <button type="submit" class="search-submit-btn">Save Changes</button>
