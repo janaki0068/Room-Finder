@@ -247,6 +247,22 @@ class VerificationDocument(models.Model):
         self.room.save()
 
 
+
+class SavedRoom(models.Model):
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='saved_rooms')
+    room = models.ForeignKey(
+        Room, on_delete=models.CASCADE, related_name='saved_by')
+    saved_at = models.DateTimeField(auto_now_add=True)
+    is_read = models.BooleanField(default=False)   # NEW
+
+    class Meta:
+        unique_together = ("user", "room")
+        ordering = ['-saved_at']
+
+    def __str__(self):
+        return f"{self.user.username} - {self.room.title}"
+
 # MESSAGES
 class Message(models.Model):
     sender = models.ForeignKey(

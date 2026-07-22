@@ -303,28 +303,41 @@
             {% if item.parking %}<span>✓ Parking</span>{% endif %}
         </div>
 
-        <div class="card-footer">
-            <span class="price">NPR {{ item.price }}/mo</span>
-            <a href="{% url 'room_detail' item.id %}" class="view-details">VIEW DETAILS</a>
-        </div>
+<div class="card-footer">
+    <span class="price">NPR {{ item.price }}/mo</span>
+
+    {% if user.is_authenticated %}
+        <a href="{% url 'room_detail' item.id %}" class="view-details">VIEW DETAILS</a>
+    {% else %}
+        <a href="{% url 'login' %}?next={% url 'room_detail' item.id %}" class="view-details login-required">VIEW DETAILS</a>
+    {% endif %}
+</div>
     </div>
+
 
     {% elif item_type == 'ad' %}
-    <div class="listing-ad">
-        <div class="listing-ad-content">
-            <span class="ad-label">Advertisement</span>
-            <div class="ad-text">
-                <strong>{{ item.title }}</strong>
-                <span>{{ item.description }}</span>
-            </div>
-        </div>
-
-        {% if item.link %}
-            <a href="{{ item.link }}" target="_blank" class="ad-btn">
-                Learn More
-            </a>
-        {% endif %}
+<div class="listing-ad">
+    {% if item.image %}
+    <div class="ad-image">
+        <img src="{{ item.image.url }}" alt="{{ item.title }}">
     </div>
+    {% endif %}
+
+    <div class="listing-ad-content">
+        <span class="ad-label">Advertisement</span>
+        <div class="ad-text">
+            <strong>{{ item.title }}</strong>
+            <span>{{ item.description }}</span>
+        </div>
+    </div>
+
+    {% if item.link %}
+        <a href="{{ item.link }}" target="_blank" class="ad-btn">
+            Learn More
+        </a>
+    {% endif %}
+</div>
+
 
     {% elif item_type == 'heading' %}
     <h2 class="more-listings-heading">{{ item }}</h2>

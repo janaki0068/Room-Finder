@@ -18,105 +18,62 @@
 
 <div class="page-top">
     <h1>My Profile</h1>
-    <p>Update your personal information and profile picture.</p>
+    <p>Your personal information and profile picture.</p>
 </div>
 
-<form method="POST" enctype="multipart/form-data" class="settings-container">
+<div class="profile-details">
 
-    {% csrf_token %}
-
-    <!-- Profile Picture -->
-
-    <div class="settings-card">
-
-        <h3>Profile Picture</h3>
-
-        <div class="profile-pic-upload">
-
-    <div class="profile-pic-preview" id="pic-preview-wrapper">
+    <div class="profile-photo-large">
         {% if request.user.profile.image %}
-            <img src="{{ request.user.profile.image.url }}"
-                 alt="Current profile picture"
-                 id="pic-preview">
+            <img src="{{ request.user.profile.image.url }}" alt="Profile Photo">
         {% else %}
-            <div class="pic-placeholder" id="pic-preview">
-                <i class="ti ti-user"></i>
-            </div>
+            <img src="{% static 'images/default-avatar.png' %}" alt="Profile Photo">
         {% endif %}
     </div>
 
-    <div class="profile-pic-controls">
-        <label for="{{ form.image.id_for_label }}" class="upload-btn-secondary">
-            Choose Photo
-        </label>
+    <div class="profile-info">
 
-        {{ form.image }}
+        <div class="info-row">
+            <span class="info-label">First Name</span>
+            <span class="info-value">{{ request.user.first_name|default:"—" }}</span>
+        </div>
 
-        <p class="upload-note-small">JPG or PNG, max 5MB.</p>
+        <div class="info-row">
+            <span class="info-label">Last Name</span>
+            <span class="info-value">{{ request.user.last_name|default:"—" }}</span>
+        </div>
 
-        {% if form.image.errors %}
-            <p class="field-error">{{ form.image.errors.0 }}</p>
-        {% endif %}
+        <div class="info-row">
+            <span class="info-label">Email</span>
+            <span class="info-value">{{ request.user.email }}</span>
+        </div>
+
+        <div class="info-row">
+            <span class="info-label">Phone</span>
+            <span class="info-value">{{ request.user.profile.phone|default:"—" }}</span>
+        </div>
+
+        <div class="info-row">
+            <span class="info-label">Bio</span>
+            <span class="info-value">{{ request.user.profile.bio|default:"—" }}</span>
+        </div>
+
+        <div class="info-row">
+            <span class="info-label">Role</span>
+            <span class="info-value">Landlord</span>
+        </div>
+
+        <div class="info-row">
+            <span class="info-label">Member Since</span>
+            <span class="info-value">{{ request.user.date_joined|date:"M d, Y" }}</span>
+        </div>
+
     </div>
+
+    <a href="{% url 'edit_profile' %}" class="save-btn edit-profile-btn">
+        Edit Profile
+    </a>
 
 </div>
 
-    </div>
-
-    <!-- Personal Info -->
-
-    <div class="settings-card">
-
-        <h3>Personal Information</h3>
-
-        <div class="form-group">
-            <label for="{{ form.phone.id_for_label }}">Phone</label>
-            {{ form.phone }}
-            {% if form.phone.errors %}
-                <p class="field-error">{{ form.phone.errors.0 }}</p>
-            {% endif %}
-        </div>
-
-        <div class="form-group">
-            <label for="{{ form.bio.id_for_label }}">Bio</label>
-            {{ form.bio }}
-            {% if form.bio.errors %}
-                <p class="field-error">{{ form.bio.errors.0 }}</p>
-            {% endif %}
-        </div>
-
-    </div>
-
-    <!-- Save -->
-
-    <div class="settings-card save-card">
-        <button type="submit" class="save-btn">
-            Save Changes
-        </button>
-    </div>
-
-</form>
-
-{% endblock %}
-
-{% block extra_js %}
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    const picInput = document.getElementById('{{ form.image.id_for_label }}');
-    const picPreviewWrapper = document.getElementById('pic-preview-wrapper');
-
-    if (picInput) {
-        picInput.addEventListener('change', function () {
-            const file = this.files[0];
-            if (!file) return;
-
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                picPreviewWrapper.innerHTML = `<img src="${e.target.result}" alt="Preview" id="pic-preview">`;
-            };
-            reader.readAsDataURL(file);
-        });
-    }
-});
-</script>
 {% endblock %}

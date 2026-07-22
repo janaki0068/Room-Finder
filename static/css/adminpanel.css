@@ -750,3 +750,28 @@ body {
     background-color: var(--color-2);
     color: #FFFFFF;
 }
+
+
+/* TEXT ko lagiiii */
+.detail-section p {
+    overflow-wrap: break-word;
+    word-break: break-word;
+    white-space: normal;
+}
+
+.room-detail-container,
+.detail-body,
+.detail-main,
+.detail-sidebar {
+    max-width: 100%;
+    overflow-wrap: break-word;
+}
+
+.detail-body {
+    /* if this is flex, make sure children are allowed to shrink */
+    min-width: 0;
+}
+
+.detail-main {
+    min-width: 0; /* flex children default to min-width:auto, which blocks wrapping */
+}

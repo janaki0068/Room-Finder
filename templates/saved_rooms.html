@@ -16,7 +16,11 @@
     </a>
 </div>
 
-
+{% if unread_count %}
+<div class="notice-banner">
+    🔔 You have <strong>{{ unread_count }}</strong> new save{{ unread_count|pluralize }} since you last checked.
+</div>
+{% endif %}
 
 {% if rooms %}
 
@@ -28,11 +32,13 @@
 
     <div class="saved-image">
 
-        {% if room.image %}
-            <img src="{{ room.image.url }}" alt="{{ room.title }}">
-        {% else %}
-            <img src="{% static 'images/no-image.png' %}" alt="">
-        {% endif %}
+        {% with room.images.first as first_image %}
+            {% if first_image %}
+                <img src="{{ first_image.image.url }}" alt="{{ room.title }}">
+            {% else %}
+                <img src="{% static 'images/no-image.png' %}" alt="">
+            {% endif %}
+        {% endwith %}
 
     </div>
 
@@ -64,6 +70,9 @@
 
                         <span>
                             {{ saved.user.get_full_name|default:saved.user.username }}
+                            {% if saved.id in unread_ids %}
+                                <span class="new-badge">New</span>
+                            {% endif %}
                         </span>
 
                         <small>

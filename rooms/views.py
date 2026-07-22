@@ -121,13 +121,11 @@ def home(request):
 
     for i, room in enumerate(rooms):
         interleaved.append(("room", room))
-        # drop in an ad after every 2 rooms (i.e. after every full row, since the
-        # grid is 2 columns) — .listing-ad spans the full width (grid-column: 1/-1)
-        if ads and (i + 1) % 3 == 0:
+
+        if ads and (i + 1) % 4 == 0:
             interleaved.append(("ad", ads[ad_index % len(ads)]))
             ad_index += 1
-            # add a "More listings" section divider right after the first ad only,
-            # matching the design mock
+
             if not ad_inserted:
                 interleaved.append(("heading", "More listings"))
                 ad_inserted = True
@@ -447,7 +445,7 @@ def my_listings(request):
 # Room detail
 @login_required
 def room_detail(request, room_id):
-    room = get_object_or_404(Room, id=room_id, owner=request.user)
+    room = get_object_or_404(Room, id=room_id)
 
     return render(request, 'room_detail.html', {
         'room': room
@@ -499,22 +497,27 @@ def delete_listing(request, room_id):
     return redirect("my_listings")
 
 # My saved rooms
-
-
 @login_required
 def saved_rooms(request):
     rooms = (
-        Room.objects.filter(
-            owner=request.user,
-            saved_by__isnull=False
-        )
-        .prefetch_related("saved_by__user")
+        Room.objects.filter(owner=request.user, saved_by__isnull=False)
+        .prefetch_related("saved_by__user", "images")
         .distinct()
         .order_by("-id")
     )
 
+    unread_ids = set(
+        SavedRoom.objects.filter(room__owner=request.user, is_read=False)
+        .values_list("id", flat=True)
+    )
+
+    # mark as read now that landlord is viewing the page
+    SavedRoom.objects.filter(room__owner=request.user, is_read=False).update(is_read=True)
+
     return render(request, "saved_rooms.html", {
-        "rooms": rooms
+        "rooms": rooms,
+        "unread_ids": unread_ids,
+        "unread_count": len(unread_ids),
     })
 
 
