@@ -41,8 +41,8 @@ urlpatterns = [
     path('tenant/notifications/', views.notifications, name='notifications'),
     path('tenant/settings/', views.tenant_settings, name='tenant_settings'),
     path('troom/<int:room_id>/', views.troom_detail, name='troom_detail'),
+    path('troom/<int:room_id>/rent/', views.rent_room, name='rent_room'),
     path('tmessages/new/', views.start_conversation, name='start_conversation'),
     path('tenant/messages/', views.tenant_messages, name='tenant_messages'),
-    path("chat/<int:user_id>/<int:room_id>/", views.chat_room, name="chat_room",
-),
+    path("chat/<int:user_id>/<int:room_id>/", views.chat_room, name="chat_room",),
 ]

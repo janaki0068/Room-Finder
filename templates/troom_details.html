@@ -81,8 +81,7 @@
               <h1>{{ room.title }}</h1>
               <p class="detail-location">
                 <i class="fa-solid fa-location-dot"></i>
-                {{ room.city }}, {{ room.district.name }}, {{ room.province.name
-                }}
+                {{ room.city }}, {{ room.district.name }}, {{ room.province.name }}
               </p>
             </div>
             <div class="detail-price">
@@ -94,7 +93,7 @@
           {% if room.is_verified %}
           <div class="verified-banner">
             <i class="fa-solid fa-shield-check"></i>
-            Verified Listing — Documents checked by Room Finder
+            Verified Listing
           </div>
           {% endif %}
 
@@ -186,8 +185,7 @@
             </div>
           </div>
 
-          {% if room.bill_water or room.bill_electricity or room.bill_internet
-          %}
+          {% if room.bill_water or room.bill_electricity or room.bill_internet %}
           <div class="detail-section">
             <h3>Bills Included</h3>
             <div class="facilities-grid">
@@ -225,6 +223,14 @@
             </div>
 
             {% if user.is_authenticated %}
+              {% if room.status == 'active' and room.owner != user %}
+              <form method="POST" action="{% url 'rent_room' room.id %}" onsubmit="return confirm('Are you sure you want to rent this room? This will mark the listing as rented and remove it from search.');">
+                {% csrf_token %}
+                <button type="submit" class="rent-btn">
+                  <i class="fa-solid fa-key"></i> Rent This Room
+                </button>
+              </form>
+              {% endif %}
             <form method="POST">
               {% csrf_token %}
               <button

@@ -161,7 +161,7 @@
             <p class="listing-price">NPR {{ room.price }} / month</p>
             <div class="listing-facilities">
               {% if room.wifi %}<span class="facility-tag">WiFi</span>{% endif %}
-              {% if room.furnished_status == 'furnished' %}<div class="facility-chip"><i class="fa-solid fa-couch"></i> Furnished</div>{% endif %}
+              {% if room.furnished_status == 'furnished' %}<span class="facility-tag">Furnished</span>{% endif %}
               {% if room.parking %}<span class="facility-tag">Parking</span>{% endif %}
               {% if room.attached_bathroom %}<span class="facility-tag">Attached Bath</span>{% endif %}
             </div>

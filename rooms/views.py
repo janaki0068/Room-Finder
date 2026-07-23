@@ -1058,7 +1058,7 @@ def notifications(request):
 
 
 def troom_detail(request, room_id):
-    room = get_object_or_404(Room, id=room_id, status='active')
+    room = get_object_or_404(Room, id=room_id)
     images = room.images.all()
 
     is_saved = False
@@ -1081,3 +1081,19 @@ def troom_detail(request, room_id):
         'images': images,
         'is_saved': is_saved
     })
+
+
+@login_required
+def rent_room(request, room_id):
+    room = get_object_or_404(Room, id=room_id, status='active')
+
+    if request.method == 'POST':
+        room.status = 'rented'
+        room.save(update_fields=['status'])
+        messages.success(
+            request,
+            f'You have successfully rented "{room.title}". The landlord will be in touch soon.'
+        )
+        return redirect('tenant_dashboard')
+
+    return redirect('tenant_dashboard')

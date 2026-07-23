@@ -43,8 +43,14 @@
     </nav>
   </aside>
 
+  
   <!-- DASHBOARD CONTENT -->
   <section class="dashboard-content">
+    {% if messages %}
+      {% for message in messages %}
+        <p class="form-message form-message-{{ message.tags }}">{{ message }}</p>
+      {% endfor %}
+    {% endif %}
     <!-- STATS ROW -->
     <div class="stats-row">
       <div class="stat-card">

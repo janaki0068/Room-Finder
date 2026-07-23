@@ -898,3 +898,25 @@
         transition: none !important;
     }
 }
+
+.rent-btn {
+    width: 100%;
+    padding: 12px 16px;
+    background-color: var(--color-5);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: background-color 0.2s ease, transform 0.15s ease;
+}
+
+.rent-btn:hover {
+    background-color: var(--color-10);
+    transform: translateY(-2px);
+}

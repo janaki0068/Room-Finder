@@ -773,7 +773,9 @@ body {
 }
 
 .detail-main {
-    min-width: 0; /* flex children default to min-width:auto, which blocks wrapping */
+    min-width: 0; 
+
+}
 /* ENHANCEMENTS */
 
 .sidebar-nav a {
@@ -969,6 +971,7 @@ body {
     height: 45px;
     object-fit: cover;
     border-radius: 4px;
+    display: block;
     transition: transform 0.2s ease;
 }
 
