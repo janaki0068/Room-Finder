@@ -3,7 +3,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from rooms.models import Room
 from django.contrib.auth.models import User
 from django.contrib.auth import logout
-from .models import Ad
+from rooms.models import Advertisement
 from .forms import AdForm
 from django.contrib import messages
 
@@ -18,7 +18,7 @@ def admin_dashboard(request):
         "rented_count": Room.objects.filter(status="rented").count(),
         "rejected_count": Room.objects.filter(status="rejected").count(),
         "total_users": User.objects.count(),
-        "active_ads_count": Ad.objects.filter(is_active=True).count(),
+        "active_ads_count": Advertisement.objects.filter(is_active=True).count(),
     }
     return render(request, "adminpanel/dashboard.html", context)
 
@@ -110,7 +110,7 @@ def custom_logout(request):
 @staff_member_required
 def ad_list(request):
     status_filter = request.GET.get('status', 'all')
-    ads = Ad.objects.all()
+    ads = Advertisement.objects.all()
 
     if status_filter != 'all':
         ads = [ad for ad in ads if ad.status_label == status_filter]
@@ -135,7 +135,7 @@ def ad_create(request):
 
 @staff_member_required
 def ad_edit(request, ad_id):
-    ad = get_object_or_404(Ad, id=ad_id)
+    ad = get_object_or_404(Advertisement, id=ad_id)
     if request.method == "POST":
         form = AdForm(request.POST, request.FILES, instance=ad)
         if form.is_valid():
@@ -149,7 +149,7 @@ def ad_edit(request, ad_id):
 
 @staff_member_required
 def ad_toggle(request, ad_id):
-    ad = get_object_or_404(Ad, id=ad_id)
+    ad = get_object_or_404(Advertisement, id=ad_id)
     if request.method == "POST":
         ad.is_active = not ad.is_active
         ad.save()
@@ -158,7 +158,7 @@ def ad_toggle(request, ad_id):
 
 @staff_member_required
 def ad_delete(request, ad_id):
-    ad = get_object_or_404(Ad, id=ad_id)
+    ad = get_object_or_404(Advertisement, id=ad_id)
     if request.method == "POST":
         ad.delete()
         messages.success(request, "Ad deleted.")

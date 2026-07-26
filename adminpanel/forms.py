@@ -1,16 +1,16 @@
 from django import forms
-from .models import Ad
+
+from rooms.models import Advertisement
 
 class AdForm(forms.ModelForm):
     class Meta:
-        model = Ad
-        fields = ['title', 'description', 'image', 'redirect_url', 'placement', 'start_date', 'end_date', 'is_active']
+        model = Advertisement
+        fields = ['title', 'description', 'image', 'link', 'start_date', 'end_date', 'is_active']
         widgets = {
             "title": forms.TextInput(attrs={"class": "ad-input"}),
             "description": forms.Textarea(attrs={"class": "ad-input", "rows": 4}),
             "image": forms.ClearableFileInput(attrs={"class": "ad-input-file"}),
-            "redirect_url": forms.URLInput(attrs={"class": "ad-input"}),
-            "placement": forms.Select(attrs={"class": "ad-input"}),
+            "link": forms.URLInput(attrs={"class": "ad-input"}),
             "start_date": forms.DateTimeInput(attrs={"class": "ad-input", "type": "datetime-local"}),
             "end_date": forms.DateTimeInput(attrs={"class": "ad-input", "type": "datetime-local"}),
             "is_active": forms.CheckboxInput(attrs={"class": "ad-checkbox"}),
