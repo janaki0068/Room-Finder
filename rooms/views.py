@@ -900,7 +900,7 @@ def tenant_edit_profile(request):
         profile.save()
 
         messages.success(request, 'Profile updated successfully.')
-        return redirect('profile_view')
+        return redirect('tenant_edit_profile')
 
     return render(request, 'tenant_edit_profile.html', {
         'profile': profile
