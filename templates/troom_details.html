@@ -30,6 +30,9 @@
       >
         <i class="fa-solid fa-gear"></i> Settings
       </a>
+      <a href="{% url 'my_rented_rooms' %}" class="{% if request.resolver_match.url_name == 'my_rented_rooms' %}active{% endif %}">
+        <i class="fa-solid fa-key"></i> My Rented Rooms
+      </a>
       <a href="{% url 'logout' %}" class="nav-logout-btn">
         <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
       </a>
@@ -227,7 +230,7 @@
               <form method="POST" action="{% url 'rent_room' room.id %}" onsubmit="return confirm('Are you sure you want to rent this room? This will mark the listing as rented and remove it from search.');">
                 {% csrf_token %}
                 <button type="submit" class="rent-btn">
-                  <i class="fa-solid fa-key"></i> Rent This Room
+                  <i class="fa-solid fa-key"></i> Rent Now 
                 </button>
               </form>
               {% endif %}

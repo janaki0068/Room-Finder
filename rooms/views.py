@@ -1089,7 +1089,9 @@ def rent_room(request, room_id):
 
     if request.method == 'POST':
         room.status = 'rented'
-        room.save(update_fields=['status'])
+        room.rented_by = request.user
+        room.rented_at = timezone.now()
+        room.save(update_fields=['status', 'rented_by', 'rented_at'])
         messages.success(
             request,
             f'You have successfully rented "{room.title}". The landlord will be in touch soon.'
@@ -1097,3 +1099,8 @@ def rent_room(request, room_id):
         return redirect('tenant_dashboard')
 
     return redirect('tenant_dashboard')
+
+@login_required
+def my_rented_rooms(request):
+    rooms = Room.objects.filter(rented_by=request.user).select_related('district', 'province').prefetch_related('images')
+    return render(request, 'my_rented_rooms.html', {'rooms': rooms})

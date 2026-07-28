@@ -45,4 +45,5 @@ urlpatterns = [
     path('tmessages/new/', views.start_conversation, name='start_conversation'),
     path('tenant/messages/', views.tenant_messages, name='tenant_messages'),
     path("chat/<int:user_id>/<int:room_id>/", views.chat_room, name="chat_room",),
+    path('my-rented-rooms/', views.my_rented_rooms, name='my_rented_rooms'),
 ]
