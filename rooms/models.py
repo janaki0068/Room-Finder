@@ -311,3 +311,14 @@ class Advertisement(models.Model):
 
     def __str__(self):
         return self.title
+
+    @property
+    def status_label(self):
+        now = timezone.now()
+        if not self.is_active:
+            return "disabled"
+        if self.start_date and now < self.start_date:
+            return "scheduled"
+        if self.end_date and now > self.end_date:
+            return "expired"
+        return "running"
