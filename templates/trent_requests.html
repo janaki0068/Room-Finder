@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/tenant_dashboard.css' %}" />
+<link rel="stylesheet" href="{% static 'css/trent_requests.css' %}" />
+{% endblock css %}
+{% block content %}
+
+<div class="dashboard-main">
+  <aside class="sidebar">
+    <nav class="sidebar-nav">
+      <a href="{% url 'tenant_edit_profile' %}" class="{% if request.resolver_match.url_name == 'tenant_edit_profile' %}active{% endif %}">
+        <i class="fa-solid fa-user-pen"></i> Edit Profile
+      </a>
+      <a href="{% url 'tenant_messages' %}" class="{% if request.resolver_match.url_name == 'tenant_messages' or request.resolver_match.url_name == 'chat_room' or request.resolver_match.url_name == 'start_conversation' %}active{% endif %}">
+        <i class="fa-solid fa-message"></i> Messages
+      </a>
+      <a href="{% url 'notifications' %}" class="{% if request.resolver_match.url_name == 'notifications' %}active{% endif %}">
+        <i class="fa-solid fa-bell"></i> Notifications
+      </a>
+      <a href="{% url 'tenant_settings' %}" class="{% if request.resolver_match.url_name == 'tenant_settings' %}active{% endif %}">
+        <i class="fa-solid fa-gear"></i> Settings
+      </a>
+      <a href="{% url 'my_rented_rooms' %}" class="{% if request.resolver_match.url_name == 'my_rented_rooms' %}active{% endif %}">
+        <i class="fa-solid fa-key"></i> My Rented Rooms
+      </a>
+      <a href="{% url 'my_rent_requests' %}" class="{% if request.resolver_match.url_name == 'my_rent_requests' %}active{% endif %}">
+        <i class="fa-solid fa-paper-plane"></i> My Rent Requests
+      </a>
+      <a href="{% url 'logout' %}" class="nav-logout-btn">
+        <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
+      </a>
+    </nav>
+  </aside>
+
+  <section class="dashboard-content">
+    <h1 class="page-title">My Rent Requests</h1>
+
+    <div class="rr-list">
+      {% for rr in requests %}
+        <div class="rr-card status-{{ rr.status }}">
+          <div class="rr-main">
+            <div class="rr-avatar">
+              {% if rr.room.owner.first_name %}
+                {{ rr.room.owner.first_name.0|upper }}
+              {% else %}
+                {{ rr.room.owner.username.0|upper }}
+              {% endif %}
+            </div>
+            <div>
+              <div class="rr-room-title">
+                <a href="{% url 'troom_detail' rr.room.id %}">{{ rr.room.title }}</a>
+              </div>
+              <div class="rr-owner-name">
+                Owner: {{ rr.room.owner.get_full_name|default:rr.room.owner.username }}
+              </div>
+              <div class="rr-date">Requested {{ rr.created_at|date:"M d, Y — g:i A" }}</div>
+            </div>
+          </div>
+
+          <span class="status {{ rr.status }}">{{ rr.get_status_display }}</span>
+        </div>
+      {% empty %}
+        <div class="rr-empty">
+          <i class="fa-solid fa-inbox"></i>
+          <p>You haven't sent any rent requests yet.</p>
+          <a href="{% url 'tsearch_rooms' %}" class="rr-browse-link">Browse listings to get started —</a>
+        </div>
+      {% endfor %}
+    </div>
+  </section>
+</div>
+
+{% endblock content %}

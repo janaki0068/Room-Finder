@@ -30,6 +30,9 @@ urlpatterns = [
     path("settings/", views.settings_view, name="settings"),
     path('settings/password/', auth_views.PasswordChangeView.as_view(),name='password_change'),
 
+    path('landlord/rent-requests/', views.landlord_rent_requests, name='landlord_rent_requests'),
+    path('rent-requests/<int:rr_id>/accept/', views.accept_rent_request, name='accept_rent_request'),
+    path('rent-requests/<int:rr_id>/reject/', views.reject_rent_request, name='reject_rent_request'),
 
     # TENANT -->
     path("tenant-dashboard/", views.tenant_dashboard, name="tenant_dashboard"),
@@ -46,4 +49,5 @@ urlpatterns = [
     path('tenant/messages/', views.tenant_messages, name='tenant_messages'),
     path("chat/<int:user_id>/<int:room_id>/", views.chat_room, name="chat_room",),
     path('my-rented-rooms/', views.my_rented_rooms, name='my_rented_rooms'),
+    path('tenant/rent-requests/', views.my_rent_requests, name='my_rent_requests'),
 ]

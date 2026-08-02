@@ -1,0 +1,69 @@
+{% extends "landlord_base.html" %}
+{% load static %}
+
+{% block title %}Rent Requests{% endblock %}
+{% block page_title %}Rent Requests{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/rent_requests.css' %}" />
+{% endblock %}
+
+{% block content %}
+<div class="rr-list">
+  {% for rr in requests %}
+    <div class="rr-card status-{{ rr.status }}">
+      <div class="rr-main">
+        <div class="rr-avatar">
+          {% if rr.tenant.first_name %}
+            {{ rr.tenant.first_name.0|upper }}
+          {% else %}
+            {{ rr.tenant.username.0|upper }}
+          {% endif %}
+        </div>
+
+        <div class="rr-body">
+          <div class="rr-header-row">
+            <span class="rr-tenant-name">
+              {{ rr.tenant.get_full_name|default:rr.tenant.username }}
+            </span>
+            <span class="status {{ rr.status }}">{{ rr.get_status_display }}</span>
+          </div>
+
+          <div class="rr-room-line">
+            wants to rent
+            <a href="{% url 'room_detail' rr.room.id %}" class="rr-room-chip">
+              <i class="ti ti-home"></i> {{ rr.room.title }}
+            </a>
+          </div>
+
+          <div class="rr-date">Requested {{ rr.created_at|date:"M d, Y — g:i A" }}</div>
+        </div>
+      </div>
+
+      {% if rr.status == 'pending' %}
+      <div class="rr-actions">
+        <form method="POST" action="{% url 'accept_rent_request' rr.id %}"
+              onsubmit="return confirm('Accept this request? The room will be marked as rented and all other pending requests for it will be rejected.');">
+          {% csrf_token %}
+          <button type="submit" class="rr-accept-btn">
+            <i class="ti ti-check"></i> Accept
+          </button>
+        </form>
+        <form method="POST" action="{% url 'reject_rent_request' rr.id %}"
+              onsubmit="return confirm('Reject this request?');">
+          {% csrf_token %}
+          <button type="submit" class="rr-reject-btn">
+            <i class="ti ti-x"></i> Reject
+          </button>
+        </form>
+      </div>
+      {% endif %}
+    </div>
+  {% empty %}
+    <div class="rr-empty">
+      <i class="ti ti-inbox"></i>
+      No rent requests yet.
+    </div>
+  {% endfor %}
+</div>
+{% endblock %}

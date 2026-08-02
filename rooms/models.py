@@ -298,7 +298,7 @@ class UserPreference(models.Model):
     def __str__(self):
         return f"Preferences for {self.user}"
 
-
+# for landing page..
 class Advertisement(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True)
@@ -322,3 +322,32 @@ class Advertisement(models.Model):
         if self.end_date and now > self.end_date:
             return "expired"
         return "running"
+
+
+class RentRequest(models.Model):
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('accepted', 'Accepted'),
+        ('rejected', 'Rejected'),
+        ('cancelled', 'Cancelled'),
+    ]
+    room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name='rent_requests')
+    tenant = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='rent_requests')
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ('room', 'tenant')
+
+class Notification(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')
+    message = models.CharField(max_length=255)
+    is_read = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.user.username}: {self.message}"

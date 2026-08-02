@@ -1,0 +1,370 @@
+/* ============================================
+   Rent Requests — Pink Theme (Refined)
+   ============================================ */
+
+:root {
+    --pink-50:  #FBEAF0;
+    --pink-100: #F4C0D1;
+    --pink-200: #ED93B1;
+    --pink-400: #D4537E;
+    --pink-600: #993556;
+    --pink-800: #72243E;
+    --pink-900: #4B1528;
+
+    --green-500: #2d9d52;
+    --green-50:  #E9F8EE;
+    --red-500:   #d64545;
+    --red-50:    #FCEBEB;
+
+    --shadow-sm: 0 1px 2px rgba(75, 21, 40, 0.04), 0 1px 3px rgba(75, 21, 40, 0.06);
+    --shadow-md: 0 4px 14px rgba(75, 21, 40, 0.08), 0 2px 4px rgba(75, 21, 40, 0.05);
+    --shadow-lift: 0 10px 28px rgba(212, 83, 126, 0.16), 0 4px 10px rgba(75, 21, 40, 0.06);
+}
+
+
+/* ── List Wrapper ──────────────────────────── */
+
+.rr-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+
+/* ── Request Card ──────────────────────────── */
+
+.rr-card {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 18px;
+    background: #ffffff;
+    border-radius: 16px;
+    border: 1px solid var(--pink-50);
+    padding: 20px 24px;
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+    isolation: isolate;
+    animation: rr-fade-in 0.35s ease both;
+    transition: box-shadow 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
+}
+
+.rr-card::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 5px;
+    background: linear-gradient(180deg, var(--pink-400), var(--pink-600));
+    border-radius: 16px 0 0 16px;
+}
+
+.rr-card:hover {
+    box-shadow: var(--shadow-lift);
+    transform: translateY(-2px);
+    border-color: var(--pink-100);
+}
+
+.rr-card.status-pending::before {
+    background: linear-gradient(180deg, var(--pink-400), var(--pink-600));
+}
+
+.rr-card.status-accepted::before {
+    background: linear-gradient(180deg, #4cbb73, var(--green-500));
+}
+
+.rr-card.status-rejected::before {
+    background: linear-gradient(180deg, #e07a7a, var(--red-500));
+}
+
+.rr-card.status-rejected {
+    opacity: 0.72;
+}
+
+.rr-card.status-rejected:hover {
+    opacity: 1;
+}
+
+@keyframes rr-fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* ── Card Main (avatar + body) ─────────────── */
+
+.rr-main {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    flex: 1;
+    min-width: 0;
+}
+
+.rr-avatar {
+    position: relative;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--pink-100), var(--pink-50));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--pink-800);
+    flex-shrink: 0;
+    box-shadow: inset 0 0 0 2px #ffffff, 0 0 0 1px var(--pink-100);
+}
+
+.rr-body {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    min-width: 0;
+    flex: 1;
+}
+
+.rr-header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.rr-tenant-name {
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--pink-900);
+    letter-spacing: -0.01em;
+}
+
+.rr-room-line {
+    font-size: 13.5px;
+    color: #8a8a8a;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.rr-room-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px 4px 10px;
+    border-radius: 8px;
+    background: var(--pink-50);
+    color: var(--pink-700, var(--pink-600));
+    font-weight: 500;
+    font-size: 13px;
+    text-decoration: none;
+    border: 1px solid var(--pink-100);
+    transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+}
+
+.rr-room-chip i {
+    font-size: 12px;
+    color: var(--pink-400);
+}
+
+.rr-room-chip:hover {
+    background: var(--pink-100);
+    border-color: var(--pink-200);
+    transform: translateY(-1px);
+}
+
+.rr-date {
+    font-size: 11.5px;
+    color: #b3b3b3;
+    margin-top: 2px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.rr-date::before {
+    content: "";
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--pink-200);
+    display: inline-block;
+}
+
+
+/* ── Status Badge ──────────────────────────── */
+
+.status {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 6px 14px 6px 12px;
+    border-radius: 999px;
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    border: 1px solid transparent;
+}
+
+.status::before {
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    font-size: 10px;
+    line-height: 1;
+}
+
+/* Pending — clock icon, pulsing ring */
+.status.pending {
+    background: var(--pink-50);
+    color: var(--pink-600);
+    border-color: rgba(212, 83, 126, 0.18);
+}
+
+.status.pending::before {
+    content: "\f017"; /* fa-clock */
+    animation: rr-tick 2s ease-in-out infinite;
+}
+
+@keyframes rr-tick {
+    0%, 100% { transform: rotate(0deg); }
+    25%      { transform: rotate(15deg); }
+    75%      { transform: rotate(-10deg); }
+}
+
+/* Accepted — check icon */
+.status.accepted {
+    background: var(--green-50);
+    color: var(--green-500);
+    border-color: rgba(45, 157, 82, 0.18);
+}
+
+.status.accepted::before {
+    content: "\f00c"; /* fa-check */
+}
+
+/* Rejected — x icon */
+.status.rejected {
+    background: var(--red-50);
+    color: var(--red-500);
+    border-color: rgba(214, 69, 69, 0.18);
+}
+
+.status.rejected::before {
+    content: "\f00d"; /* fa-xmark */
+}
+
+
+/* ── Actions ───────────────────────────────── */
+
+.rr-actions {
+    display: flex;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.rr-actions button {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 20px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+}
+
+.rr-accept-btn {
+    background: linear-gradient(135deg, var(--pink-400), var(--pink-600));
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(212, 83, 126, 0.3);
+}
+
+.rr-accept-btn:hover {
+    box-shadow: 0 4px 14px rgba(212, 83, 126, 0.4);
+    transform: translateY(-1px);
+}
+
+.rr-accept-btn:active {
+    transform: translateY(0);
+}
+
+.rr-reject-btn {
+    background: #ffffff;
+    border-color: #f0d5d5;
+    color: var(--red-500);
+}
+
+.rr-reject-btn:hover {
+    background: var(--red-50);
+    border-color: var(--red-500);
+}
+
+
+/* ── Empty State ───────────────────────────── */
+
+.rr-empty {
+    text-align: center;
+    padding: 70px 24px;
+    color: #a3a3a3;
+    background: linear-gradient(180deg, #ffffff, var(--pink-50) 250%);
+    border-radius: 18px;
+    border: 1.5px dashed var(--pink-200);
+}
+
+.rr-empty i {
+    font-size: 30px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin-bottom: 14px;
+    color: var(--pink-400);
+    background: var(--pink-50);
+    box-shadow: inset 0 0 0 1px var(--pink-100);
+}
+
+.rr-empty p {
+    font-size: 14px;
+    color: #8a8a8a;
+    margin: 0;
+}
+
+
+/* ── Responsive ────────────────────────────── */
+
+@media (max-width: 640px) {
+    .rr-card {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 16px;
+    }
+
+    .rr-actions {
+        width: 100%;
+    }
+
+    .rr-actions form {
+        flex: 1;
+    }
+
+    .rr-actions button {
+        width: 100%;
+        justify-content: center;
+    }
+}

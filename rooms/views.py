@@ -1088,15 +1088,31 @@ def rent_room(request, room_id):
     room = get_object_or_404(Room, id=room_id, status='active')
 
     if request.method == 'POST':
-        room.status = 'rented'
-        room.rented_by = request.user
-        room.rented_at = timezone.now()
-        room.save(update_fields=['status', 'rented_by', 'rented_at'])
-        messages.success(
-            request,
-            f'You have successfully rented "{room.title}". The landlord will be in touch soon.'
+        if room.owner == request.user:
+            messages.error(request, "You can't rent your own listing.")
+            return redirect('troom_detail', room_id=room.id)
+
+        rr, created = RentRequest.objects.get_or_create(
+            room=room,
+            tenant=request.user,
+            defaults={'status': 'pending'}
         )
-        return redirect('tenant_dashboard')
+        if created:
+            Notification.objects.create(
+                user=room.owner,
+                message=f'{request.user.get_full_name() or request.user.username} requested to rent "{room.title}"',
+            )
+            messages.success(
+                request,
+                f'Your request to rent "{room.title}" has been sent to the landlord.'
+            )
+        elif rr.status == 'pending':
+            messages.info(request, "You already have a pending request for this room.")
+        elif rr.status == 'rejected':
+            # let them re-request if they were rejected before
+            rr.status = 'pending'
+            rr.save(update_fields=['status'])
+            messages.success(request, "Your request has been re-sent to the landlord.")
 
     return redirect('tenant_dashboard')
 
@@ -1104,3 +1120,60 @@ def rent_room(request, room_id):
 def my_rented_rooms(request):
     rooms = Room.objects.filter(rented_by=request.user).select_related('district', 'province').prefetch_related('images')
     return render(request, 'my_rented_rooms.html', {'rooms': rooms})
+
+
+@login_required
+def my_rent_requests(request):
+    requests_qs = RentRequest.objects.filter(
+        tenant=request.user
+    ).select_related('room', 'room__owner').order_by('status', '-created_at')
+    return render(request, 'trent_requests.html', {'requests': requests_qs})
+
+# LANLORD'S RENT SYSTEM
+@login_required
+def landlord_rent_requests(request):
+    requests_qs = RentRequest.objects.filter(
+        room__owner=request.user
+    ).select_related('room', 'tenant').order_by('status', '-created_at')
+    return render(request, 'rent_requests.html', {'requests': requests_qs})
+
+
+@login_required
+def accept_rent_request(request, rr_id):
+    rr = get_object_or_404(RentRequest, id=rr_id, room__owner=request.user, status='pending')
+
+    if request.method == 'POST':
+        room = rr.room
+        room.status = 'rented'
+        room.rented_by = rr.tenant
+        room.rented_at = timezone.now()
+        room.save(update_fields=['status', 'rented_by', 'rented_at'])
+
+        rr.status = 'accepted'
+        rr.save(update_fields=['status'])
+
+        # auto-reject any other pending requests for this room
+        RentRequest.objects.filter(room=room, status='pending').exclude(id=rr.id).update(status='rejected')
+
+        Notification.objects.create(
+            user=rr.tenant,
+            message=f'Your request for "{room.title}" was accepted!',
+        )
+        messages.success(request, f'"{room.title}" is now marked as rented to {rr.tenant.username}.')
+
+    return redirect('landlord_rent_requests')
+
+
+@login_required
+def reject_rent_request(request, rr_id):
+    rr = get_object_or_404(RentRequest, id=rr_id, room__owner=request.user, status='pending')
+
+    if request.method == 'POST':
+        rr.status = 'rejected'
+        rr.save(update_fields=['status'])
+        Notification.objects.create(
+            user=rr.tenant,
+            message=f'Your request for "{rr.room.title}" was declined.',
+        )
+
+    return redirect('landlord_rent_requests')

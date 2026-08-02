@@ -95,6 +95,13 @@
         {% if listing_count %}<span class="nav-badge">{{ listing_count }}</span>{% endif %}
       </a>
 
+      <a href="{% url 'landlord_rent_requests' %}"
+        class="nav-item {% if request.resolver_match.url_name == 'landlord_rent_requests' %}active{% endif %}">
+      <i class="ti ti-key"></i>
+      Rent requests
+      {% if pending_rent_count %}<span class="nav-badge">{{ pending_rent_count }}</span>{% endif %}
+    </a>
+
       <div class="nav-section">Account</div>
 
       <a href="{% url 'saved_rooms' %}"

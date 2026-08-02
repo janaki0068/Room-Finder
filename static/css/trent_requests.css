@@ -1,0 +1,171 @@
+/* ============================================
+   My Rent Requests (Tenant) — Pink Theme
+   ============================================ */
+
+:root {
+    --pink-50:  #FBEAF0;
+    --pink-100: #F4C0D1;
+    --pink-200: #ED93B1;
+    --pink-400: #D4537E;
+    --pink-600: #993556;
+    --pink-800: #72243E;
+    --pink-900: #4B1528;
+}
+
+.page-title {
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--pink-900);
+    margin-bottom: 20px;
+}
+
+
+/* ── List Wrapper ──────────────────────────── */
+
+.rr-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+
+/* ── Request Card ──────────────────────────── */
+
+.rr-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    background: #ffffff;
+    border-radius: 12px;
+    border: 0.5px solid var(--pink-100);
+    padding: 18px 22px;
+}
+
+.rr-card.status-pending {
+    border-left: 3px solid var(--pink-400);
+}
+
+.rr-card.status-accepted {
+    border-left: 3px solid #2d7a38;
+}
+
+.rr-card.status-rejected {
+    border-left: 3px solid #c0392b;
+    opacity: 0.7;
+}
+
+
+/* ── Card Main (avatar + text) ─────────────── */
+
+.rr-main {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+}
+
+.rr-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--pink-50);
+    border: 0.5px solid var(--pink-100);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--pink-800);
+    flex-shrink: 0;
+}
+
+.rr-room-title a {
+    font-weight: 500;
+    color: var(--pink-900);
+    text-decoration: none;
+    font-size: 15px;
+}
+
+.rr-room-title a:hover {
+    color: var(--pink-600);
+    text-decoration: underline;
+}
+
+.rr-owner-name {
+    font-size: 13px;
+    color: #555555;
+    margin-top: 2px;
+}
+
+.rr-date {
+    font-size: 12px;
+    color: #999999;
+    margin-top: 4px;
+}
+
+
+/* ── Status Badge ──────────────────────────── */
+
+.status {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+    text-transform: capitalize;
+}
+
+.status.pending {
+    background: var(--pink-50);
+    color: var(--pink-600);
+}
+
+.status.accepted {
+    background: #edf7ee;
+    color: #2d7a38;
+}
+
+.status.rejected {
+    background: #fdecea;
+    color: #c0392b;
+}
+
+
+/* ── Empty State ───────────────────────────── */
+
+.rr-empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: #999999;
+    background: #ffffff;
+    border-radius: 12px;
+    border: 0.5px solid var(--pink-100);
+}
+
+.rr-empty i {
+    font-size: 28px;
+    display: block;
+    margin-bottom: 10px;
+    color: var(--pink-200);
+}
+
+.rr-browse-link {
+    color: var(--pink-600);
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.rr-browse-link:hover {
+    text-decoration: underline;
+}
+
+
+/* ── Responsive ────────────────────────────── */
+
+@media (max-width: 640px) {
+    .rr-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
