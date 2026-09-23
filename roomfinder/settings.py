@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-z)hnw9-4s+tc*ayeeniwmx(7jrii1()=)7of%8=y&vct9h(8l0
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['room-finder-mjni.onrender.com', 'localhost', '127.0.0.1']
 
 
 # Application definition
