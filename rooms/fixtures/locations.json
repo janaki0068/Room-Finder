@@ -1,0 +1,411 @@
+[
+{
+  "model": "rooms.province",
+  "pk": 1,
+  "fields": {
+    "name": "Koshi"
+  }
+},
+{
+  "model": "rooms.province",
+  "pk": 2,
+  "fields": {
+    "name": "Madhesh"
+  }
+},
+{
+  "model": "rooms.province",
+  "pk": 3,
+  "fields": {
+    "name": "Bagmati"
+  }
+},
+{
+  "model": "rooms.province",
+  "pk": 4,
+  "fields": {
+    "name": "Gandaki"
+  }
+},
+{
+  "model": "rooms.province",
+  "pk": 5,
+  "fields": {
+    "name": "Lumbini"
+  }
+},
+{
+  "model": "rooms.province",
+  "pk": 6,
+  "fields": {
+    "name": "Karnali"
+  }
+},
+{
+  "model": "rooms.province",
+  "pk": 7,
+  "fields": {
+    "name": "Sudur Paschim"
+  }
+},
+{
+  "model": "rooms.district",
+  "pk": 1,
+  "fields": {
+    "province": 1,
+    "name": "Morang"
+  }
+},
+{
+  "model": "rooms.district",
+  "pk": 2,
+  "fields": {
+    "province": 4,
+    "name": "kaski"
+  }
+},
+{
+  "model": "rooms.district",
+  "pk": 3,
+  "fields": {
+    "province": 1,
+    "name": "Illam"
+  }
+},
+{
+  "model": "rooms.district",
+  "pk": 4,
+  "fields": {
+    "province": 1,
+    "name": "Bhojpur"
+  }
+},
+{
+  "model": "rooms.district",
+  "pk": 5,
+  "fields": {
+    "province": 1,
+    "name": "Dhankuta"
+  }
+},
+{
+  "model": "rooms.district",
+  "pk": 6,
+  "fields": {
+    "province": 1,
+    "name": "Jhapa"
+  }
+},
+{
+  "model": "rooms.district",
+  "pk": 7,
+  "fields": {
+    "province": 1,
+    "name": "Khotang"
+  }
+},
+{
+  "model": "rooms.district",
+  "pk": 8,
+  "fields": {
+    "province": 1,
+    "name": "Okhaldhunga"
+  }
+},
+{
+  "model": "rooms.district",
+  "pk": 9,
+  "fields": {
+    "province": 1,
+    "name": "Pachthar"
+  }
+},
+{
+  "model": "rooms.district",
+  "pk": 10,
+  "fields": {
+    "province": 1,
+    "name": "Sankhuwasabha"
+  }
+},
+{
+  "model": "rooms.district",
+  "pk": 11,
+  "fields": {
+    "province": 1,
+    "name": "Solukhumbu"
+  }
+},
+{
+  "model": "rooms.district",
+  "pk": 12,
+  "fields": {
+    "province": 7,
+    "name": "Sunsari"
+  }
+},
+{
+  "model": "rooms.district",
+  "pk": 13,
+  "fields": {
+    "province": 1,
+    "name": "Taplejung"
+  }
+},
+{
+  "model": "rooms.district",
+  "pk": 14,
+  "fields": {
+    "province": 1,
+    "name": "Terathum"
+  }
+},
+{
+  "model": "rooms.district",
+  "pk": 15,
+  "fields": {
+    "province": 1,
+    "name": "Udaypur"
+  }
+},
+{
+  "model": "rooms.district",
+  "pk": 16,
+  "fields": {
+    "province": 2,
+    "name": "Parsa"
+  }
+},
+{
+  "model": "rooms.district",
+  "pk": 17,
+  "fields": {
+    "province": 2,
+    "name": "Bara"
+  }
+},
+{
+  "model": "rooms.district",
+  "pk": 18,
+  "fields": {
+    "province": 2,
+    "name": "Rautahat"
+  }
+},
+{
+  "model": "rooms.district",
+  "pk": 19,
+  "fields": {
+    "province": 2,
+    "name": "Sarlahi"
+  }
+},
+{
+  "model": "rooms.district",
+  "pk": 20,
+  "fields": {
+    "province": 2,
+    "name": "Mahottati"
+  }
+},
+{
+  "model": "rooms.district",
+  "pk": 21,
+  "fields": {
+    "province": 2,
+    "name": "Dhanusha"
+  }
+},
+{
+  "model": "rooms.district",
+  "pk": 22,
+  "fields": {
+    "province": 2,
+    "name": "Siraha"
+  }
+},
+{
+  "model": "rooms.district",
+  "pk": 23,
+  "fields": {
+    "province": 2,
+    "name": "Saptari"
+  }
+},
+{
+  "model": "rooms.district",
+  "pk": 24,
+  "fields": {
+    "province": 3,
+    "name": "Bhaktapur"
+  }
+},
+{
+  "model": "rooms.district",
+  "pk": 25,
+  "fields": {
+    "province": 3,
+    "name": "Chitwan"
+  }
+},
+{
+  "model": "rooms.district",
+  "pk": 26,
+  "fields": {
+    "province": 3,
+    "name": "Dolakha"
+  }
+},
+{
+  "model": "rooms.district",
+  "pk": 27,
+  "fields": {
+    "province": 3,
+    "name": "Kathmandu"
+  }
+},
+{
+  "model": "rooms.district",
+  "pk": 28,
+  "fields": {
+    "province": 2,
+    "name": "Kavrepalanchowk"
+  }
+},
+{
+  "model": "rooms.district",
+  "pk": 29,
+  "fields": {
+    "province": 3,
+    "name": "Lalitpur"
+  }
+},
+{
+  "model": "rooms.district",
+  "pk": 30,
+  "fields": {
+    "province": 3,
+    "name": "Makwanpur"
+  }
+},
+{
+  "model": "rooms.district",
+  "pk": 31,
+  "fields": {
+    "province": 3,
+    "name": "Nuwakot"
+  }
+},
+{
+  "model": "rooms.district",
+  "pk": 32,
+  "fields": {
+    "province": 3,
+    "name": "Ramechap"
+  }
+},
+{
+  "model": "rooms.district",
+  "pk": 33,
+  "fields": {
+    "province": 3,
+    "name": "Rasuwa"
+  }
+},
+{
+  "model": "rooms.district",
+  "pk": 34,
+  "fields": {
+    "province": 3,
+    "name": "Sindhuli"
+  }
+},
+{
+  "model": "rooms.district",
+  "pk": 35,
+  "fields": {
+    "province": 3,
+    "name": "Sindhupalchowk"
+  }
+},
+{
+  "model": "rooms.district",
+  "pk": 36,
+  "fields": {
+    "province": 4,
+    "name": "Baglung"
+  }
+},
+{
+  "model": "rooms.district",
+  "pk": 37,
+  "fields": {
+    "province": 4,
+    "name": "Gorkha"
+  }
+},
+{
+  "model": "rooms.district",
+  "pk": 38,
+  "fields": {
+    "province": 4,
+    "name": "Lamjung"
+  }
+},
+{
+  "model": "rooms.district",
+  "pk": 39,
+  "fields": {
+    "province": 4,
+    "name": "Manang"
+  }
+},
+{
+  "model": "rooms.district",
+  "pk": 40,
+  "fields": {
+    "province": 4,
+    "name": "Mustang"
+  }
+},
+{
+  "model": "rooms.district",
+  "pk": 41,
+  "fields": {
+    "province": 4,
+    "name": "Myagdi"
+  }
+},
+{
+  "model": "rooms.district",
+  "pk": 42,
+  "fields": {
+    "province": 4,
+    "name": "Nawalpur"
+  }
+},
+{
+  "model": "rooms.district",
+  "pk": 43,
+  "fields": {
+    "province": 4,
+    "name": "Parbat"
+  }
+},
+{
+  "model": "rooms.district",
+  "pk": 44,
+  "fields": {
+    "province": 4,
+    "name": "Syangja"
+  }
+},
+{
+  "model": "rooms.district",
+  "pk": 45,
+  "fields": {
+    "province": 4,
+    "name": "Tanahun"
+  }
+}
+]
