@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rooms.apps.RoomsConfig',
     'adminpanel',
+    'anymail',
 ]
 
 MIDDLEWARE = [
@@ -129,8 +130,17 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-DEFAULT_FROM_EMAIL = 'noreply@roomfinder.com'
+BREVO_API_KEY = os.environ.get('BREVO_API_KEY')
+
+if BREVO_API_KEY:
+    # On Render: send real emails
+    EMAIL_BACKEND = 'anymail.backends.brevo.EmailBackend'
+    ANYMAIL = {'BREVO_API_KEY': BREVO_API_KEY}
+else:
+    # On your laptop: OTP prints in the terminal
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'noreply@roomfinder.com')
 
 LOGIN_URL = 'login'                # tells @login_required where to send unauthenticated users
 LOGIN_REDIRECT_URL = 'home'        # optional — where to land after a successful login
